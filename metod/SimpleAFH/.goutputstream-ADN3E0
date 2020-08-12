@@ -1,0 +1,253 @@
+
+
+0 CONSTANT NoError
+\ коды управления
+1 CONSTANT work_Execute   \ нормальный режим работы
+2 CONSTANT work_Stop   \ останов при нормальным режиме работы
+3 CONSTANT work_Pause   \ пауза
+
+
+
+\ набор для управления программой
+ 0
+1024 -- Data_buffer \ буфер  для служебных выводимых на экран
+256  -- _file_name_bufer_ \ буфер  передачи имени между потоками
+256  -- ERROR_PROG_BUFER \ буфер  передачи ошибки
+CELL -- ERROR_PROG \ номер ошибки
+CELL -- work_thread \ запуск потока
+CELL -- tid-thead \ -  физическое управление потоком
+CELL -- -upravl_thead-  \ логический ключ для процедуры  запуска/останова  испытаний.. все удаления нужно делать в том же потоке, в котором и запускались
+CELL -- refresh  \ обновление
+\ 256  -- file_result_buf		\ буфер имени файла результата
+\ CELL -- prog_result
+\ CELL -- Len_Coment_metod_buffer \ размер данных в буфере для коментария метода
+\ 1024 -- Coment_metod_buffer \ буфер  для коментария метода
+\ CELL -- Len_opisanie_buffer \ размер данных в буфере для коментария метода
+\ 1024 -- Coment_opisanie_buffer \ буфер  для коментария метода
+CONSTANT sysup-work-info  
+
+\ изменяемые "вручную" значения
+0
+   CELL -- STEP_PAUSE \ начальная данные для межшаговой паузы
+   CELL -- STEP_TIME \ начальная дянные для длительности стоянки в точке
+  1 FLOATS  -- FREQ_BEGIN  \ начальная частота
+  1 FLOATS  -- FREQ_END   \ конечная частота
+  1 FLOATS  -- FREQ_STEP \ шаг
+  256	   -- file_kalibrov_buf	\ буфер имени файла калибровки
+  256	   -- file_generator_buf	\ буфер имени файла генератора
+  256	   -- file_izm_buf	\ буфер имени файла измерителя 
+CELL -- work_step    \ 1- процентный шаг,  0 линейшый шаг, -1  по таблице
+CELL  -- N_STEP	\ наибольшее количество шагов для выхода на мощность
+\ внутренние переменные
+  256 -- file_nastr_buf		\ имя файла настроек
+  CELL -- Len_Coment_buffer \ размер данных в буфере для коментария настроек
+  1024 -- Coment_buffer \ буфер  для коментария настроек
+  1 FLOATS  -- FREQ       \ текущая частота
+ CELL -- kalibrovka		\  имя файла калибровки
+ CELL -- generator		\   объект генератора
+ CELL -- kalibr_izm		\  имя файла измерителя калибровки
+ \ CELL -- izmeritel		\  имя файла измерителя
+ CELL -- result			\  имя файла результата
+CONSTANT sysup-metod-info
+
+0 VALUE work-info \ минимальный набор дла запуска программы
+0 VALUE metod-info  \ дополнительные настроки программы, определяются в методе
+
+ HERE DUP >R sysup-work-info DUP ALLOT ERASE TO work-info
+ HERE DUP >R sysup-metod-info DUP ALLOT ERASE TO  metod-info
+
+
+: SeeOne \ подготовить в выводу описание переменной из настроек
+\ :NONAME  
+{ n } ( n -- num/fnum  flag adr u    | flag )
+\ flag:   0 - нет описания 1 - целое 2-действительное 3- строка 4 -имя файла 
+\ ( если отричательные значения - нередактируемое поле)
+\ CASE
+ 0
+n 0 = IF DROP metod-info STEP_PAUSE	1	S" Пауза между воздействиями, мс "  THEN
+n 1 = IF DROP  metod-info STEP_TIME	1	S" Время одного воздействия, мс"  THEN
+n 2 = IF DROP metod-info FREQ_BEGIN	2	S" Начальная частота "  THEN
+n 3 = IF DROP  metod-info FREQ_END	2	S" Конечная частота "  THEN
+n 4 = IF DROP   metod-info FREQ_STEP	2	S" Шаг по частоте "   THEN
+n 5 = IF DROP   metod-info file_kalibrov_buf 4	S" Калибровка"  THEN
+n 6 = IF DROP   metod-info file_generator_buf 4	S" Генератор"  THEN
+n 7 = IF DROP   metod-info file_izm_buf 4	S" Измеритель "  THEN
+n 9 = IF DROP   metod-info work_step  1 S" ТИП РАБОТЫ: (-1)-%, (0)-линейный, (1)-по таблице"  THEN
+\ 0
+\ ENDCASE
+ \ какой-то глюк кейса
+ 
+; \ TO SeeOne
+\ отладочная информация
+
+:  see
+S" ---------------------------------------------" TYPE CR
+."  STEP_TIME: "			metod-info	STEP_TIME		@ .  CR
+."  STEP_PAUSE: "			metod-info	STEP_PAUSE		@ . CR
+."  FREQ_BEGIN:"			metod-info	FREQ_BEGIN		F@ F. CR
+."  FREQ_END: "				metod-info	FREQ_END		F@ F. CR
+."  FREQ_STEP: "			metod-info	FREQ_STEP		F@ F. CR
+."  file_generator_buf: "		metod-info	file_generator_buf	TYPE_BUFER CR
+ ."  file_izm_buf: "			metod-info	file_izm_buf		TYPE_BUFER CR
+."  file_kalibrov_buf: "		metod-info	file_kalibrov_buf	TYPE_BUFER CR
+."  work_step: "			metod-info	work_step		@ . CR
+S" ---------------------------------------------" TYPE CR
+CR
+;  
+
+
+: SAVE_NASTR_DATA  { save_file } \ сохранение настроек
+\ задержки
+	metod-info	STEP_TIME	@  save_file DtoFile  "  metod-info STEP_TIME           ! "   save_file StoFile  save_file CRtoFile
+	metod-info	STEP_PAUSE	@  save_file DtoFile  "  metod-info STEP_PAUSE          ! "   save_file StoFile  save_file CRtoFile
+	metod-info	FREQ_BEGIN	F@ save_file FtoFile  "  metod-info FREQ_BEGIN          F! "  save_file StoFile  save_file CRtoFile	
+	metod-info	FREQ_END	F@ save_file FtoFile  "  metod-info FREQ_END            F! "  save_file StoFile  save_file CRtoFile
+	metod-info	FREQ_STEP	F@ save_file FtoFile  "  metod-info FREQ_STEP           F! "  save_file StoFile  save_file CRtoFile
+\  тип шага- линейный, процентный, ?добавить по формуле?????
+	metod-info	work_step	@ save_file DtoFile   "  metod-info work_step           ! "  save_file StoFile  save_file CRtoFile
+\ имена файлов
+	"  {''} " save_file StoFile metod-info	file_generator_buf  1 +	metod-info	file_generator_buf	C@ STR>S save_file StoFile  " {''} metod-info file_generator_buf	LOAD_TO_BUFER " save_file StoFile  save_file CRtoFile
+	"  {''} " save_file StoFile metod-info	file_izm_buf        1 + metod-info	file_izm_buf	        C@ STR>S save_file StoFile  " {''} metod-info file_kalibr_izm_buf	LOAD_TO_BUFER " save_file StoFile  save_file CRtoFile
+	"  {''} " save_file StoFile metod-info	file_kalibrov_buf   1 +	metod-info	file_kalibrov_buf	C@ STR>S save_file StoFile  " {''} metod-info file_kalibrov_buf		LOAD_TO_BUFER " save_file StoFile  save_file CRtoFile 
+; \ TO 	SAVE_NASTR_DATA 
+	
+
+
+
+
+
+
+
+
+
+
+
+
+\ окно метода
+VARIABLE builder_metod
+VARIABLE WinMetod
+VARIABLE button_close_metod
+
+VARIABLE treeview_metod_data
+VARIABLE liststore_metod_text
+
+ 0 , HERE  64 ALLOT  VALUE iter_store_text
+
+
+
+
+
+
+
+
+: Refresh_list { \ adr u I flag  s  data-adr }
+ liststore_metod_text  @ 1 gtk_list_store_clear	 DROP
+0 -> I
+ BEGIN
+   I SeeOne  
+ DUP  0 >  
+ WHILE
+      -> u -> adr   -> flag      -> data-adr  
+      adr u TYPE ." -> " flag . CR
+	I iter_store_text  liststore_metod_text  @  3 gtk_list_store_insert DROP
+   	\ -1  adr u STR>S DUP >R STR@ DROP 1 iter_store_text liststore_text  @ 5 gtk_list_store_set DROP R> STRFREE
+   flag 1 = IF data-adr  @ >NUM  STR>S -> s THEN
+   flag 2 = IF data-adr F@ >FNUM STR>S -> s THEN
+   flag 2 > flag 5 < AND IF data-adr 1+ data-adr C@ STR>S -> s THEN
+   flag 4 > flag 1 < OR IF "  закончено" -> s THEN
+	 -1 I 0 adr u STR>S DUP >R STR@ DROP 1  s DUP >R STR@ DROP 2   iter_store_text liststore_metod_text  @ 9 gtk_list_store_set DROP R> STRFREE  R> STRFREE  
+   I 1 + -> I
+REPEAT
+DROP
+;
+
+
+:NONAME 
+  0 DisableButon !
+
+	WinMetod @ 1 gtk_widget_destroy DROP  
+\	builder_metod @ 1 gtk_widget_destroy DROP  	
+	0 ;  1 CELLS  CALLBACK: on_metod_destroy  
+
+:NONAME  
+	WinMetod @ 1 gtk_widget_destroy DROP    
+\	builder_metod @ 1 gtk_widget_destroy DROP  	
+	0 ;  1 CELLS  CALLBACK: button_close_metod_click
+
+: StartMetod  {   \ tekFile }
+   Directory 2 + ASCIIZ>  "" DUP -> tekFile  STR+
+  " /metod.glade" tekFile  S+
+  ." load glade file :" tekFile     STR@ TYPE ."  " CR
+  0 gtk_builder_new   builder_metod !
+   error  tekFile   >R R@ STR@  DROP  builder_metod @ 3 gtk_builder_add_from_file DROP   R> STRFREE \ 2DROP 
+  " winmetod"  >R R@ STR@  DROP builder_metod @ 2 gtk_builder_get_object WinMetod !  R> STRFREE \ 2DROP
+  WinMetod @  1 gtk_widget_show DROP \ DROP
+
+   \ ДЕЙСТВО ЗАКРЫТИЕ ПРОГРАММЫ
+   " destroy"  >R 0 0 0  ['] on_metod_destroy  R@ STR@ DROP WinMetod @ 6 g_signal_connect_data   R> STRFREE  DROP \ 2DROP 2DROP 2DROP
+
+ " button_close" >R  R@ STR@  DROP builder_metod @ 2 gtk_builder_get_object button_close_metod  !    R> STRFREE \ 2DROP
+  " clicked"  >R 0 0 0  ['] button_close_metod_click R@ STR@ DROP button_close_metod   @ 6 g_signal_connect_data   R> STRFREE  DROP \ 2DROP 2DROP 2DROP
+
+   " treeview_data" >R  R@ STR@  DROP builder_metod @ 2 gtk_builder_get_object  treeview_metod_data  !    R> STRFREE
+ 
+    " liststore_text" >R R@ STR@ DROP builder_metod @ 2 gtk_builder_get_object liststore_metod_text ! R> STRFREE  
+ 
+
+;
+
+
+
+(
+: BEGIN: \ NONAME  
+\ ."  begin " CR	  
+	see
+
+ \ генератор
+	metod-info file_generator_buf DUP 1+ SWAP  C@   INCLUDE-PROBE IF " error ineterface generator " TO_ERROR_PROG_BUFER  -1 THROW THEN
+	NewObj metod-info generator !
+ \ измеритель 
+	metod-info  file_izm_buf  DUP 1+ SWAP  C@   INCLUDE-PROBE IF " error ineterface kalibrator  " TO_ERROR_PROG_BUFER  -1 THROW THEN
+	NewObj metod-info kalibr_izm !
+ \ запуск устройств	
+	metod-info generator	@ ^ Start IF " generator not found " TO_ERROR_PROG_BUFER  -1 THROW THEN
+	metod-info kalibr_izm	@ ^ Start IF " izmeritel  not found " TO_ERROR_PROG_BUFER  -1 THROW THEN
+
+\ создали объект-основу калибровки
+	tabl_kalibr NewObj metod-info kalibrovka  !
+	metod-info kalibrovka  @ 	metod-info  file_kalibrov_buf  DUP  1+  SWAP C@   ERR-INCLUDE-PROBE 
+		IF "  error_in_file_kalibrovka "  DUP STR@ TYPE TO_ERROR_PROG_BUFER  error_out_file  work-info  ERROR_PROG !
+		ELSE ."  kalibrovka:  " metod-info kalibrovka  @ ^ SeeDatas  THEN CR
+	metod-info   FREQ_BEGIN F@ metod-info   FREQ  F!  
+\ результаты	подготовили файл
+	work-info  file_result_buf 1+ work-info  file_result_buf C@  STR>S  outFileCreate metod-info result !
+ " // " metod-info result @ StoFile TIME&DATE  DROP DROP DROP metod-info result @ DtoFile  metod-info result @ DtoFile  metod-info result @ DtoFile   metod-info result @  CRtoFile  
+\ коментари ф файл вывода
+
+\	"  // " metod-info result @ StoFile
+\	work-info Coment_buffer  work-info  Len_Coment_buffer @   STR>S metod-info result @ StoFile
+
+	metod-info result @	CRtoFile 
+\	" clear; " metod-info result @ StoFile
+\	metod-info result @	CRtoFile 
+
+\	" x= [{CRLF}" metod-info result @ StoFile
+\ metod-info generator @ ^ On
+." begin-ok"
+
+	; \ TO BEGIN:
+
+)
+
+
+
+
+
+
+
+
+
+
+
+StartMetod
+Refresh_list

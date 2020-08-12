@@ -1,0 +1,840 @@
+
+ REQUIRE  tabl_kalibr  ~disa/kalibr_hype.f
+ REQUIRE  dBuV->V  ~disa/algoritm.f
+ REQUIRE WildCMP-U ~pinka/lib/mask.f
+
+
+ 
+
+	0 CONSTANT NoError
+\ коды управления
+	1 CONSTANT work_Execute   \ нормальный режим работы
+	2 CONSTANT work_Stop   \ останов при нормальным режиме работы
+	3 CONSTANT work_Pause   \ пауза
+ 
+ 
+\ коды ошибок
+	1001 CONSTANT error_begin_problem
+	1002 CONSTANT error_end_problem
+	1003 CONSTANT error_cicle_problem
+	1004 CONSTANT error_metod_file
+	1005 CONSTANT error_nastr_file
+	2001 CONSTANT error_out_file  \ ошибки подключаемых файлов
+	3001  CONSTANT  error_face \ ошибка данных в окне
+
+
+
+\ набор для управления программой
+	 0
+	1024 -- Data_buffer \ буфер  для служебных выводимых на экран
+	256  -- _file_name_bufer_ \ буфер  передачи имени между потоками
+	256  -- ERROR_PROG_BUFER \ буфер  передачи ошибки
+	CELL -- ERROR_PROG \ номер ошибки
+	CELL -- work_thread \ запуск потока
+	CELL -- tid-thead \ -  физическое управление потоком
+	CELL -- -upravl_thead-  \ логический ключ для процедуры  запуска/останова  испытаний.. все удаления нужно делать в том же потоке, в котором и запускались
+	CELL -- refresh  \ обновление
+CONSTANT sysup-work-info  
+
+
+\ изменяемые "вручную" значения
+	0
+	   CELL -- STEP_PAUSE \ начальная данные для межшаговой паузы
+	   CELL -- STEP_TIME \ начальная дянные для длительности стоянки в точке
+	  1 FLOATS  -- FREQ_BEGIN  \ начальная частота
+	  1 FLOATS  -- FREQ_END   \ конечная частота
+	  1 FLOATS  -- FREQ_STEP \ шаг
+	  256	   -- file_kalibrov_buf	\ буфер имени файла калибровки	
+	  256	   -- file_generator_buf	\ буфер имени файла генератора
+	  256	   -- file_izm_buf	\ буфер имени файла измерителя 
+	CELL -- work_step    \ 1- процентный шаг,  0 линейшый шаг, -1  по таблице
+	CELL  -- N_STEP	\ наибольшее количество шагов для выхода на мощность
+	\ внутренние переменные
+	  256 -- file_nastr_buf		\ имя файла настроек
+	  CELL -- Len_Coment_buffer \ размер данных в буфере для коментария настроек
+	  1024 -- Coment_buffer \ буфер  для коментария настроек
+	  1 FLOATS  -- FREQ       \ текущая частота
+	 CELL -- kalibrovka		\  имя файла калибровки
+	 CELL -- generator		\   объект генератора
+	 CELL -- kalibr_izm		\  имя файла измерителя 
+	 \ CELL -- izmeritel		\  имя файла измерителя
+	 CELL -- result			\  имя файла результата
+CONSTANT sysup-metod-info
+
+0 VALUE work-info \ минимальный набор дла запуска программы
+0 VALUE metod-info  \ дополнительные настроки программы, определяются в методе
+
+ HERE DUP >R sysup-work-info DUP ALLOT ERASE TO work-info
+ HERE DUP >R sysup-metod-info DUP ALLOT ERASE TO  metod-info
+
+
+: To_Data_buffer   { adr u \  -- }
+	work-info Data_buffer  @ 1 < IF 1024  0 DO 0 I work-info Data_buffer  + C! LOOP THEN \ очищение буфера
+	work-info Data_buffer @ u + 1024 CELL -  > \ ограничение на буфер
+	IF
+		 1024 CELL - work-info Data_buffer @  -  -> u
+	THEN
+	adr work-info Data_buffer CELL+  work-info Data_buffer @ + u CMOVE 
+	work-info Data_buffer @ u + work-info Data_buffer !
+	 \ ."  ->" u . work-info Data_buffer @ . ." <- "
+;
+
+: Str_Data_buffer  ( -- s )
+	work-info Data_buffer CELL+ work-info Data_buffer @ 
+	  0 work-info Data_buffer  !
+;
+
+
+: StoFile { s-adr   file }
+	\  отправляю строку формата ~ас  в файл 
+	   s-adr STR@ \  ." -> " TYPE ." <-"  \ SWAP textview_result_bufer @ 3 gtk_text_buffer_set_text DROP
+	 To_Data_buffer  
+	\        SWAP  textview_comment_bufer @ 3 gtk_text_buffer_set_text DROP
+	s-adr   file  StoFile  
+;
+
+: FtoFile { file } "  " file StoFile  >FNUM  STR>S file StoFile  "  " file StoFile  ; \ флоат число в выходной файл
+: DtoFile { file } "  " file StoFile   >NUM  STR>S file StoFile  "  " file StoFile  ; \ целое число в выходной файл
+ : CRtoFile " {CRLF}" SWAP StoFile ;
+
+: COMMENT( { \ num  adr len  -- }
+	0 -> num 
+	BEGIN
+		[CHAR] ) DUP PARSE   -> len -> adr 
+		\    \ тут нужна защита от переполнения 
+		adr  metod-info Coment_buffer  num + len   CMOVE \ скопировали все в буфер
+		num len + -> num		\ установили новый его размер
+		adr len + C@ = 0=  
+	WHILE
+		REFILL 0= IF EXIT THEN
+	REPEAT      
+	metod-info  Coment_buffer   num + 1+  0!
+	num metod-info   Len_Coment_buffer  !
+;
+
+
+
+
+: LOAD_TO_ERR_BUFER { s-adr adr \ u    -- }
+	s-adr STR@ NIP  adr  C@ + 255 > IF 255  adr  C@ - ELSE  s-adr STR@ NIP  THEN -> u
+	s-adr STR@ DROP  adr  1 + adr  C@ +  u CMOVE  
+	s-adr STRFREE
+	adr  C@   u + adr  C!
+;
+
+
+: TYPE_BUFER { bufer } 
+	bufer  1+ 
+	bufer  C@   DUP 0 > IF TYPE ELSE 2DROP ."  no info in buffer "  THEN 
+;
+
+: CLEAR_ERROR_BUFER 255 0 DO 0 work-info ERROR_PROG_BUFER   I + C!  LOOP ;
+: TO_ERROR_PROG_BUFER    work-info ERROR_PROG_BUFER  LOAD_TO_ERR_BUFER ;  ( s-adr  ) \ ошибку в буфер
+: TYPE_ERROR_PROG_BUFER  work-info ERROR_PROG_BUFER   TYPE_BUFER ;
+\ отработка ошибки
+: :ERROR  { s-adr-err n-err  }  s-adr-err  TO_ERROR_PROG_BUFER  n-err work-info  ERROR_PROG ! TYPE_ERROR_PROG_BUFER   -1 ;
+
+: PAUSE-PROG 
+	DUP 50 < 
+	IF  PAUSE  
+	ELSE 50 / 
+		0 DO work-info -upravl_thead- @  work_Execute = 
+			IF  50 PAUSE THEN    
+		LOOP 
+	THEN 
+;
+ 
+: SeeOne \ подготовить в выводу описание переменной из настроек
+	\ :NONAME  
+	{ n } ( n -- num/fnum  flag adr u    | flag )
+	\ flag:   0 - нет описания 1 - целое 2-действительное 3- строка 4 -имя файла  калибровки, 4 -имя файла  прибора
+	\ ( если отричательные значения - нередактируемое поле)
+	\ CASE
+	 0
+	n 0 = IF DROP metod-info STEP_PAUSE	1	S" Пауза между воздействиями, мс "  THEN
+	n 1 = IF DROP  metod-info STEP_TIME	1	S" Время одного воздействия, мс"  THEN
+	n 2 = IF DROP metod-info FREQ_BEGIN	2	S" Начальная частота, Гц "  THEN
+	n 3 = IF DROP  metod-info FREQ_END	2	S" Конечная частота, Гц "  THEN
+	n 4 = IF DROP   metod-info work_step  1		S" ТИП РАБОТЫ: (-1)-%, (0)-линейный, (1)-по таблице"  THEN
+	n 5 = IF DROP   metod-info FREQ_STEP	2	S" Шаг по частоте "   THEN
+	n 6 = IF DROP   metod-info file_kalibrov_buf 4	S" Калибровка"  THEN
+	n 7 = IF DROP   metod-info file_generator_buf 5	S" Генератор"  THEN
+	n 8 = IF DROP   metod-info file_izm_buf 5	S" Измеритель "  THEN
+	\ 0
+	\ ENDCASE
+	 \ какой-то глюк кейса 
+; \ TO SeeOne
+
+\ отладочная информация
+
+:  see
+	S" ---------------------------------------------" TYPE CR
+	."  COMMENT: "				metod-info	Coment_buffer metod-info  Len_Coment_buffer  @ TYPE CR
+	."  STEP_TIME: "			metod-info	STEP_TIME		@ .  CR
+	."  STEP_PAUSE: "			metod-info	STEP_PAUSE		@ . CR
+	."  FREQ_BEGIN:"			metod-info	FREQ_BEGIN		F@ F. CR
+	."  FREQ_END: "				metod-info	FREQ_END		F@ F. CR
+	."  FREQ_STEP: "			metod-info	FREQ_STEP		F@ F. CR
+	."  file_generator_buf: "		metod-info	file_generator_buf	TYPE_BUFER CR
+	 ."  file_izm_buf: "			metod-info	file_izm_buf		TYPE_BUFER CR
+	."  file_kalibrov_buf: "		metod-info	file_kalibrov_buf	TYPE_BUFER CR
+	."  work_step: "			metod-info	work_step		@ . CR
+	S" ---------------------------------------------" TYPE CR
+	CR
+;  
+
+
+: SAVE_NASTR_DATA  { save_file } \ сохранение настроек
+	." SAVE NAST DATA " CR
+	" COMMENT( " save_file StoFile
+	\	" 111111111222222222223333333333 " save_file StoFile
+	\	"  ) " save_file StoFile save_file CRtoFile
+	metod-info Coment_buffer  metod-info  Len_Coment_buffer @  \ данные по буферу
+	STR>S  save_file StoFile   
+	" )" save_file StoFile save_file CRtoFile
+	\	"  {''} " save_file StoFile metod-info file_result_buf 1+ metod-info   file_result_buf  C@    	STR>S save_file StoFile  " {''} metod-info file_result_buf	LOAD_TO_BUFER " save_file StoFile  save_file CRtoFile
+\ задержки
+	"  {''} " save_file StoFile  metod-info	STEP_TIME	@  save_file DtoFile  " {''} S>FLOAT DROP F>D DROP  metod-info STEP_TIME           !  "   save_file StoFile  save_file CRtoFile
+	"  {''} " save_file StoFile metod-info	STEP_PAUSE	@  save_file DtoFile  " {''} S>FLOAT DROP F>D DROP  metod-info STEP_PAUSE          ! "   save_file StoFile  save_file CRtoFile
+	"  {''} " save_file StoFile metod-info	FREQ_BEGIN	F@ save_file FtoFile  " {''} S>FLOAT DROP           metod-info FREQ_BEGIN          F! "  save_file StoFile  save_file CRtoFile	
+	"  {''} " save_file StoFile metod-info	FREQ_END	F@ save_file FtoFile  " {''} S>FLOAT DROP           metod-info FREQ_END            F! "  save_file StoFile  save_file CRtoFile
+	"  {''} " save_file StoFile metod-info	FREQ_STEP	F@ save_file FtoFile  " {''} S>FLOAT DROP           metod-info FREQ_STEP           F! "  save_file StoFile  save_file CRtoFile
+\  тип шага- линейный, процентный, ?добавить по формуле?????
+	"  {''} " save_file StoFile metod-info	work_step	@ save_file DtoFile   " {''} S>FLOAT DROP F>D DROP  metod-info work_step           ! "  save_file StoFile  save_file CRtoFile
+\ имена файлов
+	"  {''} " save_file StoFile metod-info	file_generator_buf  1 +	metod-info	file_generator_buf	C@ STR>S save_file StoFile  " {''} metod-info file_generator_buf	LOAD_TO_BUFER " save_file StoFile  save_file CRtoFile
+	"  {''} " save_file StoFile metod-info	file_izm_buf        1 + metod-info	file_izm_buf	        C@ STR>S save_file StoFile  " {''} metod-info file_izm_buf	 	LOAD_TO_BUFER " save_file StoFile  save_file CRtoFile
+	"  {''} " save_file StoFile metod-info	file_kalibrov_buf   1 +	metod-info	file_kalibrov_buf	C@ STR>S save_file StoFile  " {''} metod-info file_kalibrov_buf		LOAD_TO_BUFER " save_file StoFile  save_file CRtoFile 
+;
+	\
+: IF_END:
+	\ ." ifend "
+	metod-info FREQ_STEP F@ 0e F>
+	IF \ едем вверх
+		metod-info  FREQ F@  metod-info  FREQ_END   F@ F>=   IF metod-info  FREQ_END   F@ metod-info  FREQ F! 0  ELSE 1 THEN
+	ELSE \ едем вниз
+		metod-info  FREQ F@  metod-info  FREQ_END   F@ F<=   IF metod-info  FREQ_BEGIN   F@ metod-info  FREQ F! 0  ELSE 1 THEN
+	THEN	
+; 
+
+
+: BEGIN:  
+	."  begin " CR	  
+	see
+	 \ генератор
+	."  file_generator_buf  " CR	   
+	metod-info file_generator_buf DUP 1+ SWAP  C@  2DUP INCLUDE-PROBE IF " error ineterface generator " TO_ERROR_PROG_BUFER  -1 THROW THEN
+	NewObj metod-info generator !
+	500 PAUSE
+\ измеритель
+	."  file_izm_buf   " CR	    
+	metod-info  file_izm_buf  DUP 1+ SWAP  C@  2DUP  INCLUDE-PROBE IF " error ineterface kalibrator  " TO_ERROR_PROG_BUFER  -1 THROW THEN
+	NewObj metod-info kalibr_izm !
+	500 PAUSE
+ \ запуск устройств	
+	."  start   " CR	    
+	 metod-info  file_generator_buf	 metod-info  generator	@ ^ Start IF " generator not found " TO_ERROR_PROG_BUFER  -1 THROW THEN
+				metod-info   kalibr_izm	@ ^ Start IF " izmeritel  not found " TO_ERROR_PROG_BUFER  -1 THROW THEN
+	."  kalibrovka " CR	    
+\ создали объект-основу калибровки
+	500 PAUSE
+	tabl_kalibr NewObj metod-info kalibrovka  !
+	metod-info kalibrovka  @ 	metod-info  file_kalibrov_buf  DUP  1+  SWAP C@   ERR-INCLUDE-PROBE 
+		IF "  error_in_file_kalibrovka "  DUP STR@ TYPE TO_ERROR_PROG_BUFER  error_out_file  work-info  ERROR_PROG !
+		ELSE ."  kalibrovka:  " metod-info kalibrovka  @ ^ SeeDatas  THEN CR
+	" result.txt"   outFileCreate metod-info result !
+	\ устанавливаем мин и макс по калибровке, если они не соответствуют ей
+	metod-info   FREQ_BEGIN F@  metod-info kalibrovka  @ ^ MinMax metod-info   FREQ_BEGIN F! IF " минимальное  значение не соответствует калибровке. Поправлено. {CRLF} " metod-info result @  StoFile THEN 
+	metod-info   FREQ_END   F@  metod-info kalibrovka  @ ^ MinMax metod-info   FREQ_END   F! IF " максимальное значение не соответствует калибровке. Поправлено. {CRLF}" metod-info result @  StoFile THEN
+	metod-info   FREQ_BEGIN F@ metod-info   FREQ  F!  
+	" start: " metod-info result @ StoFile TIME&DATE  DROP DROP DROP metod-info result @ DtoFile  metod-info result @ DtoFile  metod-info result @ DtoFile   metod-info result @  CRtoFile  
+	" Частота,МГц               ПОДАНО               ПРИНЯТО"  metod-info result  @ StoFile  metod-info result @ CRtoFile 
+	\ коментари ф файл вывода
+	\	"  // " metod-info result @ StoFile
+	\	work-info Coment_buffer  work-info  Len_Coment_buffer @   STR>S metod-info result @ StoFile
+	\	metod-info result @	CRtoFile 
+	\	" clear; " metod-info result @ StoFile
+	\	metod-info result @	CRtoFile 
+	\	" x= [{CRLF}" metod-info result @ StoFile
+	\ metod-info generator @ ^ On
+	." begin-ok"
+; 
+
+: WORK:     || F: gen F: kal  D: n_step   ||
+	  ."  work... "
+\	 metod-info FREQ  F@   F.
+	 \ учтанавливаем частоту
+	 metod-info FREQ  F@    metod-info generator	@ ^ SetFreq  
+	 metod-info FREQ  F@   metod-info kalibr_izm	@ ^ SetFreq 
+
+	metod-info FREQ  F@ 2 metod-info kalibrovka @ ^ TakeData  gen F!  \ начальные данные генератора
+
+\ частота
+	 metod-info FREQ  F@   metod-info result @ FtoFile  
+	"                "  metod-info result @  StoFile
+
+	gen F@  metod-info generator @ ^ SetLevel  \  выставляем данные генератора
+	metod-info STEP_TIME @ PAUSE-PROG
+	 gen  F@   metod-info result @ FtoFile  
+	"               "  metod-info result @  StoFile
+\  калибровочные данные
+	 metod-info kalibr_izm	@ ^ GetLevel  DUP 0 >   IF   0 DO   metod-info result @ FtoFile  LOOP ELSE DROP    THEN
+	 "    "  metod-info result @  StoFile  
+	metod-info result @  CRtoFile  
+	."  ...work "
+	CR
+; 
+
+
+
+
+: END:  
+	\ ." end"
+	\	" ];{CRLF}" metod-info result @ StoFile
+	\	" StartFreq=x(1,1); {CRLF}" metod-info result @ StoFile
+	\	" sss=size(x) {CRLF}" metod-info result @ StoFile
+	\	" StopFreq=x(sss(1),1); {CRLF}" metod-info result @ StoFile
+	\	 " y=10^(x(:,2)./20)./1000000; {CRLF}" metod-info result @StoFile
+	\	" y=x(:,3){CRLF}"  metod-info result @ StoFile
+	\	" xset({''}thickness{''},2); {CRLF} " metod-info result @ StoFile
+	\	" plot2d({''}nn{''},x(:,1),y,1); {CRLF}" metod-info result @ StoFile	\\\	" set(gca(),{''}grid{''},[1, 1]); {CRLF}" metod-info result @ StoFile
+	" stop: " metod-info result @  StoFile TIME&DATE  DROP DROP DROP metod-info result @  DtoFile  metod-info result @  DtoFile  metod-info result @  DtoFile   metod-info result @ CRtoFile  
+	\	metod-info result @ outFileClose
+\ отключение оборудования
+	metod-info generator	@ ^ Off
+	metod-info generator	@ ^ Stop
+ 	metod-info kalibr_izm	@ ^ Stop
+\ удаление оборудования 	
+	metod-info generator	@  FreeObj
+	metod-info kalibr_izm	@  FreeObj
+\ удаление таблиц	
+	metod-info kalibrovka  @   FreeObj
+	; 
+
+	
+: NewStep   \ { \ sign } 
+	\ metod-info FREQ_STEP F@ 0e F< IF -1 -> sign THEN  \ если идем по частоте вниз !
+	\ ."  NewStep " CR 
+	\ ."  v1 " DEPTH . FDEPTH . ."  "
+	 metod-info  work_step  @ 
+	\  ."  v2 " DEPTH . FDEPTH . ."  " 
+	 CASE 
+		-1 OF  metod-info FREQ_STEP  F@ metod-info FREQ  F@ F*   ( sign  IF -1e F* THEN)  metod-info FREQ  F@ F+    ENDOF
+		1  OF  metod-info FREQ  F@  metod-info kalibrovka @ ^ NextFreq     ENDOF \ НЕ РАБОТАЕТ ПЕРЕБОР ВНИЗ по частоте!!!!! при табличной вводе
+		metod-info FREQ_STEP  F@    ( sign  IF -1e F* THEN) metod-info FREQ  F@ F+  
+	 ENDCASE
+	metod-info FREQ  F!  
+\ ."  v4 " DEPTH . FDEPTH . ."  " 
+; 
+
+
+ : WORK_END: 
+ ;
+
+\ один шаг по частоте
+: WorkStep
+	work_Execute work-info -upravl_thead- !
+	 \  work-info FREQ_BEGIN  F@ work-info  FREQ F!
+	\ WORK_BEGIN:
+	 BEGIN 
+		\ ."  -1- "
+		\ завершение работы, штатное/принудительное
+		work-info  -upravl_thead- @ work_Execute = 
+		IF 
+			IF_END:    \
+		ELSE  0 
+		THEN     
+	WHILE
+		\ рабочий цикл
+		WORK:  
+		\ вычисляем и запоминаем новый шаг (новую частоту?) 
+		NewStep  \ work-info  FREQ  F!
+	  	metod-info  STEP_PAUSE @ PAUSE-PROG  
+	REPEAT
+		\ "последний" шаг
+	work-info -upravl_thead- @ work_Execute = IF   WORK_END: WORK:      THEN     
+;
+
+
+: WorkCicle 
+	\ обнулили ошибки при запуске
+	CLEAR_ERROR_BUFER 
+	NoError work-info ERROR_PROG !
+	\ подготовка оборудования к запуску, инициализация приборов
+	work_Execute work-info -upravl_thead- !
+	[']  BEGIN: CATCH  
+	IF \ CR  ." word BEGIN problem  " CR error_begin_problem work-info  ERROR_PROG !
+		" word BEGIN problem  " error_end_problem  :ERROR  DROP
+	ELSE \ если инициализация прошла 
+		CR ." word BEGIN  - ok  " CR
+		['] WorkStep CATCH  
+		IF   
+			" word WorkCicle problem "  error_cicle_problem  :ERROR  DROP
+			\	  error_cicle_problem work-info  ERROR_PROG ! 
+		ELSE  CR ." word WorkCicle -ok  "  CR THEN
+	THEN	
+	['] END:  CATCH 	
+	IF  \ CR ." word END problem. "  CR error_end_problem work-info  ERROR_PROG ! 
+		" word END problem "  error_end_problem  :ERROR  DROP
+	ELSE  CR ." word END - ok  " CR 
+	THEN	
+	metod-info result @ outFileClose
+\	[']  FreePribor CATCH 0=  IF CR ." word FreePribor problem. " THEN	 
+	work-info -upravl_thead- @ 0= \ если не было ошибок 
+	IF  
+		work_Stop  work-info -upravl_thead- ! \  то "нормальный" останов
+	THEN
+	\ 0 TO -work_thead-
+	CR ." WorkCicle STOP" CR
+	work_Stop  work-info -upravl_thead- !
+	\ TERMINATE 
+;
+
+
+
+
+: file_nastr_reqiured metod-info  file_nastr_buf 1+ metod-info  file_nastr_buf C@  	INCLUDE-PROBE   ;
+
+
+VARIABLE num_data \ номер последних/текущих данных в списке  gtk_tree... только для передачи внутри граф. интерфейса
+VARIABLE dialog
+\ VARIABLE dialog_file
+
+\ окно метода
+VARIABLE builder_metod
+VARIABLE WinMetod
+VARIABLE button_close_metod
+VARIABLE WinMetod_timer \ для останова таймерра
+
+VARIABLE treeview_metod_data
+VARIABLE liststore_metod_text
+VARIABLE button_save_data
+VARIABLE tree_view_metod
+VARIABLE filechooserbutton_file_nastr  \ настройки
+VARIABLE filechooserbutton_metod 
+VARIABLE button_save_data_metod
+VARIABLE button_load_data_metod
+VARIABLE filefilter_kal
+VARIABLE filefilter_prib
+VARIABLE filefilter_nast
+
+VARIABLE  button_start
+VARIABLE  button_stop
+VARIABLE  button_pause
+VARIABLE  textview_result 
+VARIABLE  textview_result_bufer 
+
+
+	 
+\ диалог ввода цифр и файлов в методы  
+VARIABLE button_norma
+VARIABLE button_error 
+VARIABLE dialog_entry
+VARIABLE dialog_label
+VARIABLE dialog_filechooserbutton 
+
+\ различные итераторвы
+ 0 , HERE  64 ALLOT  VALUE iter_store_text
+ 0 , HERE  64 ALLOT  VALUE iter_n
+ 0 , HERE  64 ALLOT  VALUE iter_k
+
+
+VARIABLE textview_comment_metod
+VARIABLE textview_comment_bufer
+
+
+
+: Refresh_list { \ adr u I flag  s  data-adr }
+	liststore_metod_text  @ 1 gtk_list_store_clear	 DROP
+	0 -> I
+	BEGIN
+		I SeeOne  ."  SeeOne: " DUP . ." " 
+		DUP  0 >  
+	WHILE
+		-> u -> adr   -> flag      -> data-adr  
+		adr u TYPE ." -> " flag . CR
+		I iter_store_text  liststore_metod_text  @  3 gtk_list_store_insert DROP
+		\ -1  adr u STR>S DUP >R STR@ DROP 1 iter_store_text liststore_text  @ 5 gtk_list_store_set DROP R> STRFREE
+		flag 1 = 
+		IF 
+			data-adr  @ >NUM  STR>S -> s 
+		THEN
+		flag 2 = 
+		IF 
+			data-adr F@ >FNUM STR>S -> s 
+		THEN
+		flag 2 > flag 6 < AND 
+		IF 
+			data-adr 1+ data-adr C@ STR>S -> s 
+		THEN
+		flag 5 > flag 1 < OR 
+		IF 
+			"  закончено" -> s 
+		THEN
+		-1 I 0 adr u STR>S DUP >R STR@ DROP 1  s DUP >R STR@ DROP 2   iter_store_text liststore_metod_text  @ 9 gtk_list_store_set DROP R> STRFREE  R> STRFREE  
+		I 1 + -> I
+		."  I: " I . ."  " CR
+	REPEAT
+	DROP
+;
+
+:NONAME 
+	." but_stop_click"	
+ \	0 work-info  ERROR_PROG  !	\ сбраcываем ошибки
+	work_Stop work-info -upravl_thead- ! 	
+	0 ;  1 CELLS  
+CALLBACK: but_stop_click
+
+:NONAME 
+	0 DisableButon !
+	0 WinMetod_timer !
+	but_stop_click
+	WinMetod @ 1 gtk_widget_destroy DROP  
+	\	builder_metod @ 1 gtk_widget_destroy DROP  	
+	0 ;  1 CELLS  
+CALLBACK: on_metod_destroy  
+
+:NONAME  
+	WinMetod @ 1 gtk_widget_destroy DROP    
+	\	builder_metod @ 1 gtk_widget_destroy DROP  	
+	0 ;  1 CELLS  
+CALLBACK: button_close_metod_click
+
+
+\ диалог ввода параметров и процедура принятия решений
+:NONAME     { \ flag  adr_str  adr u tekFile }
+	num_data @ SeeOne \ адрес данных,тип данных,  название данных   длинна названия
+	2DROP -> flag  -> adr_str  	
+	\ выясняем какой тип  данных 
+	." flag: " flag . CR 
+	flag  1 =  flag  2 =  OR \ действительное или  целое
+	IF  
+		dialog_entry  @ 1 gtk_entry_get_text_length   DUP 0 > 
+		IF 
+			dialog_entry  @ 1 gtk_entry_get_text    -> adr  -> u \ adr u 	
+			adr u  ."  NUMBER: "  TYPE ."  " 			
+			adr u  STR>FLOAT    FDUP F. CR
+			\	1000 PAUSE			
+			IF
+				flag  2 =  IF	 adr_str F!  ELSE  F>D D>S  adr_str ! THEN \ действительное или целое
+			ELSE FDROP -1 -> flag
+			THEN 
+\			CR DEPTH .   FDEPTH . CR
+		ELSE DROP -1 -> flag 
+\				CR  DEPTH . FDEPTH . CR 1000 PAUSE
+
+		THEN
+	THEN
+	flag  3 =  \ строка
+	IF
+		DROP
+	THEN
+	flag  4 =  \ файл калибровки
+	IF
+		filefilter_kal @ dialog_filechooserbutton   @ 2 gtk_file_chooser_remove_filter DROP
+		dialog_filechooserbutton @ 1 gtk_file_chooser_get_filename \  взяли имя
+		DUP 
+		IF ASCIIZ> 2DUP ?STR_FILE			\ проверили наличие файла
+			IF  STR>S adr_str LOAD_TO_BUFER		\
+			ELSE  -1 -> flag 
+			THEN  
+		ELSE -1 -> flag 
+		THEN
+	THEN
+	flag  5 =  \ файл оборудования
+	IF
+		filefilter_prib @ dialog_filechooserbutton   @ 2 gtk_file_chooser_remove_filter DROP
+		dialog_filechooserbutton @ 1 gtk_file_chooser_get_filename \  взяли имя
+		DUP 
+		IF ASCIIZ> 2DUP ?STR_FILE			\ проверили наличие файла
+			IF  STR>S adr_str LOAD_TO_BUFER		\
+			ELSE  -1 -> flag 
+			THEN  
+		ELSE -1 -> flag 
+		THEN
+	THEN
+	dialog   @ 1 gtk_widget_hide DROP Refresh_list 
+	dialog   @  ;  1 CELLS  
+CALLBACK: button_norma_click
+
+\ диалог ввода параметров кнопка отмены ввода
+:NONAME 	
+	dialog @  1 gtk_widget_hide DROP  
+	0 ;  1 CELLS  
+CALLBACK: button_error_click
+
+
+:NONAME   {  column path tree_view \ model  flag  adr u  tekFile }
+	." TreeView_start_metod_click"  CR
+	dialog @  1 gtk_widget_show DROP
+	\ выделенная строчка 
+	  tree_view  1 gtk_tree_view_get_model   -> model 
+	  path iter_store_text model 3   gtk_tree_model_get_iter DROP \ (model, &iter, path_string)
+	  iter_store_text model 2 gtk_tree_model_get_string_from_iter    ASCIIZ> STR>S   \ STYPE ."  "
+	   S>FLOAT 
+	\ Временно 
+	 IF 
+		F>D D>S  num_data ! \ запомнить номер строчки с данными
+		num_data @ SeeOne \ адрес данных,тип данных,  название данных   длинна названия
+		-> u -> adr  -> flag
+		adr u STR>S DUP >R  STR@ DROP dialog_label @ 2 gtk_label_set_text DROP R> STRFREE
+		flag 1 = 
+		IF 
+			@  >NUM  STR>S   
+		THEN	 \ целое
+		flag 2 = 
+		IF 
+			F@ >FNUM  STR>S  
+		THEN      \ действительное
+		flag 3 = 
+		IF 
+			DUP 1+ SWAP C@ STR>S  
+		THEN \ просто текст
+		flag 4 = 
+		IF  			\ имя файла калибровки
+			DUP 1+ SWAP C@ STR>S 
+			Directory   ASCIIZ>  "" DUP -> tekFile  STR+   " /default.kal" tekFile  S+ tekFile   STR@ ." Directory   " TYPE CR 
+			tekFile    >R  R@ STR@  DROP dialog_filechooserbutton  @ 2 gtk_file_chooser_set_uri  R> STRFREE  ." dialog_filechooserbutton =" . CR 	
+			filefilter_kal @ dialog_filechooserbutton   @ 2 gtk_file_chooser_add_filter DROP
+			\	 DUP STR@ DROP dialog_filechooserbutton @ 2 gtk_file_chooser_set_filename DROP    
+		
+		THEN
+		flag 5 = 
+		IF  			\ имя файла прибора
+			DUP 1+ SWAP C@ STR>S 
+			" ./prib" -> tekFile    " /default.prib" tekFile  S+ tekFile   STR@ ." Directory   " TYPE CR 
+			tekFile    >R  R@ STR@  DROP dialog_filechooserbutton  @ 2 gtk_file_chooser_set_uri  R> STRFREE  ." dialog_filechooserbutton =" . CR 	
+			filefilter_prib @ dialog_filechooserbutton   @ 2 gtk_file_chooser_add_filter DROP
+			\	 DUP STR@ DROP dialog_filechooserbutton @ 2 gtk_file_chooser_set_filename DROP    
+		THEN
+		flag 5 > flag 1 < OR 
+		IF 
+			" ОШИБКА " 
+		THEN
+		DUP >R  STR@ DROP dialog_entry    @ 2 gtk_entry_set_text DROP R> STRFREE
+	THEN
+	column path tree_view 0 ; 3 CELLS 
+CALLBACK:  TreeView_start_metod_click
+
+
+: SaveDefaultNastrData { \ save_file tekFile  } 
+\ синхронизация буфера настроек
+	iter_n  textview_comment_bufer  @ 2 gtk_text_buffer_get_start_iter DROP
+	iter_k  textview_comment_bufer  @ 2 gtk_text_buffer_get_end_iter DROP
+	0 iter_k   iter_n    textview_comment_bufer  @ 4 gtk_text_buffer_get_text  ASCIIZ>   
+	DUP metod-info  Len_Coment_buffer ! \ запомнить длинну
+	metod-info  Coment_buffer SWAP CMOVE \ процесс перемещения 
+
+	Directory   ASCIIZ>  "" DUP -> tekFile  STR+   
+	" /default.nast" tekFile  S+   	
+	tekFile  
+	\ " 111.txt"
+	outFileCreate ->  save_file
+	save_file  SAVE_NASTR_DATA
+	save_file outFileClose
+;
+		
+:NONAME 
+	SaveDefaultNastrData
+	0 ;  1 CELLS  
+CALLBACK: button_save_data_metod_click
+
+\ загрузка начальных данныхдля работы
+:NONAME 	
+	0 work-info  ERROR_PROG  !	\ сбраcываем ошибки
+	0 work-info  ERROR_PROG  !	\ сбраcываем ошибки
+	\ грузим имя настроек
+	filechooserbutton_file_nastr  @ 1 gtk_file_chooser_get_filename   DUP  ."  gtk_file_chooser_get_filename = " . CR
+	DUP  
+	IF  
+		ASCIIZ> STR>S metod-info  file_nastr_buf  LOAD_TO_BUFER  0
+	ELSE 
+		DROP "  Error: nastr not found "   error_metod_file :ERROR   
+	THEN 
+	IF EXIT THEN
+\ грузим настройки
+	file_nastr_reqiured 
+	IF
+		" Error: load nastr problem  "   error_metod_file :ERROR      
+	THEN \ IF EXIT THEN
+	\  ." DEPTH=" DEPTH .   CR 
+	see CR
+	metod-info  Len_Coment_buffer @ metod-info Coment_buffer  textview_comment_bufer @ 3 gtk_text_buffer_set_text DROP
+	Refresh_list
+	 0 ;  1 CELLS  
+CALLBACK: button_load_data_metod_click   
+
+:NONAME ." but_start_click"
+	work_Execute work-info -upravl_thead- @ <> \  и запущенность программ, дабы не запускать 2 копии
+	IF
+		0 work-info  ERROR_PROG  !	\ сбраcываем ошибки
+		\	S" " SWAP textview_result_bufer @  3 gtk_text_buffer_set_text DROP \ обнуляем окно
+		\	load_data_out_form		\ подгружаем из формы данные
+		work-info  ERROR_PROG @ 0=  \ проверяем на ошибки формы 
+		IF	
+			['] WorkCicle  TASK work-info work_thread !
+			work-info work_thread @ START 
+		THEN
+	THEN
+	Refresh_list 
+	S" " SWAP textview_result_bufer @  3 gtk_text_buffer_set_text DROP \ обнуляем окно
+	 \	0 button_start @ 2 gtk_widget_set_sensitive DROP
+	0 ;  1 CELLS  
+CALLBACK: but_start_click
+
+:NONAME { \ s }
+." ."
+	Str_Data_buffer   STR>S -> s
+	s STR@ NIP 
+	IF   ."  >"  s STR@ TYPE ." <   " \ TYPE
+\		S"  + " 
+		s STR@   SWAP  textview_result_bufer @ 3 gtk_text_buffer_insert_at_cursor DROP 
+	THEN
+	s STRFREE
+	\ вывод ошибки 
+	work-info  ERROR_PROG @  NoError <> 
+	IF 
+		work-info ERROR_PROG_BUFER C@   work-info ERROR_PROG_BUFER 1+ textview_result_bufer @ 3 gtk_text_buffer_insert_at_cursor DROP  
+		" {CRLF}" DUP  >R STR@ SWAP textview_result_bufer @ 3 gtk_text_buffer_insert_at_cursor DROP R> STRFREE
+		work_Stop  work-info -upravl_thead- ! 
+	THEN
+	
+	work-info -upravl_thead- @    work_Execute  \  2DUP . . 
+	=  \ работает?
+	IF 
+		0 button_start @ 2 gtk_widget_set_sensitive DROP
+		-1 button_stop @ 2 gtk_widget_set_sensitive DROP
+		-1 button_pause @ 2 gtk_widget_set_sensitive DROP
+		\ work-info tid-thead   @ SUSPEND  work_Pause   work-info -upravl_thead- !
+	ELSE \ в паузе
+\		work_Execute  work-info -upravl_thead- !   work-info tid-thead  @ RESUME  
+		\ -upravl_thead- work_Pause = IF -work_thead-   RESUME  work_Execute  TO -upravl_thead-   ELSE  -work_thead-  SUSPEND  work_Pause  TO -upravl_thead- THEN 
+		-1 button_start @ 2 gtk_widget_set_sensitive DROP
+		0 button_stop @ 2 gtk_widget_set_sensitive DROP
+		0 button_pause @ 2 gtk_widget_set_sensitive DROP
+	THEN	
+	
+	textview_result_bufer @  1 gtk_text_buffer_get_insert -> s
+	0 0 0 0 s textview_result @ 6 gtk_text_view_scroll_to_mark DROP
+	filechooserbutton_file_nastr  @   1 gtk_file_chooser_get_current_folder DUP 
+	0<> 
+	IF 
+		DROP	\ ASCIIZ> TYPE 
+	ELSE 
+		DROP 	   " ./metod/SimpleAFH/" >R  R@ STR@  DROP filechooserbutton_file_nastr  @ 2 gtk_file_chooser_set_current_folder   R> STRFREE   ." filechooserbutton_pribor =" . CR	
+	THEN
+
+	dialog_filechooserbutton  @   1 gtk_file_chooser_get_current_folder DUP 
+	0<> 
+	IF 
+		DROP	\ ASCIIZ> TYPE 
+	ELSE 
+		DROP 	   " ./" >R  R@ STR@  DROP dialog_filechooserbutton  @ 2 gtk_file_chooser_set_current_folder   R> STRFREE   ." filechooserbutton_pribor =" . CR	
+	THEN
+
+	WinMetod_timer @  ;  1 CELLS  
+CALLBACK:  timer_ticket 
+
+
+:NONAME  ." but_pause_click"	
+	 work-info -upravl_thead- @  work_Execute =  \ работает?
+	IF 
+		work-info tid-thead   @ SUSPEND  work_Pause   work-info -upravl_thead- !
+	ELSE \ в паузе
+		work_Execute  work-info -upravl_thead- !   work-info tid-thead  @ RESUME  
+		\ -upravl_thead- work_Pause = IF -work_thead-   RESUME  work_Execute  TO -upravl_thead-   ELSE  -work_thead-  SUSPEND  work_Pause  TO -upravl_thead- THEN 
+	THEN	
+	0 ;  1 CELLS  
+CALLBACK: but_pause_click
+
+
+: StartMetod  {   \ tekFile }
+	Directory 2 + ASCIIZ>  "" DUP -> tekFile  STR+
+	" /metod.glade" tekFile  S+
+	." load glade file :" tekFile     STR@ TYPE ."  " CR
+	0 gtk_builder_new   builder_metod !
+	error  tekFile   >R R@ STR@  DROP  builder_metod @ 3 gtk_builder_add_from_file DROP   R> STRFREE \ 2DROP 
+	" winmetod"  >R R@ STR@  DROP builder_metod @ 2 gtk_builder_get_object WinMetod !  R> STRFREE \ 2DROP
+	WinMetod @  1 gtk_widget_show DROP \ DROP
+	\ ДЕЙСТВО ЗАКРЫТИЕ ПРОГРАММЫ
+	" destroy"  >R 0 0 0  ['] on_metod_destroy  R@ STR@ DROP WinMetod @ 6 g_signal_connect_data   R> STRFREE  DROP \ 2DROP 2DROP 2DROP	
+	" button_close" >R  R@ STR@  DROP builder_metod @ 2 gtk_builder_get_object button_close_metod  !    R> STRFREE \ 2DROP
+	" clicked"  >R 0 0 0  ['] button_close_metod_click R@ STR@ DROP button_close_metod   @ 6 g_signal_connect_data   R> STRFREE  DROP \ 2DROP 2DROP 2DROP
+
+	" treeview_data" >R  R@ STR@  DROP builder_metod @ 2 gtk_builder_get_object  treeview_metod_data  !    R> STRFREE
+	" row-activated"    >R 0 0 0  ['] TreeView_start_metod_click R@ STR@ DROP treeview_metod_data @ 6 g_signal_connect_data   R> STRFREE  DROP \ 2DROP 2DROP 2DROP
+
+	" filefilter_kal" >R  R@ STR@  DROP builder_metod @ 2 gtk_builder_get_object  filefilter_kal  !    R> STRFREE
+
+ 
+	\ кнопка сохранить настройки
+	" button_save_data_metod" >R  R@ STR@  DROP builder_metod @  2 gtk_builder_get_object button_save_data_metod !    R> STRFREE \ 2DROP
+	" clicked"  >R 0 0 0  ['] button_save_data_metod_click   R@ STR@ DROP button_save_data_metod  @ 6 g_signal_connect_data   R> STRFREE  DROP \ 2DROP 2DROP 2DROP
+	\  кнопка загрузить метод
+	  " button_load_data_metod" >R  R@ STR@  DROP builder_metod @  2 gtk_builder_get_object button_load_data_metod !    R> STRFREE \ 2DROP
+	" clicked"  >R 0 0 0  ['] button_load_data_metod_click   R@ STR@ DROP button_load_data_metod @ 6 g_signal_connect_data   R> STRFREE  DROP \ 2DROP 2DROP 2DROP
+	 
+ 
+	" liststore_text" >R R@ STR@ DROP builder_metod @ 2 gtk_builder_get_object liststore_metod_text ! R> STRFREE  
+	
+	\ " button_save_data" >R  R@ STR@  DROP builder_metod @ 2 gtk_builder_get_object button_save_data  !    R> STRFREE \ 2DROP
+	\  " clicked"  >R 0 0 0  ['] button_save_data_click R@ STR@ DROP button_save_data   @ 6 g_signal_connect_data   R> STRFREE  DROP \ 2DROP 2DROP 2DROP
+
+	\ указатель для загрузки и  сохранении настроек
+	 " filechooserbutton_file_nastr" >R  R@ STR@  DROP builder_metod @  2 gtk_builder_get_object filechooserbutton_file_nastr !    R> STRFREE \ 2DROP
+	
+	\ фильтры выбора файлов
+	" filefilter_nast" >R  R@ STR@  DROP builder_metod @  2 gtk_builder_get_object filefilter_nast  !    R> STRFREE \ 2DROP
+	" filefilter_prib" >R  R@ STR@  DROP builder_metod @  2 gtk_builder_get_object filefilter_prib  !    R> STRFREE \ 2DROP
+	" filefilter_kal"  >R  R@ STR@  DROP builder_metod @  2 gtk_builder_get_object filefilter_kal  !    R> STRFREE \ 2DROP
+
+	\ устанавливаем фильтр для настроек
+	filefilter_nast @ filechooserbutton_file_nastr   @ 2 gtk_file_chooser_add_filter DROP
+
+	Directory   ASCIIZ>  "" DUP -> tekFile  STR+   " /default.nast" tekFile  S+ tekFile   
+	>R  R@ STR@  DROP filechooserbutton_file_nastr  @ 2 gtk_file_chooser_set_uri  R> STRFREE  ." gtk_file_chooser_set_uri =" . CR 
+
+	\ коментарий наксктоек
+	" textview_comment_metod" >R  R@ STR@  DROP builder_metod  @  2 gtk_builder_get_object textview_comment_metod !    R> STRFREE 
+	textview_comment_metod @ 1 gtk_text_view_get_buffer textview_comment_bufer ! 
+
+	\ кнопка старт
+	" button_start" >R  R@ STR@  DROP builder_metod  @ 2 gtk_builder_get_object button_start !    R> STRFREE \ 2DROP
+	" clicked"  >R 0 0 0  ['] but_start_click   R@ STR@ DROP button_start @ 6 g_signal_connect_data   R> STRFREE  DROP \ 2DROP 2DROP 2DROP
+	\ кнопка стоп
+	" button_stop" >R  R@ STR@  DROP builder_metod @  2 gtk_builder_get_object button_stop !    R> STRFREE \ 2DROP
+	" clicked"  >R 0 0 0  ['] but_stop_click   R@ STR@ DROP button_stop @ 6 g_signal_connect_data   R> STRFREE  DROP \ 2DROP 2DROP 2DROP
+	\ кнопка пауза
+	" button_pause" >R  R@ STR@  DROP builder_metod @  2 gtk_builder_get_object button_pause !    R> STRFREE \ 2DROP
+	" clicked"  >R 0 0 0  ['] but_pause_click   R@ STR@ DROP button_pause @ 6 g_signal_connect_data   R> STRFREE  DROP \ 2DROP 2DROP 2DROP
+
+	" textview_result" >R  R@ STR@  DROP builder_metod  @  2 gtk_builder_get_object  textview_result !    R> STRFREE 
+	textview_result @ 1 gtk_text_view_get_buffer  textview_result_bufer ! 
+
+	\ button_load_data_metod_click \ ЗАГРУЗКА ПОСЛЕДНИХ ДАННЫХ
+
+	\ поднятие диалога выбора  вот тут проблемма что если удалять и включать. то  втором и последующих включениях появляетя голое окно без кнопочек.
+	 " dialog_label" >R  R@ STR@  DROP builder_metod @ 2 gtk_builder_get_object dialog_label !    R> STRFREE \ изменяемая надпись
+	
+	 " dialog"  DUP >R STR@  DROP builder_metod @ 2 gtk_builder_get_object  dialog !  R> STRFREE \ 2DROP
+	 " button_norma" >R  R@ STR@  DROP builder_metod @  2 gtk_builder_get_object button_norma !    R> STRFREE \ 2DROP
+	 " clicked"  >R 0 0 0  ['] button_norma_click   R@ STR@ DROP button_norma @ 6 g_signal_connect_data   R> STRFREE  DROP \ 2DROP 2DROP 2DROP
+	 " button_error" >R  R@ STR@  DROP builder_metod @  2 gtk_builder_get_object button_error !    R> STRFREE \ 2DROP
+	 " clicked"  >R 0 0 0  ['] button_error_click   R@ STR@ DROP button_error @ 6 g_signal_connect_data   R> STRFREE  DROP \ 2DROP 2DROP 2DROP
+	 " dialog_entry" >R  R@ STR@  DROP builder_metod  @ 2 gtk_builder_get_object dialog_entry !    R> STRFREE \ 2DROP
+	 " dialog_filechooserbutton"  >R  R@ STR@  DROP builder_metod   @  2 gtk_builder_get_object dialog_filechooserbutton !    R> STRFREE \ 2DROP
+	 dialog @  1 gtk_widget_hide DROP 
+
+	1 WinMetod_timer !
+	 0 ['] timer_ticket  1000 3 g_timeout_add DROP
+ 
+	1 button_start @ 2 gtk_widget_set_sensitive DROP
+	0 button_stop @ 2 gtk_widget_set_sensitive DROP
+	0 button_pause @ 2 gtk_widget_set_sensitive DROP
+;
+
+
+
+
+StartMetod
+Refresh_list

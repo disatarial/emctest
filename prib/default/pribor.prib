@@ -1,0 +1,50 @@
+\ настройки прибора
+REQUIRE  HYPE ~disa\~day\hype3\hype3.f
+REQUIRE PriborPassport priborpassport.f
+
+S" Load Pribor..." TYPE CR
+
+
+ CLASS 1_Prib 
+1 FLOATS  DEFS data 
+\ PriborPassport DEFS  Passport
+
+: Start
+|| D:  str_prib   D: etalon  D: flag  D: pribpath  ||
+ pribpath ! \ путь к  файлу прибора, прилетает для команды старт
+" test pribor 1 data " str_prib !
+" *pribor*"  etalon !
+\ читаем характеристики прибора
+\ pribpath @ 1 + pribpath @ C@  CR ." pribpath = " TYPE CR
+\  pribpath @ 1 + pribpath @ C@  12 -  2DUP ." pribpath = " TYPE CR
+ \ меняю формат строки в переменной 
+\  STR>S  pribpath !
+\ " \haracter.spf" pribpath @ S+
+\ pribpath @ STR@  2DUP TYPE CR
+\ INCLUDE-PROBE IF  	 ."   ERROR haracteristic pribor 1: not found  " CR -1 flag ! THEN
+\ pribpath @ STRFREE
+ 
+\  PriborPassport_info  Passport  PriborPassport CMOVE
+\ str_prib @ STR@ etalon @ STR@ WildCMP-U
+\ IF
+\	 ."   ERROR pribor 1 not found  " CR -1 flag ! 
+\ ELSE  
+\	str_prib @ STR@ TYPE CR 0 flag ! 
+\	." pribor -ok: "
+	\ PriborPassportSee
+
+\ THEN
+\ etalon @  STRFREE  str_prib @ STRFREE 
+CR
+ flag @ DUP . CR
+;
+ 
+: Stop ;
+: SetFreq    ." SetFreq=" F. ; 
+: SetLevel  ." SetLevel =" FDUP F. data F!  ; 
+: GetLevel  ." GetLevel=" data F@ FDUP F. 1 ; 
+: Off ." off" ;
+ 
+;CLASS 1_Prib
+S" .....Load Pribor" TYPE CR
+

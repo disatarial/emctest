@@ -1,0 +1,9 @@
+COMMENT( Простой проход по частоте с использованием  заранее подготовленных настроек генератора. )
+ "  1000 " S>FLOAT DROP F>D DROP  metod-info STEP_TIME           !  
+ "  1000 " S>FLOAT DROP F>D DROP  metod-info STEP_PAUSE          ! 
+ "  1.0000000 " S>FLOAT DROP           metod-info FREQ_BEGIN          F! 
+ "  1000.0000 " S>FLOAT DROP           metod-info FREQ_END            F! 
+ "  1.0000000 " S>FLOAT DROP           metod-info FREQ_STEP           F! 
+ "  0 " S>FLOAT DROP F>D DROP  metod-info work_step           ! 
+ " C:\progs\SPForth\emctest\prib\default\pribor.prib" metod-info file_generator_buf	LOAD_TO_BUFER 
+ " C:\progs\SPForth\emctest\metod\GenOnly\IKIRAN\VP10M200M135dBuV.kal" metod-info file_kalibrov_buf		LOAD_TO_BUFER 

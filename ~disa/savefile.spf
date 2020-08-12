@@ -1,0 +1,53 @@
+\ WIN ONLY
+WINAPI: GetLocalTime		KERNEL32.DLL 
+
+
+
+
+: S+time {  sadr \ --  sadr }
+" _" sadr S+
+Year >NUM    sadr  STR+ " _" sadr S+
+Month >NUM   sadr  STR+ " _" sadr S+
+Day >NUM      sadr  STR+ " _" sadr S+
+Hour >NUM    sadr  STR+ " _" sadr S+
+Minute >NUM   sadr  STR+ " _" sadr S+
+Second  >NUM  sadr  STR+ 
+sadr  
+;
+	
+
+: StoFile { sadr file \ --  } 
+\  отправляю строку формата ~ас  в файл 
+ ."  " sadr STR@ TYPE ."  "
+sadr STR@ file WRITE-FILE THROW
+sadr STRFREE
+;
+: FtoFile { file } "  " file StoFile  >FNUM   ."  " 2DUP TYPE ."  " file WRITE-FILE  THROW "  " file StoFile  ; \ флоат число в выходной файл
+: DtoFile { file } "  " file StoFile   >NUM   ."  " 2DUP TYPE ."  " file  WRITE-FILE THROW "  " file StoFile  ; \ целое число в выходной файл
+
+
+: outFileCreate { sadr \ --  file } 
+ sadr STR@  ."  outFileCreate= "  TYPE ."  " 
+ sadr STR@ W/O CREATE-FILE-SHARED \ CREATE-FILE 
+ IF   ." file not created" CR  DROP 0 THEN
+  sadr STRFREE
+ ;
+
+: outFileCreateTime { sadr \ --  file } 
+sadr S+time  
+" .sce" sadr S+
+STR@  ."  " 2DUP TYPE ."  " 
+ W/O \ CREATE-FILE 
+ CREATE-FILE-SHARED 
+  IF   ." file not created" CR  DROP 0 THEN \ THROW  
+ sadr STRFREE
+ ;
+ 
+ : CRtoFile " {CRLF}" SWAP StoFile ;
+
+
+: outFileClose  { file \ -- }
+file FLUSH-FILE THROW
+file  CLOSE-FILE THROW
+;
+

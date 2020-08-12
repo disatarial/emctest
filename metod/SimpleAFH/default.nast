@@ -1,0 +1,10 @@
+COMMENT( Простой проход по частоте с использованием  заранее подготовленных настроек генератора и измерителя. )
+ "  1000 " S>FLOAT DROP F>D DROP  metod-info STEP_TIME           !  
+ "  1000 " S>FLOAT DROP F>D DROP  metod-info STEP_PAUSE          ! 
+ "  10.000000 " S>FLOAT DROP           metod-info FREQ_BEGIN          F! 
+ "  20.000000 " S>FLOAT DROP           metod-info FREQ_END            F! 
+ "  1.0000000 " S>FLOAT DROP           metod-info FREQ_STEP           F! 
+ "  0 " S>FLOAT DROP F>D DROP  metod-info work_step           ! 
+ " C:\progs\SPForth\emctest\prib\default\pribor.prib" metod-info file_generator_buf	LOAD_TO_BUFER 
+ " C:\progs\SPForth\emctest\prib\default\pribor.prib" metod-info file_izm_buf	 	LOAD_TO_BUFER 
+ " C:\progs\SPForth\emctest\metod\SimpleAFH\default.kal" metod-info file_kalibrov_buf		LOAD_TO_BUFER 

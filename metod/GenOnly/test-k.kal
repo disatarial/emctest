@@ -1,0 +1,10 @@
+
+.( test-kal ...)
+10 3   LoadDatas:
+LoadData:  1.0000000e01     1e02    0.e0      
+LoadData:  1.0000000e09     1e02    0.e0      
+LoadData:  2.0000000e09     1e02    0.e0      
+LoadData:  2.0000000e09     1e01    0.e0      
+LoadData:  3.0000000e09     1e01    0.e0      
+LoadData:  18.000000e09     1e02    0.e0      
+.( ...test-kal. )  CR
