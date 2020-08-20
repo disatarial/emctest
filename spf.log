@@ -1,16 +1,7 @@
-CODE isn't unique (C:\progs\SPForth\lib/asm/486asm.f)
-gtk_file_chooser_get_current_folder isn't unique (C:\progs\SPForth\/emctest/gtk-api.spf)
-REQUIRE isn't unique (C:\progs\SPForth\devel/~day\lib\includemodule.f)
-strCRLF isn't unique (~disa\dopoln.f)
-'' isn't unique (~disa\dopoln.f)
-F. isn't unique (~disa\dopoln.f)
-FS. isn't unique (~disa\dopoln.f)
->FNUM isn't unique (~disa\dopoln.f)
-GetLocalTime isn't unique (~disa\savefile.spf)
-XCOUNT isn't unique (~ac\STR_LIST.F)
-LOAD_TO_BUFER isn't unique (priborpassport.f)
 снятие простой амплитудно-частотной характеристики. 
 1 генератор + 1 измеритель.
+Испытания по ГОСТ РВ 6601-001 п.5.5 с 
+использованием датчика электрического поля.
 простая подача сигнала с генератора по значениям калибровочных таблииц 
 без какого-либо контроля.
 load grafic file :./metod/GenOnly/bildo.png 
@@ -56,40 +47,23 @@ gtk_file_chooser_set_uri =1
  I: 7  
  SeeOne: 29 Файл генератора-> 5 
  I: 8  
- SeeOne: 0 . SeeOne: 17 Пауза, мс -> 1 
- I: 1  
- SeeOne: 22 Выдержка, мс-> 1 
- I: 2  
- SeeOne: 31 Частота нач., МГц -> 2 
-  I: 3  
- SeeOne: 32 Частота кон., МГц  -> 2 
-  I: 4  
- SeeOne: 27 Шаг по частоте -> 2 
-  I: 5  
- SeeOne: 74 ТИП РАБОТЫ: (-1)-%, (0)-линейный, (1)-по таблице-> 1 
- I: 6  
- SeeOne: 29 Файл калибровки-> 4 
- I: 7  
- SeeOne: 29 Файл генератора-> 5 
- I: 8  
- SeeOne: 0 TreeView_start_metod_click
- . SeeOne: 17 Пауза, мс -> 1 
- I: 1  
- SeeOne: 22 Выдержка, мс-> 1 
- I: 2  
- SeeOne: 31 Частота нач., МГц -> 2 
-  I: 3  
- SeeOne: 32 Частота кон., МГц  -> 2 
-  I: 4  
- SeeOne: 27 Шаг по частоте -> 2 
-  I: 5  
- SeeOne: 74 ТИП РАБОТЫ: (-1)-%, (0)-линейный, (1)-по таблице-> 1 
- I: 6  
- SeeOne: 29 Файл калибровки-> 4 
- I: 7  
- SeeOne: 29 Файл генератора-> 5 
- I: 8  
- SeeOne: 0 .filechooserbutton_pribor =1 
+ SeeOne: 0  gtk_file_chooser_get_filename = 51981504 
+LOAD_TO_BUFER= C:\progs\SPForth\emctest\metod\GenOnly\default.nast
+LOAD_TO_BUFER= C:\progs\SPForth\emctest\prib\default\pribor.prib
+LOAD_TO_BUFER= C:\progs\SPForth\emctest\metod\GenOnly\default.kal
+---------------------------------------------
+ COMMENT: Простой проход по частоте с использованием  заранее подготовленных настроек генератора. 
+ STEP_TIME: 1000 
+ STEP_PAUSE: 1000 
+ FREQ_BEGIN: 1.0000000e00 
+ FREQ_END:  1.0000000e03 
+ FREQ_STEP:  1.0000000e00 
+ file_generator_buf: C:\progs\SPForth\emctest\prib\default\pribor.prib
+ file_kalibrov_buf: C:\progs\SPForth\emctest\metod\GenOnly\default.kal
+ work_step: 0 
+---------------------------------------------
+
+
  SeeOne: 17 Пауза, мс -> 1 
  I: 1  
  SeeOne: 22 Выдержка, мс-> 1 
@@ -122,7 +96,27 @@ gtk_file_chooser_set_uri =1
  I: 7  
  SeeOne: 29 Файл генератора-> 5 
  I: 8  
- SeeOne: 0 . SeeOne: 17 Пауза, мс -> 1 
+ SeeOne: 0 but_start_click begin 
+---------------------------------------------
+ COMMENT: Простой проход по частоте с использованием  заранее подготовленных настроек генератора. 
+ STEP_TIME: 1000 
+ STEP_PAUSE: 1000 
+ FREQ_BEGIN: 1.0000000e00 
+ FREQ_END:  1.0000000e03 
+ FREQ_STEP:  1.0000000e00 
+ file_generator_buf: C:\progs\SPForth\emctest\prib\default\pribor.prib
+ file_kalibrov_buf: C:\progs\SPForth\emctest\metod\GenOnly\default.kal
+ work_step: 0 
+---------------------------------------------
+
+ file_generator_buf  
+Load Pribor...
+.....Load Pribor
+ start   
+
+0 
+ kalibrovka 
+. SeeOne: 17 Пауза, мс -> 1 
  I: 1  
  SeeOne: 22 Выдержка, мс-> 1 
  I: 2  
@@ -138,7 +132,28 @@ gtk_file_chooser_set_uri =1
  I: 7  
  SeeOne: 29 Файл генератора-> 5 
  I: 8  
- SeeOne: 0 . SeeOne: 17 Пауза, мс -> 1 
+ SeeOne: 0  Include: C:\progs\SPForth\emctest\metod\GenOnly\default.kal
+ kalibrovka:  
+ 1.0000000e01  1.0000000e02  1.0000000e00  1.0000000e00 
+ 1.0000000e02  1.0000000e02  1.0000000e00  1.0000000e00 
+ 1.0000000e03  1.0000000e02  1.0000000e00  1.0000000e00 
+ 1.0000000e04  1.0000000e02  1.0000000e00  1.0000000e00 
+ 1.0000000e05  1.0000000e02  1.0000000e00  1.0000000e00 
+ 1.0000000e06  1.0000000e02  1.0000000e00  1.0000000e00 
+ 1.0000000e07  1.0000000e02  1.0000000e00  1.0000000e00 
+ 1.0000000e08  1.0000000e02  1.0000000e00  1.0000000e00 
+ 1.0000000e09  1.0000000e02  1.0000000e00  1.0000000e00 
+ 1.0000000e10  1.0000000e02  1.0000000e00  1.0000000e00 
+
+ outFileCreate= result.txt  минимальное  значение не соответствует калибровке. Поправлено. 
+   start:      21        3        35     
+  Частота,МГц               ПОДАНО         
+ begin-ok
+word BEGIN  - ok  
+ work... SetFreq= 1.0000000e01      10.000000                    SetLevel = 1.0000000e00 . >минимальное  значение не соответствует калибровке. Поправлено. 
+ start:  21  3  35 
+Частота,МГц               ПОДАНО       
+ 10.000000               <    SeeOne: 17 Пауза, мс -> 1 
  I: 1  
  SeeOne: 22 Выдержка, мс-> 1 
  I: 2  
@@ -154,7 +169,10 @@ gtk_file_chooser_set_uri =1
  I: 7  
  SeeOne: 29 Файл генератора-> 5 
  I: 8  
- SeeOne: 0 . SeeOne: 17 Пауза, мс -> 1 
+ SeeOne: 0      1.0000000               
+  ...work 
+. > 1.0000000       
+<    SeeOne: 17 Пауза, мс -> 1 
  I: 1  
  SeeOne: 22 Выдержка, мс-> 1 
  I: 2  
@@ -170,7 +188,7 @@ gtk_file_chooser_set_uri =1
  I: 7  
  SeeOne: 29 Файл генератора-> 5 
  I: 8  
- SeeOne: 0 . SeeOne: 17 Пауза, мс -> 1 
+ SeeOne: 0  work... SetFreq= 1.1000000e01      11.000000                    SetLevel = 1.0000000e00 . > 11.000000               <    SeeOne: 17 Пауза, мс -> 1 
  I: 1  
  SeeOne: 22 Выдержка, мс-> 1 
  I: 2  
@@ -186,7 +204,10 @@ gtk_file_chooser_set_uri =1
  I: 7  
  SeeOne: 29 Файл генератора-> 5 
  I: 8  
- SeeOne: 0 . SeeOne: 17 Пауза, мс -> 1 
+ SeeOne: 0      1.0000000               
+  ...work 
+. > 1.0000000       
+<    SeeOne: 17 Пауза, мс -> 1 
  I: 1  
  SeeOne: 22 Выдержка, мс-> 1 
  I: 2  
@@ -202,7 +223,7 @@ gtk_file_chooser_set_uri =1
  I: 7  
  SeeOne: 29 Файл генератора-> 5 
  I: 8  
- SeeOne: 0 . SeeOne: 17 Пауза, мс -> 1 
+ SeeOne: 0  work... SetFreq= 1.2000000e01      12.000000                    SetLevel = 1.0000000e00 . > 12.000000               <    SeeOne: 17 Пауза, мс -> 1 
  I: 1  
  SeeOne: 22 Выдержка, мс-> 1 
  I: 2  
@@ -218,7 +239,10 @@ gtk_file_chooser_set_uri =1
  I: 7  
  SeeOne: 29 Файл генератора-> 5 
  I: 8  
- SeeOne: 0 . SeeOne: 17 Пауза, мс -> 1 
+ SeeOne: 0      1.0000000               
+  ...work 
+. > 1.0000000       
+<    SeeOne: 17 Пауза, мс -> 1 
  I: 1  
  SeeOne: 22 Выдержка, мс-> 1 
  I: 2  
@@ -234,7 +258,7 @@ gtk_file_chooser_set_uri =1
  I: 7  
  SeeOne: 29 Файл генератора-> 5 
  I: 8  
- SeeOne: 0 . SeeOne: 17 Пауза, мс -> 1 
+ SeeOne: 0  work... SetFreq= 1.3000000e01      13.000000                    SetLevel = 1.0000000e00 . > 13.000000               <    SeeOne: 17 Пауза, мс -> 1 
  I: 1  
  SeeOne: 22 Выдержка, мс-> 1 
  I: 2  
@@ -250,7 +274,10 @@ gtk_file_chooser_set_uri =1
  I: 7  
  SeeOne: 29 Файл генератора-> 5 
  I: 8  
- SeeOne: 0 . SeeOne: 17 Пауза, мс -> 1 
+ SeeOne: 0      1.0000000               
+  ...work 
+. > 1.0000000       
+<    SeeOne: 17 Пауза, мс -> 1 
  I: 1  
  SeeOne: 22 Выдержка, мс-> 1 
  I: 2  
@@ -266,7 +293,7 @@ gtk_file_chooser_set_uri =1
  I: 7  
  SeeOne: 29 Файл генератора-> 5 
  I: 8  
- SeeOne: 0 . SeeOne: 17 Пауза, мс -> 1 
+ SeeOne: 0  work... SetFreq= 1.4000000e01      14.000000                    SetLevel = 1.0000000e00 . > 14.000000               <    SeeOne: 17 Пауза, мс -> 1 
  I: 1  
  SeeOne: 22 Выдержка, мс-> 1 
  I: 2  
@@ -282,7 +309,10 @@ gtk_file_chooser_set_uri =1
  I: 7  
  SeeOne: 29 Файл генератора-> 5 
  I: 8  
- SeeOne: 0 . SeeOne: 17 Пауза, мс -> 1 
+ SeeOne: 0      1.0000000               
+  ...work 
+. > 1.0000000       
+<    SeeOne: 17 Пауза, мс -> 1 
  I: 1  
  SeeOne: 22 Выдержка, мс-> 1 
  I: 2  
@@ -298,7 +328,7 @@ gtk_file_chooser_set_uri =1
  I: 7  
  SeeOne: 29 Файл генератора-> 5 
  I: 8  
- SeeOne: 0 . SeeOne: 17 Пауза, мс -> 1 
+ SeeOne: 0  work... SetFreq= 1.5000000e01      15.000000                    SetLevel = 1.0000000e00 . > 15.000000               <    SeeOne: 17 Пауза, мс -> 1 
  I: 1  
  SeeOne: 22 Выдержка, мс-> 1 
  I: 2  
@@ -314,8 +344,10 @@ gtk_file_chooser_set_uri =1
  I: 7  
  SeeOne: 29 Файл генератора-> 5 
  I: 8  
- SeeOne: 0 .filechooserbutton_pribor =1 
- SeeOne: 17 Пауза, мс -> 1 
+ SeeOne: 0      1.0000000               
+  ...work 
+. > 1.0000000       
+<    SeeOne: 17 Пауза, мс -> 1 
  I: 1  
  SeeOne: 22 Выдержка, мс-> 1 
  I: 2  
@@ -331,7 +363,7 @@ gtk_file_chooser_set_uri =1
  I: 7  
  SeeOne: 29 Файл генератора-> 5 
  I: 8  
- SeeOne: 0 . SeeOne: 17 Пауза, мс -> 1 
+ SeeOne: 0  work... SetFreq= 1.6000000e01      16.000000                    SetLevel = 1.0000000e00 . > 16.000000               <    SeeOne: 17 Пауза, мс -> 1 
  I: 1  
  SeeOne: 22 Выдержка, мс-> 1 
  I: 2  
@@ -347,7 +379,10 @@ gtk_file_chooser_set_uri =1
  I: 7  
  SeeOne: 29 Файл генератора-> 5 
  I: 8  
- SeeOne: 0 . SeeOne: 17 Пауза, мс -> 1 
+ SeeOne: 0      1.0000000               
+  ...work 
+. > 1.0000000       
+<    SeeOne: 17 Пауза, мс -> 1 
  I: 1  
  SeeOne: 22 Выдержка, мс-> 1 
  I: 2  
@@ -363,7 +398,7 @@ gtk_file_chooser_set_uri =1
  I: 7  
  SeeOne: 29 Файл генератора-> 5 
  I: 8  
- SeeOne: 0 . SeeOne: 17 Пауза, мс -> 1 
+ SeeOne: 0  work... SetFreq= 1.7000000e01      17.000000                    SetLevel = 1.0000000e00 . > 17.000000               <    SeeOne: 17 Пауза, мс -> 1 
  I: 1  
  SeeOne: 22 Выдержка, мс-> 1 
  I: 2  
@@ -379,7 +414,10 @@ gtk_file_chooser_set_uri =1
  I: 7  
  SeeOne: 29 Файл генератора-> 5 
  I: 8  
- SeeOne: 0 . SeeOne: 17 Пауза, мс -> 1 
+ SeeOne: 0      1.0000000               
+  ...work 
+. > 1.0000000       
+<    SeeOne: 17 Пауза, мс -> 1 
  I: 1  
  SeeOne: 22 Выдержка, мс-> 1 
  I: 2  
@@ -395,7 +433,7 @@ gtk_file_chooser_set_uri =1
  I: 7  
  SeeOne: 29 Файл генератора-> 5 
  I: 8  
- SeeOne: 0 . SeeOne: 17 Пауза, мс -> 1 
+ SeeOne: 0  work... SetFreq= 1.8000000e01      18.000000                    SetLevel = 1.0000000e00 . > 18.000000               <    SeeOne: 17 Пауза, мс -> 1 
  I: 1  
  SeeOne: 22 Выдержка, мс-> 1 
  I: 2  
@@ -411,7 +449,10 @@ gtk_file_chooser_set_uri =1
  I: 7  
  SeeOne: 29 Файл генератора-> 5 
  I: 8  
- SeeOne: 0 . SeeOne: 17 Пауза, мс -> 1 
+ SeeOne: 0      1.0000000               
+  ...work 
+. > 1.0000000       
+<    SeeOne: 17 Пауза, мс -> 1 
  I: 1  
  SeeOne: 22 Выдержка, мс-> 1 
  I: 2  
@@ -427,7 +468,7 @@ gtk_file_chooser_set_uri =1
  I: 7  
  SeeOne: 29 Файл генератора-> 5 
  I: 8  
- SeeOne: 0 . SeeOne: 17 Пауза, мс -> 1 
+ SeeOne: 0  work... SetFreq= 1.9000000e01      19.000000                    SetLevel = 1.0000000e00 . > 19.000000               <    SeeOne: 17 Пауза, мс -> 1 
  I: 1  
  SeeOne: 22 Выдержка, мс-> 1 
  I: 2  
@@ -443,248 +484,17 @@ gtk_file_chooser_set_uri =1
  I: 7  
  SeeOne: 29 Файл генератора-> 5 
  I: 8  
- SeeOne: 0 . SeeOne: 17 Пауза, мс -> 1 
- I: 1  
- SeeOne: 22 Выдержка, мс-> 1 
- I: 2  
- SeeOne: 31 Частота нач., МГц -> 2 
-  I: 3  
- SeeOne: 32 Частота кон., МГц  -> 2 
-  I: 4  
- SeeOne: 27 Шаг по частоте -> 2 
-  I: 5  
- SeeOne: 74 ТИП РАБОТЫ: (-1)-%, (0)-линейный, (1)-по таблице-> 1 
- I: 6  
- SeeOne: 29 Файл калибровки-> 4 
- I: 7  
- SeeOne: 29 Файл генератора-> 5 
- I: 8  
- SeeOne: 0 . SeeOne: 17 Пауза, мс -> 1 
- I: 1  
- SeeOne: 22 Выдержка, мс-> 1 
- I: 2  
- SeeOne: 31 Частота нач., МГц -> 2 
-  I: 3  
- SeeOne: 32 Частота кон., МГц  -> 2 
-  I: 4  
- SeeOne: 27 Шаг по частоте -> 2 
-  I: 5  
- SeeOne: 74 ТИП РАБОТЫ: (-1)-%, (0)-линейный, (1)-по таблице-> 1 
- I: 6  
- SeeOne: 29 Файл калибровки-> 4 
- I: 7  
- SeeOne: 29 Файл генератора-> 5 
- I: 8  
- SeeOne: 0 . SeeOne: 17 Пауза, мс -> 1 
- I: 1  
- SeeOne: 22 Выдержка, мс-> 1 
- I: 2  
- SeeOne: 31 Частота нач., МГц -> 2 
-  I: 3  
- SeeOne: 32 Частота кон., МГц  -> 2 
-  I: 4  
- SeeOne: 27 Шаг по частоте -> 2 
-  I: 5  
- SeeOne: 74 ТИП РАБОТЫ: (-1)-%, (0)-линейный, (1)-по таблице-> 1 
- I: 6  
- SeeOne: 29 Файл калибровки-> 4 
- I: 7  
- SeeOne: 29 Файл генератора-> 5 
- I: 8  
- SeeOne: 0 . SeeOne: 17 Пауза, мс -> 1 
- I: 1  
- SeeOne: 22 Выдержка, мс-> 1 
- I: 2  
- SeeOne: 31 Частота нач., МГц -> 2 
-  I: 3  
- SeeOne: 32 Частота кон., МГц  -> 2 
-  I: 4  
- SeeOne: 27 Шаг по частоте -> 2 
-  I: 5  
- SeeOne: 74 ТИП РАБОТЫ: (-1)-%, (0)-линейный, (1)-по таблице-> 1 
- I: 6  
- SeeOne: 29 Файл калибровки-> 4 
- I: 7  
- SeeOne: 29 Файл генератора-> 5 
- I: 8  
- SeeOne: 0 .filechooserbutton_pribor =1 
- SeeOne: 17 Пауза, мс -> 1 
- I: 1  
- SeeOne: 22 Выдержка, мс-> 1 
- I: 2  
- SeeOne: 31 Частота нач., МГц -> 2 
-  I: 3  
- SeeOne: 32 Частота кон., МГц  -> 2 
-  I: 4  
- SeeOne: 27 Шаг по частоте -> 2 
-  I: 5  
- SeeOne: 74 ТИП РАБОТЫ: (-1)-%, (0)-линейный, (1)-по таблице-> 1 
- I: 6  
- SeeOne: 29 Файл калибровки-> 4 
- I: 7  
- SeeOne: 29 Файл генератора-> 5 
- I: 8  
- SeeOne: 0 . SeeOne: 17 Пауза, мс -> 1 
- I: 1  
- SeeOne: 22 Выдержка, мс-> 1 
- I: 2  
- SeeOne: 31 Частота нач., МГц -> 2 
-  I: 3  
- SeeOne: 32 Частота кон., МГц  -> 2 
-  I: 4  
- SeeOne: 27 Шаг по частоте -> 2 
-  I: 5  
- SeeOne: 74 ТИП РАБОТЫ: (-1)-%, (0)-линейный, (1)-по таблице-> 1 
- I: 6  
- SeeOne: 29 Файл калибровки-> 4 
- I: 7  
- SeeOne: 29 Файл генератора-> 5 
- I: 8  
- SeeOne: 0 . SeeOne: 17 Пауза, мс -> 1 
- I: 1  
- SeeOne: 22 Выдержка, мс-> 1 
- I: 2  
- SeeOne: 31 Частота нач., МГц -> 2 
-  I: 3  
- SeeOne: 32 Частота кон., МГц  -> 2 
-  I: 4  
- SeeOne: 27 Шаг по частоте -> 2 
-  I: 5  
- SeeOne: 74 ТИП РАБОТЫ: (-1)-%, (0)-линейный, (1)-по таблице-> 1 
- I: 6  
- SeeOne: 29 Файл калибровки-> 4 
- I: 7  
- SeeOne: 29 Файл генератора-> 5 
- I: 8  
- SeeOne: 0 . SeeOne: 17 Пауза, мс -> 1 
- I: 1  
- SeeOne: 22 Выдержка, мс-> 1 
- I: 2  
- SeeOne: 31 Частота нач., МГц -> 2 
-  I: 3  
- SeeOne: 32 Частота кон., МГц  -> 2 
-  I: 4  
- SeeOne: 27 Шаг по частоте -> 2 
-  I: 5  
- SeeOne: 74 ТИП РАБОТЫ: (-1)-%, (0)-линейный, (1)-по таблице-> 1 
- I: 6  
- SeeOne: 29 Файл калибровки-> 4 
- I: 7  
- SeeOne: 29 Файл генератора-> 5 
- I: 8  
- SeeOne: 0 . SeeOne: 17 Пауза, мс -> 1 
- I: 1  
- SeeOne: 22 Выдержка, мс-> 1 
- I: 2  
- SeeOne: 31 Частота нач., МГц -> 2 
-  I: 3  
- SeeOne: 32 Частота кон., МГц  -> 2 
-  I: 4  
- SeeOne: 27 Шаг по частоте -> 2 
-  I: 5  
- SeeOne: 74 ТИП РАБОТЫ: (-1)-%, (0)-линейный, (1)-по таблице-> 1 
- I: 6  
- SeeOne: 29 Файл калибровки-> 4 
- I: 7  
- SeeOne: 29 Файл генератора-> 5 
- I: 8  
- SeeOne: 0 . SeeOne: 17 Пауза, мс -> 1 
- I: 1  
- SeeOne: 22 Выдержка, мс-> 1 
- I: 2  
- SeeOne: 31 Частота нач., МГц -> 2 
-  I: 3  
- SeeOne: 32 Частота кон., МГц  -> 2 
-  I: 4  
- SeeOne: 27 Шаг по частоте -> 2 
-  I: 5  
- SeeOne: 74 ТИП РАБОТЫ: (-1)-%, (0)-линейный, (1)-по таблице-> 1 
- I: 6  
- SeeOne: 29 Файл калибровки-> 4 
- I: 7  
- SeeOne: 29 Файл генератора-> 5 
- I: 8  
- SeeOne: 0 . SeeOne: 17 Пауза, мс -> 1 
- I: 1  
- SeeOne: 22 Выдержка, мс-> 1 
- I: 2  
- SeeOne: 31 Частота нач., МГц -> 2 
-  I: 3  
- SeeOne: 32 Частота кон., МГц  -> 2 
-  I: 4  
- SeeOne: 27 Шаг по частоте -> 2 
-  I: 5  
- SeeOne: 74 ТИП РАБОТЫ: (-1)-%, (0)-линейный, (1)-по таблице-> 1 
- I: 6  
- SeeOne: 29 Файл калибровки-> 4 
- I: 7  
- SeeOne: 29 Файл генератора-> 5 
- I: 8  
- SeeOne: 0 . SeeOne: 17 Пауза, мс -> 1 
- I: 1  
- SeeOne: 22 Выдержка, мс-> 1 
- I: 2  
- SeeOne: 31 Частота нач., МГц -> 2 
-  I: 3  
- SeeOne: 32 Частота кон., МГц  -> 2 
-  I: 4  
- SeeOne: 27 Шаг по частоте -> 2 
-  I: 5  
- SeeOne: 74 ТИП РАБОТЫ: (-1)-%, (0)-линейный, (1)-по таблице-> 1 
- I: 6  
- SeeOne: 29 Файл калибровки-> 4 
- I: 7  
- SeeOne: 29 Файл генератора-> 5 
- I: 8  
- SeeOne: 0 . SeeOne: 17 Пауза, мс -> 1 
- I: 1  
- SeeOne: 22 Выдержка, мс-> 1 
- I: 2  
- SeeOne: 31 Частота нач., МГц -> 2 
-  I: 3  
- SeeOne: 32 Частота кон., МГц  -> 2 
-  I: 4  
- SeeOne: 27 Шаг по частоте -> 2 
-  I: 5  
- SeeOne: 74 ТИП РАБОТЫ: (-1)-%, (0)-линейный, (1)-по таблице-> 1 
- I: 6  
- SeeOne: 29 Файл калибровки-> 4 
- I: 7  
- SeeOne: 29 Файл генератора-> 5 
- I: 8  
- SeeOne: 0 . SeeOne: 17 Пауза, мс -> 1 
- I: 1  
- SeeOne: 22 Выдержка, мс-> 1 
- I: 2  
- SeeOne: 31 Частота нач., МГц -> 2 
-  I: 3  
- SeeOne: 32 Частота кон., МГц  -> 2 
-  I: 4  
- SeeOne: 27 Шаг по частоте -> 2 
-  I: 5  
- SeeOne: 74 ТИП РАБОТЫ: (-1)-%, (0)-линейный, (1)-по таблице-> 1 
- I: 6  
- SeeOne: 29 Файл калибровки-> 4 
- I: 7  
- SeeOne: 29 Файл генератора-> 5 
- I: 8  
- SeeOne: 0 . SeeOne: 17 Пауза, мс -> 1 
- I: 1  
- SeeOne: 22 Выдержка, мс-> 1 
- I: 2  
- SeeOne: 31 Частота нач., МГц -> 2 
-  I: 3  
- SeeOne: 32 Частота кон., МГц  -> 2 
-  I: 4  
- SeeOne: 27 Шаг по частоте -> 2 
-  I: 5  
- SeeOne: 74 ТИП РАБОТЫ: (-1)-%, (0)-линейный, (1)-по таблице-> 1 
- I: 6  
- SeeOne: 29 Файл калибровки-> 4 
- I: 7  
- SeeOne: 29 Файл генератора-> 5 
- I: 8  
- SeeOne: 0 but_stop_click.filechooserbutton_pribor =0 
+ SeeOne: 0      1.0000000               
+  ...work 
+but_stop_click. > 1.0000000       
+<   
+word WorkCicle -ok  
+ stop:      21        3        55     
+ off
+word END - ok  
+
+WorkCicle STOP
+filechooserbutton_pribor =0 
 filechooserbutton_pribor =0 
  SeeOne: 17 Пауза, мс -> 1 
  I: 1  

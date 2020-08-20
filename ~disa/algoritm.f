@@ -26,7 +26,9 @@ REQUIRE  StoFile ~disa\savefile.spf
 1 FLOATS -- setsGenMax
 1 FLOATS -- ResultGen
  CONSTANT nach_formula
+ 
  HERE DUP >R nach_formula DUP ALLOT ERASE VALUE Data_nach_formula
+ 
  : nach_formula_see  { x \ -- }
 CR ." nach_formula_see :  " CR
 x Data_Kalib  ." Data_Kalib = "  F@ F. CR \ данные калибровки

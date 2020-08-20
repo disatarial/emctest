@@ -229,6 +229,7 @@ THEN
 0 VALUE runthread
 
 : start
+STARTLOG 
  ['] work_windows TASK TO runthread
   runthread START
 ; 

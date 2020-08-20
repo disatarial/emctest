@@ -65,7 +65,7 @@ freq F@ F/
 : adr_data_in_number    
 	|| D:  N_write ||
 	N_write ! 
-." ->" DUP .  N_write @ . ." <-"
+\ ." ->" DUP .  N_write @ . ." <-"
 	num_datas_in_string @ FLOATS  * datas @ +  N_write @ FLOATS +   
 ;
  

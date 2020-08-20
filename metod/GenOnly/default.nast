@@ -6,4 +6,4 @@ COMMENT( Простой проход по частоте с использова
  "  1.0000000 " S>FLOAT DROP           metod-info FREQ_STEP           F! 
  "  0 " S>FLOAT DROP F>D DROP  metod-info work_step           ! 
  " C:\progs\SPForth\emctest\prib\default\pribor.prib" metod-info file_generator_buf	LOAD_TO_BUFER 
- " C:\progs\SPForth\emctest\metod\GenOnly\IKIRAN\VP10M200M135dBuV.kal" metod-info file_kalibrov_buf		LOAD_TO_BUFER 
+ " C:\progs\SPForth\emctest\metod\GenOnly\default.kal" metod-info file_kalibrov_buf		LOAD_TO_BUFER 
