@@ -153,8 +153,8 @@ CONSTANT sysup-metod-info
 	 0
 	n 0 = IF DROP metod-info STEP_PAUSE	1	S" Пауза между воздействиями, мс "  THEN
 	n 1 = IF DROP  metod-info STEP_TIME	1	S" Время одного воздействия, мс"  THEN
-	n 2 = IF DROP metod-info FREQ_BEGIN	2	S" Начальная частота, Гц "  THEN
-	n 3 = IF DROP  metod-info FREQ_END	2	S" Конечная частота, Гц "  THEN
+	n 2 = IF DROP metod-info FREQ_BEGIN	2	S" Начальная частота, МГц "  THEN
+	n 3 = IF DROP  metod-info FREQ_END	2	S" Конечная частота, МГц "  THEN
 	n 4 = IF DROP   metod-info work_step  1		S" ТИП РАБОТЫ: (-1)-%, (0)-линейный, (1)-по таблице"  THEN
 	n 5 = IF DROP   metod-info FREQ_STEP	2	S" Шаг по частоте "   THEN
 	n 6 = IF DROP   metod-info file_kalibrov_buf 4	S" Калибровка"  THEN
@@ -213,7 +213,7 @@ CONSTANT sysup-metod-info
 	IF \ едем вверх
 		metod-info  FREQ F@  metod-info  FREQ_END   F@ F>=   IF metod-info  FREQ_END   F@ metod-info  FREQ F! 0  ELSE 1 THEN
 	ELSE \ едем вниз
-		metod-info  FREQ F@  metod-info  FREQ_END   F@ F<=   IF metod-info  FREQ_BEGIN   F@ metod-info  FREQ F! 0  ELSE 1 THEN
+		metod-info  FREQ F@  metod-info  FREQ_BEGIN   F@ F<=   IF metod-info  FREQ_BEGIN   F@ metod-info  FREQ F! 0  ELSE 1 THEN
 	THEN	
 ; 
 
@@ -242,11 +242,19 @@ CONSTANT sysup-metod-info
 	metod-info kalibrovka  @ 	metod-info  file_kalibrov_buf  DUP  1+  SWAP C@   ERR-INCLUDE-PROBE 
 		IF "  error_in_file_kalibrovka "  DUP STR@ TYPE TO_ERROR_PROG_BUFER  error_out_file  work-info  ERROR_PROG !
 		ELSE ."  kalibrovka:  " metod-info kalibrovka  @ ^ SeeDatas  THEN CR
-	" result.txt"   outFileCreate metod-info result !
+	" result.txt"   outFileCreateTime metod-info result !
 	\ устанавливаем мин и макс по калибровке, если они не соответствуют ей
 	metod-info   FREQ_BEGIN F@  metod-info kalibrovka  @ ^ MinMax metod-info   FREQ_BEGIN F! IF " минимальное  значение не соответствует калибровке. Поправлено. {CRLF} " metod-info result @  StoFile THEN 
 	metod-info   FREQ_END   F@  metod-info kalibrovka  @ ^ MinMax metod-info   FREQ_END   F! IF " максимальное значение не соответствует калибровке. Поправлено. {CRLF}" metod-info result @  StoFile THEN
 	metod-info   FREQ_BEGIN F@ metod-info   FREQ  F!  
+
+	metod-info FREQ_STEP F@ 0e F>
+	IF \ едем вверх
+	   metod-info   FREQ_BEGIN F@ metod-info   FREQ  F!  
+	ELSE \ едем вниз
+	  metod-info   FREQ_END F@ metod-info   FREQ  F!  
+	THEN
+
 	" start: " metod-info result @ StoFile TIME&DATE  DROP DROP DROP metod-info result @ DtoFile  metod-info result @ DtoFile  metod-info result @ DtoFile   metod-info result @  CRtoFile  
 	" Частота,МГц               ПОДАНО               ПРИНЯТО"  metod-info result  @ StoFile  metod-info result @ CRtoFile 
 	\ коментари ф файл вывода
@@ -312,14 +320,14 @@ CONSTANT sysup-metod-info
 	; 
 
 	
-: NewStep   \ { \ sign } 
+: NewStep    
 	\ metod-info FREQ_STEP F@ 0e F< IF -1 -> sign THEN  \ если идем по частоте вниз !
 	\ ."  NewStep " CR 
 	\ ."  v1 " DEPTH . FDEPTH . ."  "
 	 metod-info  work_step  @ 
 	\  ."  v2 " DEPTH . FDEPTH . ."  " 
 	 CASE 
-		-1 OF  metod-info FREQ_STEP  F@ metod-info FREQ  F@ F*   ( sign  IF -1e F* THEN)  metod-info FREQ  F@ F+    ENDOF
+		-1 OF  metod-info FREQ_STEP  F@ 1e2 F/ metod-info FREQ  F@ F*   ( sign  IF -1e F* THEN)  metod-info FREQ  F@ F+    ENDOF
 		1  OF  metod-info FREQ  F@  metod-info kalibrovka @ ^ NextFreq     ENDOF \ НЕ РАБОТАЕТ ПЕРЕБОР ВНИЗ по частоте!!!!! при табличной вводе
 		metod-info FREQ_STEP  F@    ( sign  IF -1e F* THEN) metod-info FREQ  F@ F+  
 	 ENDCASE

@@ -215,7 +215,7 @@ CONSTANT sysup-metod-info
 	IF \ едем вверх
 		metod-info  FREQ F@  metod-info  FREQ_END   F@ F>=   IF metod-info  FREQ_END   F@ metod-info  FREQ F! 0  ELSE 1 THEN
 	ELSE \ едем вниз
-		metod-info  FREQ F@  metod-info  FREQ_END   F@ F<=   IF metod-info  FREQ_BEGIN   F@ metod-info  FREQ F! 0  ELSE 1 THEN
+		metod-info  FREQ F@  metod-info  FREQ_BEGIN F@ F<=   IF metod-info  FREQ_BEGIN F@ metod-info  FREQ F! 0  ELSE 1 THEN
 	THEN	
 ; 
 
@@ -246,14 +246,17 @@ CONSTANT sysup-metod-info
 		ELSE ."  kalibrovka:  " metod-info kalibrovka  @ ^ SeeDatas  THEN CR
 
 	\ результаты	подготовили файл
-	" result.txt"   outFileCreate metod-info result !
+	" result.txt"   outFileCreateTime metod-info result !
 	\ устанавливаем мин и макс по калибровке, если они не соответствуют ей
 	metod-info   FREQ_BEGIN F@  metod-info kalibrovka  @ ^ MinMax metod-info   FREQ_BEGIN F! IF " минимальное  значение не соответствует калибровке. Поправлено. {CRLF} " metod-info result @  StoFile THEN 
 	metod-info   FREQ_END   F@  metod-info kalibrovka  @ ^ MinMax metod-info   FREQ_END   F! IF " максимальное значение не соответствует калибровке. Поправлено. {CRLF}" metod-info result @  StoFile THEN
 	
-	metod-info   FREQ_BEGIN F@ metod-info   FREQ  F!  
-	
-
+	metod-info FREQ_STEP F@ 0e F>
+	IF \ едем вверх
+	   metod-info   FREQ_BEGIN F@ metod-info   FREQ  F!  
+	ELSE \ едем вниз
+	  metod-info   FREQ_END F@ metod-info   FREQ  F!  
+	THEN
 
 	" start: " metod-info result @ StoFile TIME&DATE  DROP DROP DROP metod-info result @ DtoFile  metod-info result @ DtoFile  metod-info result @ DtoFile   metod-info result @  CRtoFile  
 	" Частота,МГц               ПОДАНО       "  metod-info result  @ StoFile  metod-info result @ CRtoFile 
@@ -321,14 +324,11 @@ CONSTANT sysup-metod-info
 	; 
 
 	
-: NewStep   \ { \ sign } 
-	\ metod-info FREQ_STEP F@ 0e F< IF -1 -> sign THEN  \ если идем по частоте вниз !
-	\ ."  NewStep " CR 
-	\ ."  v1 " DEPTH . FDEPTH . ."  "
-	 metod-info  work_step  @ 
+: NewStep   
+    	 metod-info  work_step  @ 
 	\  ."  v2 " DEPTH . FDEPTH . ."  " 
 	 CASE 
-		-1 OF  metod-info FREQ_STEP  F@ metod-info FREQ  F@ F*   ( sign  IF -1e F* THEN)  metod-info FREQ  F@ F+    ENDOF
+		-1 OF  metod-info FREQ_STEP  F@ 1e2 F/ metod-info FREQ  F@ F*   ( sign  IF -1e F* THEN)  metod-info FREQ  F@ F+    ENDOF
 		1  OF  metod-info FREQ  F@  metod-info kalibrovka @ ^ NextFreq     ENDOF \ НЕ РАБОТАЕТ ПЕРЕБОР ВНИЗ по частоте!!!!! при табличной вводе
 		metod-info FREQ_STEP  F@    ( sign  IF -1e F* THEN) metod-info FREQ  F@ F+  
 	 ENDCASE

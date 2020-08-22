@@ -4,9 +4,1145 @@
 использованием датчика электрического поля.
 простая подача сигнала с генератора по значениям калибровочных таблииц 
 без какого-либо контроля.
-load grafic file :./metod/SimpleAFH/bildo.png 
-load grafic file :./metod/GOST_RV_6601-001n.5.5/bildo.png 
 load grafic file :./metod/GenOnly/bildo.png 
-load grafic file :./metod/GOST_RV_6601-001n.5.5/bildo.png 
+load grafic file :./metod/SimpleAFH/bildo.png 
+button_load_metod_click
+load metod file :./metod/SimpleAFH/metod.spf 
+StoFile isn't unique (./metod/SimpleAFH/metod.spf)
+FtoFile isn't unique (./metod/SimpleAFH/metod.spf)
+DtoFile isn't unique (./metod/SimpleAFH/metod.spf)
+CRtoFile isn't unique (./metod/SimpleAFH/metod.spf)
+TYPE_BUFER isn't unique (./metod/SimpleAFH/metod.spf)
+timer_ticket isn't unique (./metod/SimpleAFH/metod.spf)
+load glade file :metod/SimpleAFH/metod.glade 
+gtk_file_chooser_set_uri =1 
+ SeeOne: 55 Пауза между воздействиями, мс -> 1 
+ I: 1  
+ SeeOne: 52 Время одного воздействия, мс-> 1 
+ I: 2  
+ SeeOne: 42 Начальная частота, МГц -> 2 
+  I: 3  
+ SeeOne: 40 Конечная частота, МГц -> 2 
+  I: 4  
+ SeeOne: 74 ТИП РАБОТЫ: (-1)-%, (0)-линейный, (1)-по таблице-> 1 
+ I: 5  
+ SeeOne: 27 Шаг по частоте -> 2 
+  I: 6  
+ SeeOne: 20 Калибровка-> 4 
+ I: 7  
+ SeeOne: 18 Генератор-> 5 
+ I: 8  
+ SeeOne: 21 Измеритель -> 5 
+ I: 9  
+ SeeOne: 0 . gtk_file_chooser_get_filename = 50931728 
+LOAD_TO_BUFER= C:\progs\SPForth\emctest\metod\SimpleAFH\default.nast
+LOAD_TO_BUFER= C:\progs\SPForth\emctest\prib\default\pribor.prib
+LOAD_TO_BUFER= C:\progs\SPForth\emctest\prib\default\pribor.prib
+LOAD_TO_BUFER= C:\progs\SPForth\emctest\metod\SimpleAFH\default.kal
+---------------------------------------------
+ COMMENT: Простой проход по частоте с использованием  заранее подготовленных настроек генератора и измерителя. 
+ STEP_TIME: 1000 
+ STEP_PAUSE: 1000 
+ FREQ_BEGIN: 1.0000000e01 
+ FREQ_END:  1.3000000e01 
+ FREQ_STEP:  -1.0000000e00 
+ file_generator_buf: C:\progs\SPForth\emctest\prib\default\pribor.prib
+ file_izm_buf: C:\progs\SPForth\emctest\prib\default\pribor.prib
+ file_kalibrov_buf: C:\progs\SPForth\emctest\metod\SimpleAFH\default.kal
+ work_step: 0 
+---------------------------------------------
 
-Exit 
+
+ SeeOne: 55 Пауза между воздействиями, мс -> 1 
+ I: 1  
+ SeeOne: 52 Время одного воздействия, мс-> 1 
+ I: 2  
+ SeeOne: 42 Начальная частота, МГц -> 2 
+  I: 3  
+ SeeOne: 40 Конечная частота, МГц -> 2 
+  I: 4  
+ SeeOne: 74 ТИП РАБОТЫ: (-1)-%, (0)-линейный, (1)-по таблице-> 1 
+ I: 5  
+ SeeOne: 27 Шаг по частоте -> 2 
+  I: 6  
+ SeeOne: 20 Калибровка-> 4 
+ I: 7  
+ SeeOne: 18 Генератор-> 5 
+ I: 8  
+ SeeOne: 21 Измеритель -> 5 
+ I: 9  
+ SeeOne: 0 ...but_start_click SeeOne:  begin 55
+ ---------------------------------------------
+Пауза между воздействиями, мс  COMMENT: -> Простой проход по частоте с использованием  заранее подготовленных настроек генератора и измерителя. 1
+  STEP_TIME: 
+1000  I: 
+1 STEP_PAUSE:  1000  
+
+ SeeOne:  FREQ_BEGIN:52  1.0000000e01 Время одного воздействия, мс
+->  FREQ_END: 1  1.3000000e01
+ 
+ I:  FREQ_STEP: 2  -1.0000000e00  
+
+ SeeOne:  file_generator_buf: 42C:\progs\SPForth\emctest\prib\default\pribor.prib 
+ file_izm_buf: Начальная частота, МГц C:\progs\SPForth\emctest\prib\default\pribor.prib-> 
+2 file_kalibrov_buf:  C:\progs\SPForth\emctest\metod\SimpleAFH\default.kal
+
+  work_step:  I: 03  
+ ---------------------------------------------
+
+ SeeOne: 
+40 file_generator_buf   
+Конечная частота, МГц Load Pribor...-> 
+2 
+ .....Load Pribor I: 4
+  
+ SeeOne: 74 ТИП РАБОТЫ: (-1)-%, (0)-линейный, (1)-по таблице-> 1 
+ I: 5  
+ SeeOne: 27 Шаг по частоте -> 2 
+  I: 6  
+ SeeOne: 20 Калибровка-> 4 
+ I: 7  
+ SeeOne: 18 Генератор-> 5 
+ I: 8  
+ SeeOne: 21 Измеритель -> 5 
+ I: 9  
+ SeeOne: 0 . file_izm_buf   
+Load Pribor...
+1_Prib isn't unique ()
+.....Load Pribor
+ start   
+
+0 
+
+0 
+ kalibrovka 
+. Include: C:\progs\SPForth\emctest\metod\SimpleAFH\default.kal
+ kalibrovka:  
+ 1.0000000e01  1.0000000e02  1.0000000e00  1.0000000e00 
+ 1.0000000e02  1.0000000e02  1.0000000e00  1.0000000e00 
+ 1.0000000e03  1.0000000e02  1.0000000e00  1.0000000e00 
+ 1.0000000e04  1.0000000e02  1.0000000e00  1.0000000e00 
+
+ result.txt_2020_8_22_21_8_23.sce  минимальное  значение не соответствует калибровке. Поправлено. 
+   start:      21        8        23     
+  Частота,МГц               ПОДАНО               ПРИНЯТО  
+ begin-ok
+word BEGIN  - ok  
+ work... SetFreq= 1.3000000e01 SetFreq= 1.3000000e01      13.000000                     SetLevel = 1.0000000e00 . >минимальное  значение не соответствует калибровке. Поправлено. 
+ start:  21  8  23 
+Частота,МГц               ПОДАНО               ПРИНЯТО
+ 13.000000                <        1.0000000                    GetLevel= 0.0000000e00      0.0000000          
+  ...work 
+. > 1.0000000                0.0000000    
+<    work... SetFreq= 1.2000000e01 SetFreq= 1.2000000e01      12.000000                     SetLevel = 1.0000000e00 . > 12.000000                <   .     1.0000000                    GetLevel= 0.0000000e00      0.0000000          
+  ...work 
+. > 1.0000000                0.0000000    
+<    work... SetFreq= 1.1000000e01 SetFreq= 1.1000000e01      11.000000                     SetLevel = 1.0000000e00 . > 11.000000                <        1.0000000                    GetLevel= 0.0000000e00      0.0000000          
+  ...work 
+. > 1.0000000                0.0000000    
+<    work... SetFreq= 1.0000000e01 SetFreq= 1.0000000e01      10.000000                     SetLevel = 1.0000000e00 . > 10.000000                <    .  >  <     1.0000000                    GetLevel= 0.0000000e00      0.0000000          
+  ...work 
+
+word WorkCicle -ok  
+ stop:      21        8        32     
+ off
+word END - ok  
+
+WorkCicle STOP
+. >1.0000000                0.0000000    
+stop:  21  8  32 
+<   ........TreeView_start_metod_click
+...flag: 1 
+ NUMBER: -1  -1.0000000e00 
+ SeeOne: 55 Пауза между воздействиями, мс -> 1 
+ I: 1  
+ SeeOne: 52 Время одного воздействия, мс-> 1 
+ I: 2  
+ SeeOne: 42 Начальная частота, МГц -> 2 
+  I: 3  
+ SeeOne: 40 Конечная частота, МГц -> 2 
+  I: 4  
+ SeeOne: 74 ТИП РАБОТЫ: (-1)-%, (0)-линейный, (1)-по таблице-> 1 
+ I: 5  
+ SeeOne: 27 Шаг по частоте -> 2 
+  I: 6  
+ SeeOne: 20 Калибровка-> 4 
+ I: 7  
+ SeeOne: 18 Генератор-> 5 
+ I: 8  
+ SeeOne: 21 Измеритель -> 5 
+ I: 9  
+ SeeOne: 0 . outFileCreate= ./metod/SimpleAFH/default.nast SAVE NAST DATA 
+ COMMENT(   Простой проход по частоте с использованием  заранее подготовленных настроек генератора и измерителя.   )  
+   "      1000     " S>FLOAT DROP F>D DROP  metod-info STEP_TIME           !    
+   "      1000     " S>FLOAT DROP F>D DROP  metod-info STEP_PAUSE          !   
+   "       10.000000     " S>FLOAT DROP           metod-info FREQ_BEGIN          F!   
+   "       13.000000     " S>FLOAT DROP           metod-info FREQ_END            F!   
+   "       -1.0000000     " S>FLOAT DROP           metod-info FREQ_STEP           F!   
+   "      -1     " S>FLOAT DROP F>D DROP  metod-info work_step           !   
+   "   C:\progs\SPForth\emctest\prib\default\pribor.prib  " metod-info file_generator_buf	LOAD_TO_BUFER   
+   "   C:\progs\SPForth\emctest\prib\default\pribor.prib  " metod-info file_izm_buf	 	LOAD_TO_BUFER   
+   "   C:\progs\SPForth\emctest\metod\SimpleAFH\default.kal  " metod-info file_kalibrov_buf		LOAD_TO_BUFER   
+ . >COMMENT( Простой проход по частоте с использованием  заранее подготовленных настроек генератора и измерителя. )
+ "  1000 " S>FLOAT DROP F>D DROP  metod-info STEP_TIME           !  
+ "  1000 " S>FLOAT DROP F>D DROP  metod-info STEP_PAUSE          ! 
+ "  10.000000 " S>FLOAT DROP           metod-info FREQ_BEGIN          F! 
+ "  13.000000 " S>FLOAT DROP           metod-info FREQ_END            F! 
+ "  -1.0000000 " S>FLOAT DROP           metod-info FREQ_STEP           F! 
+ "  -1 " S>FLOAT DROP F>D DROP  metod-info work_step           ! 
+ " C:\progs\SPForth\emctest\prib\default\pribor.prib" metod-info file_generator_buf	LOAD_TO_BUFER 
+ " C:\progs\SPForth\emctest\prib\default\pribor.prib" metod-info file_izm_buf	 	LOAD_TO_BUFER 
+ " C:\progs\SPForth\emctest\metod\SimpleAFH\default.kal" metod-info file_kalibrov_buf		LOAD_TO_BUFER 
+<   but_start_click SeeOne:  begin 55
+ ---------------------------------------------
+Пауза между воздействиями, мс  COMMENT: -> Простой проход по частоте с использованием  заранее подготовленных настроек генератора и измерителя. 1
+  STEP_TIME: 
+1000  I: 
+1 STEP_PAUSE:  1000  
+
+ SeeOne:  FREQ_BEGIN:52  1.0000000e01 Время одного воздействия, мс
+->  FREQ_END: 1  1.3000000e01
+ 
+ I:  FREQ_STEP: 2  -1.0000000e00  
+
+ SeeOne:  file_generator_buf: 42C:\progs\SPForth\emctest\prib\default\pribor.prib 
+ file_izm_buf: Начальная частота, МГц C:\progs\SPForth\emctest\prib\default\pribor.prib-> 
+2 file_kalibrov_buf:  C:\progs\SPForth\emctest\metod\SimpleAFH\default.kal
+
+ work_step:  -1 I:  3
+ --------------------------------------------- 
+
+
+ SeeOne:  file_generator_buf  40
+ Load Pribor...Конечная частота, МГц 
+-> 1_Prib2 isn't unique ( )
+
+  I: 4  
+ SeeOne: .....Load Pribor74
+ ТИП РАБОТЫ: (-1)-%, (0)-линейный, (1)-по таблице-> 1 
+ I: 5  
+ SeeOne: 27 Шаг по частоте -> 2 
+  I: 6  
+ SeeOne: 20 Калибровка-> 4 
+ I: 7  
+ SeeOne: 18 Генератор-> 5 
+ I: 8  
+ SeeOne: 21 Измеритель -> 5 
+ I: 9  
+ SeeOne: 0 . file_izm_buf   
+Load Pribor...
+1_Prib isn't unique ()
+.....Load Pribor
+ start   
+
+0 
+
+0 
+ kalibrovka 
+. Include: C:\progs\SPForth\emctest\metod\SimpleAFH\default.kal
+ kalibrovka:  
+ 1.0000000e01  1.0000000e02  1.0000000e00  1.0000000e00 
+ 1.0000000e02  1.0000000e02  1.0000000e00  1.0000000e00 
+ 1.0000000e03  1.0000000e02  1.0000000e00  1.0000000e00 
+ 1.0000000e04  1.0000000e02  1.0000000e00  1.0000000e00 
+
+ result.txt_2020_8_22_21_8_49.sce  минимальное  значение не соответствует калибровке. Поправлено. 
+   start:      21        8        49     
+  Частота,МГц               ПОДАНО               ПРИНЯТО  
+ begin-ok
+word BEGIN  - ok  
+ work... SetFreq= 1.3000000e01 SetFreq= 1.3000000e01      13.000000                     SetLevel = 1.0000000e00 . >минимальное  значение не соответствует калибровке. Поправлено. 
+ start:  21  8  49 
+Частота,МГц               ПОДАНО               ПРИНЯТО
+ 13.000000                <        1.0000000                    GetLevel= 0.0000000e00      0.0000000          
+  ...work 
+. > 1.0000000                0.0000000    
+<    work... SetFreq= 1.2987000e01 SetFreq= 1.2987000e01      12.987000                     SetLevel = 1.0000000e00 . > 12.987000                <   .     1.0000000                    GetLevel= 0.0000000e00      0.0000000          
+  ...work 
+. > 1.0000000                0.0000000    
+<    work... SetFreq= 1.2974013e01 SetFreq= 1.2974013e01      12.974013                     SetLevel = 1.0000000e00 . > 12.974013                <        1.0000000                    GetLevel= 0.0000000e00      0.0000000          
+  ...work 
+. > 1.0000000                0.0000000    
+<    work... SetFreq= 1.2961039e01 SetFreq= 1.2961039e01      12.961039                     SetLevel = 1.0000000e00 . > 12.961039                <   .     1.0000000                    GetLevel= 0.0000000e00      0.0000000          
+  ...work 
+. > 1.0000000                0.0000000    
+<    work... SetFreq= 1.2948078e01 SetFreq= 1.2948078e01      12.948078                     SetLevel = 1.0000000e00 . > 12.948078                <        1.0000000                    GetLevel= 0.0000000e00      0.0000000          
+  ...work 
+. > 1.0000000                0.0000000    
+<    work... SetFreq= 1.2935130e01 SetFreq= 1.2935130e01      12.935130                     SetLevel = 1.0000000e00 . > 12.935130                <    .  >  <     1.0000000                    GetLevel= 0.0000000e00      0.0000000          
+  ...work 
+TreeView_start_metod_click
+ . >1.0000000                0.0000000    
+<    work... SetFreq= 1.2922195e01 SetFreq= 1.2922195e01      12.922195                     SetLevel = 1.0000000e00 . > 12.922195                <        1.0000000                    GetLevel= 0.0000000e00      0.0000000          
+  ...work 
+. > 1.0000000                0.0000000    
+<    work... SetFreq= 1.2909273e01 SetFreq= 1.2909273e01      12.909273                     SetLevel = 1.0000000e00 . > 12.909273                <   flag: 2 
+ NUMBER: -10.0000000  -1.0000000e01 
+ SeeOne: 55 Пауза между воздействиями, мс -> 1 
+ I: 1  
+ SeeOne: 52 Время одного воздействия, мс-> 1 
+ I: 2  
+ SeeOne: 42 Начальная частота, МГц -> 2 
+  I: 3  
+ SeeOne: 40 Конечная частота, МГц -> 2 
+  I: 4  
+ SeeOne: 74 ТИП РАБОТЫ: (-1)-%, (0)-линейный, (1)-по таблице-> 1 
+ I: 5  
+ SeeOne: 27 Шаг по частоте -> 2 
+  I: 6  
+ SeeOne: 20 Калибровка-> 4 
+ I: 7  
+ SeeOne: 18 Генератор-> 5 
+ I: 8  
+ SeeOne: 21 Измеритель -> 5 
+ I: 9  
+ SeeOne: 0      1.0000000                    GetLevel= 0.0000000e00      0.0000000          
+  ...work 
+. > 1.0000000                0.0000000    
+<   . work... SetFreq= 1.2780180e01 SetFreq= 1.2780180e01      12.780180                     SetLevel = 1.0000000e00 . > 12.780180                <        1.0000000                    GetLevel= 0.0000000e00      0.0000000          
+  ...work 
+. > 1.0000000                0.0000000    
+<    work... SetFreq= 1.2652378e01 SetFreq= 1.2652378e01      12.652378                     SetLevel = 1.0000000e00 . > 12.652378                <        1.0000000                    GetLevel= 0.0000000e00      0.0000000          
+  ...work 
+. > 1.0000000                0.0000000    
+<   . work... SetFreq= 1.2525854e01 SetFreq= 1.2525854e01      12.525854                     SetLevel = 1.0000000e00 . > 12.525854                <        1.0000000                    GetLevel= 0.0000000e00      0.0000000          
+  ...work 
+. > 1.0000000                0.0000000    
+<    work... SetFreq= 1.2400596e01 SetFreq= 1.2400596e01      12.400596                     SetLevel = 1.0000000e00 . > 12.400596                <        1.0000000                    GetLevel= 0.0000000e00      0.0000000          
+  ...work 
+. > 1.0000000                0.0000000    
+<    work... .SetFreq= 1.2276590e01 SetFreq= 1.2276590e01      12.276590                     SetLevel = 1.0000000e00 but_stop_click     1.0000000                    GetLevel= 0.0000000e00      0.0000000          
+  ...work 
+
+word WorkCicle -ok  
+ stop:      21        9        19     
+ off
+word END - ok  
+
+WorkCicle STOP
+. > 12.276590                 1.0000000                0.0000000    
+stop:  21  9  19 
+<   .but_start_click begin  SeeOne: 
+55--------------------------------------------- 
+ COMMENT: Пауза между воздействиями, мс Простой проход по частоте с использованием  заранее подготовленных настроек генератора и измерителя. -> 
+1 STEP_TIME:  1000
+ 
+ STEP_PAUSE:  I: 10001  
+  FREQ_BEGIN:
+  SeeOne: 1.0000000e0152  
+ FREQ_END: Время одного воздействия, мс -> 1.3000000e011  
+
+ FREQ_STEP:   I: -1.0000000e012  
+  file_generator_buf: 
+C:\progs\SPForth\emctest\prib\default\pribor.prib SeeOne: 
+42 file_izm_buf:  C:\progs\SPForth\emctest\prib\default\pribor.prib
+Начальная частота, МГц  file_kalibrov_buf: -> C:\progs\SPForth\emctest\metod\SimpleAFH\default.kal2
+  work_step: 
+-1  
+ I: ---------------------------------------------3
+ 
+  file_generator_buf  
+
+ SeeOne: 40 Конечная частота, МГц Load Pribor...-> 
+21_Prib  isn't unique (
+) 
+ I: 4  
+ SeeOne: 74 ТИП РАБОТЫ: (-1)-%, (0)-линейный, (1)-по таблице-> 1 
+ I: 5  
+ SeeOne: .....Load Pribor27 
+Шаг по частоте -> 2 
+  I: 6  
+ SeeOne: 20 Калибровка-> 4 
+ I: 7  
+ SeeOne: 18 Генератор-> 5 
+ I: 8  
+ SeeOne: 21 Измеритель -> 5 
+ I: 9  
+ SeeOne: 0 . file_izm_buf   
+Load Pribor...
+1_Prib isn't unique ()
+.....Load Pribor
+ start   
+
+0 
+
+0 
+ kalibrovka 
+. Include: C:\progs\SPForth\emctest\metod\SimpleAFH\default.kal
+ kalibrovka:  
+ 1.0000000e01  1.0000000e02  1.0000000e00  1.0000000e00 
+ 1.0000000e02  1.0000000e02  1.0000000e00  1.0000000e00 
+ 1.0000000e03  1.0000000e02  1.0000000e00  1.0000000e00 
+ 1.0000000e04  1.0000000e02  1.0000000e00  1.0000000e00 
+
+ result.txt_2020_8_22_21_9_23.sce  минимальное  значение не соответствует калибровке. Поправлено. 
+   start:      21        9        23     
+  Частота,МГц               ПОДАНО               ПРИНЯТО  
+ begin-ok
+word BEGIN  - ok  
+ work... SetFreq= 1.3000000e01 SetFreq= 1.3000000e01      13.000000                     SetLevel = 1.0000000e00 . >минимальное  значение не соответствует калибровке. Поправлено. 
+ start:  21  9  23 
+Частота,МГц               ПОДАНО               ПРИНЯТО
+ 13.000000                <        1.0000000                    GetLevel= 0.0000000e00      0.0000000          
+  ...work 
+. > 1.0000000                0.0000000    
+<    work... SetFreq= 1.2870000e01 SetFreq= 1.2870000e01      12.870000                     SetLevel = 1.0000000e00 . > 12.870000                <        1.0000000                    GetLevel= 0.0000000e00      0.0000000          
+  ...work 
+. > 1.0000000                0.0000000    
+<   . work... SetFreq= 1.2741300e01 SetFreq= 1.2741300e01      12.741300                     SetLevel = 1.0000000e00 . > 12.741300                <        1.0000000                    GetLevel= 0.0000000e00      0.0000000          
+  ...work 
+. > 1.0000000                0.0000000    
+<    work... SetFreq= 1.2613887e01 SetFreq= 1.2613887e01      12.613887                     SetLevel = 1.0000000e00 . > 12.613887                <        1.0000000                    GetLevel= 0.0000000e00      0.0000000          
+  ...work 
+. > 1.0000000                0.0000000    
+<   . work... SetFreq= 1.2487748e01 SetFreq= 1.2487748e01      12.487748                     SetLevel = 1.0000000e00 . > 12.487748                <        1.0000000                    GetLevel= 0.0000000e00      0.0000000          
+  ...work 
+. > 1.0000000                0.0000000    
+<    work... SetFreq= 1.2362871e01 SetFreq= 1.2362871e01      12.362871                     SetLevel = 1.0000000e00 . > 12.362871                <        1.0000000                    GetLevel= 0.0000000e00      0.0000000          
+  ...work 
+. > 1.0000000                0.0000000    
+<    work... SetFreq= 1.2239242e01 SetFreq= 1.2239242e01      12.239242                     SetLevel = 1.0000000e00 . > 12.239242                <   .     1.0000000                    GetLevel= 0.0000000e00      0.0000000          
+  ...work 
+. > 1.0000000                0.0000000    
+<    work... SetFreq= 1.2116850e01 SetFreq= 1.2116850e01      12.116850                     SetLevel = 1.0000000e00 . > 12.116850                <        1.0000000                    GetLevel= 0.0000000e00      0.0000000          
+  ...work 
+. > 1.0000000                0.0000000    
+<    work... SetFreq= 1.1995681e01 SetFreq= 1.1995681e01      11.995681                     SetLevel = 1.0000000e00 . > 11.995681                <   .     1.0000000                    GetLevel= 0.0000000e00      0.0000000          
+  ...work 
+. > 1.0000000                0.0000000    
+<    work... SetFreq= 1.1875724e01 SetFreq= 1.1875724e01      11.875724                     SetLevel = 1.0000000e00 . > 11.875724                <        1.0000000                    GetLevel= 0.0000000e00      0.0000000          
+  ...work 
+. > 1.0000000                0.0000000    
+<    work... SetFreq= 1.1756967e01 SetFreq= 1.1756967e01      11.756967                     SetLevel = 1.0000000e00 . > 11.756967                <   .     1.0000000                    GetLevel= 0.0000000e00      0.0000000          
+  ...work 
+. > 1.0000000                0.0000000    
+<    work... SetFreq= 1.1639397e01 SetFreq= 1.1639397e01      11.639397                     SetLevel = 1.0000000e00 . > 11.639397                <        1.0000000                    GetLevel= 0.0000000e00      0.0000000          
+  ...work 
+. > 1.0000000                0.0000000    
+<    work... SetFreq= 1.1523003e01 SetFreq= 1.1523003e01      11.523003                     SetLevel = 1.0000000e00 . > 11.523003                <        1.0000000                    GetLevel= 0.0000000e00      0.0000000          
+  ...work 
+. > 1.0000000                0.0000000    
+<   . work... SetFreq= 1.1407773e01 SetFreq= 1.1407773e01      11.407773                     SetLevel = 1.0000000e00 . > 11.407773                <        1.0000000                    GetLevel= 0.0000000e00      0.0000000          
+  ...work 
+. > 1.0000000                0.0000000    
+<    work... SetFreq= 1.1293696e01 SetFreq= 1.1293696e01      11.293696                     SetLevel = 1.0000000e00 . > 11.293696                <        1.0000000                    GetLevel= 0.0000000e00      0.0000000          
+  ...work 
+. > 1.0000000                0.0000000    
+<   . work... SetFreq= 1.1180759e01 SetFreq= 1.1180759e01      11.180759                     SetLevel = 1.0000000e00 . > 11.180759                <        1.0000000                    GetLevel= 0.0000000e00      0.0000000          
+  ...work 
+. > 1.0000000                0.0000000    
+<    work... SetFreq= 1.1068951e01 SetFreq= 1.1068951e01      11.068951                     SetLevel = 1.0000000e00 . > 11.068951                <        1.0000000                    GetLevel= 0.0000000e00      0.0000000          
+  ...work 
+. > 1.0000000                0.0000000    
+<   . work... SetFreq= 1.0958262e01 SetFreq= 1.0958262e01      10.958262                     SetLevel = 1.0000000e00 . > 10.958262                <        1.0000000                    GetLevel= 0.0000000e00      0.0000000          
+  ...work 
+. > 1.0000000                0.0000000    
+<    work... SetFreq= 1.0848679e01 SetFreq= 1.0848679e01      10.848679                     SetLevel = 1.0000000e00 . > 10.848679                <        1.0000000                    GetLevel= 0.0000000e00      0.0000000          
+  ...work 
+. > 1.0000000                0.0000000    
+<    work... SetFreq= 1.0740192e01 SetFreq= 1.0740192e01      10.740192                     SetLevel = 1.0000000e00 . > 10.740192                <   .     1.0000000                    GetLevel= 0.0000000e00      0.0000000          
+  ...work 
+. > 1.0000000                0.0000000    
+<    work... SetFreq= 1.0632790e01 SetFreq= 1.0632790e01      10.632790                     SetLevel = 1.0000000e00 . > 10.632790                <        1.0000000                    GetLevel= 0.0000000e00      0.0000000          
+  ...work 
+. > 1.0000000                0.0000000    
+<    work... SetFreq= 1.0526462e01 SetFreq= 1.0526462e01      10.526462                     SetLevel = 1.0000000e00 . > 10.526462                <   .     1.0000000                    GetLevel= 0.0000000e00      0.0000000          
+  ...work 
+but_stop_click
+word WorkCicle -ok  
+ stop:      21        10        17     
+ off
+word END - ok  
+
+WorkCicle STOP
+. > 1.0000000                0.0000000    
+stop:  21  10  17 
+<   .TreeView_start_metod_click
+....flag: 1 
+ NUMBER: 0  0.0000000e00 
+ SeeOne: 55 Пауза между воздействиями, мс -> 1 
+ I: 1  
+ SeeOne: 52 Время одного воздействия, мс-> 1 
+ I: 2  
+ SeeOne: 42 Начальная частота, МГц -> 2 
+  I: 3  
+ SeeOne: 40 Конечная частота, МГц -> 2 
+  I: 4  
+ SeeOne: 74 ТИП РАБОТЫ: (-1)-%, (0)-линейный, (1)-по таблице-> 1 
+ I: 5  
+ SeeOne: 27 Шаг по частоте -> 2 
+  I: 6  
+ SeeOne: 20 Калибровка-> 4 
+ I: 7  
+ SeeOne: 18 Генератор-> 5 
+ I: 8  
+ SeeOne: 21 Измеритель -> 5 
+ I: 9  
+ SeeOne: 0 ..TreeView_start_metod_click
+.....flag: 1 
+ NUMBER: -1  -1.0000000e00 
+ SeeOne: 55 Пауза между воздействиями, мс -> 1 
+ I: 1  
+ SeeOne: 52 Время одного воздействия, мс-> 1 
+ I: 2  
+ SeeOne: 42 Начальная частота, МГц -> 2 
+  I: 3  
+ SeeOne: 40 Конечная частота, МГц -> 2 
+  I: 4  
+ SeeOne: 74 ТИП РАБОТЫ: (-1)-%, (0)-линейный, (1)-по таблице-> 1 
+ I: 5  
+ SeeOne: 27 Шаг по частоте -> 2 
+  I: 6  
+ SeeOne: 20 Калибровка-> 4 
+ I: 7  
+ SeeOne: 18 Генератор-> 5 
+ I: 8  
+ SeeOne: 21 Измеритель -> 5 
+ I: 9  
+ SeeOne: 0 .TreeView_start_metod_click
+ ..flag: 2 
+ NUMBER: 10.000000  1.0000000e01 
+ SeeOne: 55 Пауза между воздействиями, мс -> 1 
+ I: 1  
+ SeeOne: 52 Время одного воздействия, мс-> 1 
+ I: 2  
+ SeeOne: 42 Начальная частота, МГц -> 2 
+  I: 3  
+ SeeOne: 40 Конечная частота, МГц -> 2 
+  I: 4  
+ SeeOne: 74 ТИП РАБОТЫ: (-1)-%, (0)-линейный, (1)-по таблице-> 1 
+ I: 5  
+ SeeOne: 27 Шаг по частоте -> 2 
+  I: 6  
+ SeeOne: 20 Калибровка-> 4 
+ I: 7  
+ SeeOne: 18 Генератор-> 5 
+ I: 8  
+ SeeOne: 21 Измеритель -> 5 
+ I: 9  
+ SeeOne: 0 . outFileCreate= ./metod/SimpleAFH/default.nast SAVE NAST DATA 
+ COMMENT(   Простой проход по частоте с использованием  заранее подготовленных настроек генератора и измерителя.   )  
+   "      1000     " S>FLOAT DROP F>D DROP  metod-info STEP_TIME           !    
+   "      1000     " S>FLOAT DROP F>D DROP  metod-info STEP_PAUSE          !   
+   "       10.000000     " S>FLOAT DROP           metod-info FREQ_BEGIN          F!   
+   "       13.000000     " S>FLOAT DROP           metod-info FREQ_END            F!   
+   "       10.000000     " S>FLOAT DROP           metod-info FREQ_STEP           F!   
+   "      -1     " S>FLOAT DROP F>D DROP  metod-info work_step           !   
+   "   C:\progs\SPForth\emctest\prib\default\pribor.prib  " metod-info file_generator_buf	LOAD_TO_BUFER   
+   "   C:\progs\SPForth\emctest\prib\default\pribor.prib  " metod-info file_izm_buf	 	LOAD_TO_BUFER   
+   "   C:\progs\SPForth\emctest\metod\SimpleAFH\default.kal  " metod-info file_kalibrov_buf		LOAD_TO_BUFER   
+ . >COMMENT( Простой проход по частоте с использованием  заранее подготовленных настроек генератора и измерителя. )
+ "  1000 " S>FLOAT DROP F>D DROP  metod-info STEP_TIME           !  
+ "  1000 " S>FLOAT DROP F>D DROP  metod-info STEP_PAUSE          ! 
+ "  10.000000 " S>FLOAT DROP           metod-info FREQ_BEGIN          F! 
+ "  13.000000 " S>FLOAT DROP           metod-info FREQ_END            F! 
+ "  10.000000 " S>FLOAT DROP           metod-info FREQ_STEP           F! 
+ "  -1 " S>FLOAT DROP F>D DROP  metod-info work_step           ! 
+ " C:\progs\SPForth\emctest\prib\default\pribor.prib" metod-info file_generator_buf	LOAD_TO_BUFER 
+ " C:\progs\SPForth\emctest\prib\default\pribor.prib" metod-info file_izm_buf	 	LOAD_TO_BUFER 
+ " C:\progs\SPForth\emctest\metod\SimpleAFH\default.kal" metod-info file_kalibrov_buf		LOAD_TO_BUFER 
+<   but_start_click SeeOne:  begin 55
+ ---------------------------------------------
+Пауза между воздействиями, мс  COMMENT: -> Простой проход по частоте с использованием  заранее подготовленных настроек генератора и измерителя. 1
+  STEP_TIME: 
+1000 I:  1
+  STEP_PAUSE:  1000
+  SeeOne: 
+52 FREQ_BEGIN:  1.0000000e01Время одного воздействия, мс -> 
+1 FREQ_END:   
+1.3000000e01  I: 
+2 FREQ_STEP:    1.0000000e01
+  SeeOne: 
+42 file_generator_buf:  C:\progs\SPForth\emctest\prib\default\pribor.prib
+Начальная частота, МГц  file_izm_buf: -> C:\progs\SPForth\emctest\prib\default\pribor.prib2
+  file_kalibrov_buf: 
+C:\progs\SPForth\emctest\metod\SimpleAFH\default.kal
+  work_step:  I: -13  
+ ---------------------------------------------
+
+ SeeOne: 
+40 file_generator_buf   
+Конечная частота, МГц -> 2 Load Pribor...
+
+ 1_Prib I:  isn't unique (4 ) 
+
+ SeeOne: 74 ТИП РАБОТЫ: (-1)-%, (0)-линейный, (1)-по таблице-> 1 
+ I: 5  
+ SeeOne: 27.....Load Pribor 
+Шаг по частоте -> 2 
+  I: 6  
+ SeeOne: 20 Калибровка-> 4 
+ I: 7  
+ SeeOne: 18 Генератор-> 5 
+ I: 8  
+ SeeOne: 21 Измеритель -> 5 
+ I: 9  
+ SeeOne: 0 . file_izm_buf   
+Load Pribor...
+1_Prib isn't unique ()
+.....Load Pribor
+ start   
+
+0 
+
+0 
+ kalibrovka 
+. Include: C:\progs\SPForth\emctest\metod\SimpleAFH\default.kal
+ kalibrovka:  
+ 1.0000000e01  1.0000000e02  1.0000000e00  1.0000000e00 
+ 1.0000000e02  1.0000000e02  1.0000000e00  1.0000000e00 
+ 1.0000000e03  1.0000000e02  1.0000000e00  1.0000000e00 
+ 1.0000000e04  1.0000000e02  1.0000000e00  1.0000000e00 
+
+ result.txt_2020_8_22_21_10_37.sce  минимальное  значение не соответствует калибровке. Поправлено. 
+   start:      21        10        37     
+  Частота,МГц               ПОДАНО               ПРИНЯТО  
+ begin-ok
+word BEGIN  - ok  
+ work... SetFreq= 1.0000000e01 SetFreq= 1.0000000e01      10.000000                     SetLevel = 1.0000000e00 . >минимальное  значение не соответствует калибровке. Поправлено. 
+ start:  21  10  37 
+Частота,МГц               ПОДАНО               ПРИНЯТО
+ 10.000000                <        1.0000000                    GetLevel= 0.0000000e00      0.0000000          
+  ...work 
+. > 1.0000000                0.0000000    
+<    work... SetFreq= 1.0100000e01 SetFreq= 1.0100000e01      10.100000                     SetLevel = 1.0000000e00 . > 10.100000                <   .     1.0000000                    GetLevel= 0.0000000e00      0.0000000          
+  ...work 
+. > 1.0000000                0.0000000    
+<    work... SetFreq= 1.0201000e01 SetFreq= 1.0201000e01      10.201000                     SetLevel = 1.0000000e00 . > 10.201000                <        1.0000000                    GetLevel= 0.0000000e00      0.0000000          
+  ...work 
+. > 1.0000000                0.0000000    
+<    work... SetFreq= 1.0303010e01 SetFreq= 1.0303010e01      10.303010                     SetLevel = 1.0000000e00 but_stop_click     1.0000000                    GetLevel= 0.0000000e00      0.0000000          
+  ...work 
+
+word WorkCicle -ok  
+ stop:      21        10        45     
+ off
+word END - ok  
+
+WorkCicle STOP
+. > 10.303010                 1.0000000                0.0000000    
+stop:  21  10  45 
+<   TreeView_start_metod_click
+ ...flag: 2 
+ NUMBER: 1.000000  1.0000000e00 
+ SeeOne: 55 Пауза между воздействиями, мс -> 1 
+ I: 1  
+ SeeOne: 52 Время одного воздействия, мс-> 1 
+ I: 2  
+ SeeOne: 42 Начальная частота, МГц -> 2 
+  I: 3  
+ SeeOne: 40 Конечная частота, МГц -> 2 
+  I: 4  
+ SeeOne: 74 ТИП РАБОТЫ: (-1)-%, (0)-линейный, (1)-по таблице-> 1 
+ I: 5  
+ SeeOne: 27 Шаг по частоте -> 2 
+  I: 6  
+ SeeOne: 20 Калибровка-> 4 
+ I: 7  
+ SeeOne: 18 Генератор-> 5 
+ I: 8  
+ SeeOne: 21 Измеритель -> 5 
+ I: 9  
+ SeeOne: 0  outFileCreate= ./metod/SimpleAFH/default.nast SAVE NAST DATA 
+ COMMENT(   Простой проход по частоте с использованием  заранее подготовленных настроек генератора и измерителя.   )  
+   "      1000     " S>FLOAT DROP F>D DROP  metod-info STEP_TIME           !    
+   "      1000     " S>FLOAT DROP F>D DROP  metod-info STEP_PAUSE          !   
+   "       10.000000     " S>FLOAT DROP           metod-info FREQ_BEGIN          F!   
+   "       13.000000     " S>FLOAT DROP           metod-info FREQ_END            F!   
+   "       1.0000000     " S>FLOAT DROP           metod-info FREQ_STEP           F!   
+   "      -1     " S>FLOAT DROP F>D DROP  metod-info work_step           !   
+   "   C:\progs\SPForth\emctest\prib\default\pribor.prib  " metod-info file_generator_buf	LOAD_TO_BUFER   
+   "   C:\progs\SPForth\emctest\prib\default\pribor.prib  " metod-info file_izm_buf	 	LOAD_TO_BUFER   
+   "   C:\progs\SPForth\emctest\metod\SimpleAFH\default.kal  " metod-info file_kalibrov_buf		LOAD_TO_BUFER   
+ . >COMMENT( Простой проход по частоте с использованием  заранее подготовленных настроек генератора и измерителя. )
+ "  1000 " S>FLOAT DROP F>D DROP  metod-info STEP_TIME           !  
+ "  1000 " S>FLOAT DROP F>D DROP  metod-info STEP_PAUSE          ! 
+ "  10.000000 " S>FLOAT DROP           metod-info FREQ_BEGIN          F! 
+ "  13.000000 " S>FLOAT DROP           metod-info FREQ_END            F! 
+ "  1.0000000 " S>FLOAT DROP           metod-info FREQ_STEP           F! 
+ "  -1 " S>FLOAT DROP F>D DROP  metod-info work_step           ! 
+ " C:\progs\SPForth\emctest\prib\default\pribor.prib" metod-info file_generator_buf	LOAD_TO_BUFER 
+ " C:\progs\SPForth\emctest\prib\default\pribor.prib" metod-info file_izm_buf	 	LOAD_TO_BUFER 
+ " C:\progs\SPForth\emctest\metod\SimpleAFH\default.kal" metod-info file_kalibrov_buf		LOAD_TO_BUFER 
+<   but_start_click SeeOne:  begin 55
+ ---------------------------------------------
+Пауза между воздействиями, мс  COMMENT: -> Простой проход по частоте с использованием  заранее подготовленных настроек генератора и измерителя. 1
+  STEP_TIME: 
+1000 
+ I:  STEP_PAUSE: 11000   
+
+ FREQ_BEGIN: SeeOne:  521.0000000e01  
+Время одного воздействия, мс FREQ_END: ->  11.3000000e01  
+
+ FREQ_STEP:  I:  21.0000000e00   
+
+ file_generator_buf:  SeeOne: C:\progs\SPForth\emctest\prib\default\pribor.prib42
+  file_izm_buf: C:\progs\SPForth\emctest\prib\default\pribor.pribНачальная частота, МГц 
+->  file_kalibrov_buf: 2C:\progs\SPForth\emctest\metod\SimpleAFH\default.kal 
+
+ work_step:  -1 I:  3
+ --------------------------------------------- 
+
+
+ SeeOne:  file_generator_buf  40
+ Конечная частота, МГц -> 2 Load Pribor...
+
+ 1_Prib I:  isn't unique (4 ) 
+
+ SeeOne: 74 ТИП РАБОТЫ: (-1)-%, (0)-линейный, (1)-по таблице-> 1 
+ I: 5  
+ SeeOne: 27.....Load Pribor Шаг по частоте 
+-> 2 
+  I: 6  
+ SeeOne: 20 Калибровка-> 4 
+ I: 7  
+ SeeOne: 18 Генератор-> 5 
+ I: 8  
+ SeeOne: 21 Измеритель -> 5 
+ I: 9  
+ SeeOne: 0 . file_izm_buf   
+Load Pribor...
+1_Prib isn't unique ()
+.....Load Pribor
+ start   
+
+0 
+
+0 
+ kalibrovka 
+. Include: C:\progs\SPForth\emctest\metod\SimpleAFH\default.kal
+ kalibrovka:  
+ 1.0000000e01  1.0000000e02  1.0000000e00  1.0000000e00 
+ 1.0000000e02  1.0000000e02  1.0000000e00  1.0000000e00 
+ 1.0000000e03  1.0000000e02  1.0000000e00  1.0000000e00 
+ 1.0000000e04  1.0000000e02  1.0000000e00  1.0000000e00 
+
+ result.txt_2020_8_22_21_10_51.sce  минимальное  значение не соответствует калибровке. Поправлено. 
+   start:      21        10        51     
+  Частота,МГц               ПОДАНО               ПРИНЯТО  
+ begin-ok
+word BEGIN  - ok  
+ work... SetFreq= 1.0000000e01 SetFreq= 1.0000000e01      10.000000                     SetLevel = 1.0000000e00 . >минимальное  значение не соответствует калибровке. Поправлено. 
+ start:  21  10  51 
+Частота,МГц               ПОДАНО               ПРИНЯТО
+ 10.000000                <        1.0000000                    GetLevel= 0.0000000e00      0.0000000          
+  ...work 
+. > 1.0000000                0.0000000    
+<    work... SetFreq= 1.0010000e01 SetFreq= 1.0010000e01      10.010000                     SetLevel = 1.0000000e00 . > 10.010000                <        1.0000000                    GetLevel= 0.0000000e00      0.0000000          
+  ...work 
+. > 1.0000000                0.0000000    
+<   . work... SetFreq= 1.0020010e01 SetFreq= 1.0020010e01      10.020010                     SetLevel = 1.0000000e00 but_stop_click     1.0000000                    GetLevel= 0.0000000e00      0.0000000          
+  ...work 
+
+word WorkCicle -ok  
+ stop:      21        10        57     
+ off
+word END - ok  
+
+WorkCicle STOP
+. > 10.020010                 1.0000000                0.0000000    
+stop:  21  10  57 
+<   .....................................but_stop_click.filechooserbutton_pribor =0 
+filechooserbutton_pribor =0 
+button_load_metod_click
+load metod file :./metod/SimpleAFH/metod.spf 
+NoError isn't unique (./metod/SimpleAFH/metod.spf)
+work_Execute isn't unique (./metod/SimpleAFH/metod.spf)
+work_Stop isn't unique (./metod/SimpleAFH/metod.spf)
+work_Pause isn't unique (./metod/SimpleAFH/metod.spf)
+error_begin_problem isn't unique (./metod/SimpleAFH/metod.spf)
+error_end_problem isn't unique (./metod/SimpleAFH/metod.spf)
+error_cicle_problem isn't unique (./metod/SimpleAFH/metod.spf)
+error_metod_file isn't unique (./metod/SimpleAFH/metod.spf)
+error_nastr_file isn't unique (./metod/SimpleAFH/metod.spf)
+error_out_file isn't unique (./metod/SimpleAFH/metod.spf)
+error_face isn't unique (./metod/SimpleAFH/metod.spf)
+Data_buffer isn't unique (./metod/SimpleAFH/metod.spf)
+_file_name_bufer_ isn't unique (./metod/SimpleAFH/metod.spf)
+ERROR_PROG_BUFER isn't unique (./metod/SimpleAFH/metod.spf)
+ERROR_PROG isn't unique (./metod/SimpleAFH/metod.spf)
+work_thread isn't unique (./metod/SimpleAFH/metod.spf)
+tid-thead isn't unique (./metod/SimpleAFH/metod.spf)
+-upravl_thead- isn't unique (./metod/SimpleAFH/metod.spf)
+refresh isn't unique (./metod/SimpleAFH/metod.spf)
+sysup-work-info isn't unique (./metod/SimpleAFH/metod.spf)
+STEP_PAUSE isn't unique (./metod/SimpleAFH/metod.spf)
+STEP_TIME isn't unique (./metod/SimpleAFH/metod.spf)
+FREQ_BEGIN isn't unique (./metod/SimpleAFH/metod.spf)
+FREQ_END isn't unique (./metod/SimpleAFH/metod.spf)
+FREQ_STEP isn't unique (./metod/SimpleAFH/metod.spf)
+file_kalibrov_buf isn't unique (./metod/SimpleAFH/metod.spf)
+file_generator_buf isn't unique (./metod/SimpleAFH/metod.spf)
+file_izm_buf isn't unique (./metod/SimpleAFH/metod.spf)
+work_step isn't unique (./metod/SimpleAFH/metod.spf)
+N_STEP isn't unique (./metod/SimpleAFH/metod.spf)
+file_nastr_buf isn't unique (./metod/SimpleAFH/metod.spf)
+Len_Coment_buffer isn't unique (./metod/SimpleAFH/metod.spf)
+Coment_buffer isn't unique (./metod/SimpleAFH/metod.spf)
+FREQ isn't unique (./metod/SimpleAFH/metod.spf)
+kalibrovka isn't unique (./metod/SimpleAFH/metod.spf)
+generator isn't unique (./metod/SimpleAFH/metod.spf)
+kalibr_izm isn't unique (./metod/SimpleAFH/metod.spf)
+result isn't unique (./metod/SimpleAFH/metod.spf)
+sysup-metod-info isn't unique (./metod/SimpleAFH/metod.spf)
+work-info isn't unique (./metod/SimpleAFH/metod.spf)
+metod-info isn't unique (./metod/SimpleAFH/metod.spf)
+To_Data_buffer isn't unique (./metod/SimpleAFH/metod.spf)
+Str_Data_buffer isn't unique (./metod/SimpleAFH/metod.spf)
+StoFile isn't unique (./metod/SimpleAFH/metod.spf)
+FtoFile isn't unique (./metod/SimpleAFH/metod.spf)
+DtoFile isn't unique (./metod/SimpleAFH/metod.spf)
+CRtoFile isn't unique (./metod/SimpleAFH/metod.spf)
+COMMENT( isn't unique (./metod/SimpleAFH/metod.spf)
+LOAD_TO_ERR_BUFER isn't unique (./metod/SimpleAFH/metod.spf)
+TYPE_BUFER isn't unique (./metod/SimpleAFH/metod.spf)
+CLEAR_ERROR_BUFER isn't unique (./metod/SimpleAFH/metod.spf)
+TO_ERROR_PROG_BUFER isn't unique (./metod/SimpleAFH/metod.spf)
+TYPE_ERROR_PROG_BUFER isn't unique (./metod/SimpleAFH/metod.spf)
+:ERROR isn't unique (./metod/SimpleAFH/metod.spf)
+PAUSE-PROG isn't unique (./metod/SimpleAFH/metod.spf)
+SeeOne isn't unique (./metod/SimpleAFH/metod.spf)
+see isn't unique (./metod/SimpleAFH/metod.spf)
+SAVE_NASTR_DATA isn't unique (./metod/SimpleAFH/metod.spf)
+IF_END: isn't unique (./metod/SimpleAFH/metod.spf)
+BEGIN: isn't unique (./metod/SimpleAFH/metod.spf)
+WORK: isn't unique (./metod/SimpleAFH/metod.spf)
+END: isn't unique (./metod/SimpleAFH/metod.spf)
+NewStep isn't unique (./metod/SimpleAFH/metod.spf)
+WORK_END: isn't unique (./metod/SimpleAFH/metod.spf)
+WorkStep isn't unique (./metod/SimpleAFH/metod.spf)
+WorkCicle isn't unique (./metod/SimpleAFH/metod.spf)
+file_nastr_reqiured isn't unique (./metod/SimpleAFH/metod.spf)
+num_data isn't unique (./metod/SimpleAFH/metod.spf)
+dialog isn't unique (./metod/SimpleAFH/metod.spf)
+builder_metod isn't unique (./metod/SimpleAFH/metod.spf)
+WinMetod isn't unique (./metod/SimpleAFH/metod.spf)
+button_close_metod isn't unique (./metod/SimpleAFH/metod.spf)
+WinMetod_timer isn't unique (./metod/SimpleAFH/metod.spf)
+treeview_metod_data isn't unique (./metod/SimpleAFH/metod.spf)
+liststore_metod_text isn't unique (./metod/SimpleAFH/metod.spf)
+button_save_data isn't unique (./metod/SimpleAFH/metod.spf)
+tree_view_metod isn't unique (./metod/SimpleAFH/metod.spf)
+filechooserbutton_file_nastr isn't unique (./metod/SimpleAFH/metod.spf)
+filechooserbutton_metod isn't unique (./metod/SimpleAFH/metod.spf)
+button_save_data_metod isn't unique (./metod/SimpleAFH/metod.spf)
+button_load_data_metod isn't unique (./metod/SimpleAFH/metod.spf)
+filefilter_kal isn't unique (./metod/SimpleAFH/metod.spf)
+filefilter_prib isn't unique (./metod/SimpleAFH/metod.spf)
+filefilter_nast isn't unique (./metod/SimpleAFH/metod.spf)
+button_start isn't unique (./metod/SimpleAFH/metod.spf)
+button_stop isn't unique (./metod/SimpleAFH/metod.spf)
+button_pause isn't unique (./metod/SimpleAFH/metod.spf)
+textview_result isn't unique (./metod/SimpleAFH/metod.spf)
+textview_result_bufer isn't unique (./metod/SimpleAFH/metod.spf)
+button_norma isn't unique (./metod/SimpleAFH/metod.spf)
+button_error isn't unique (./metod/SimpleAFH/metod.spf)
+dialog_entry isn't unique (./metod/SimpleAFH/metod.spf)
+dialog_label isn't unique (./metod/SimpleAFH/metod.spf)
+dialog_filechooserbutton isn't unique (./metod/SimpleAFH/metod.spf)
+iter_store_text isn't unique (./metod/SimpleAFH/metod.spf)
+iter_n isn't unique (./metod/SimpleAFH/metod.spf)
+iter_k isn't unique (./metod/SimpleAFH/metod.spf)
+textview_comment_metod isn't unique (./metod/SimpleAFH/metod.spf)
+textview_comment_bufer isn't unique (./metod/SimpleAFH/metod.spf)
+Refresh_list isn't unique (./metod/SimpleAFH/metod.spf)
+but_stop_click isn't unique (./metod/SimpleAFH/metod.spf)
+on_metod_destroy isn't unique (./metod/SimpleAFH/metod.spf)
+button_close_metod_click isn't unique (./metod/SimpleAFH/metod.spf)
+button_norma_click isn't unique (./metod/SimpleAFH/metod.spf)
+button_error_click isn't unique (./metod/SimpleAFH/metod.spf)
+TreeView_start_metod_click isn't unique (./metod/SimpleAFH/metod.spf)
+SaveDefaultNastrData isn't unique (./metod/SimpleAFH/metod.spf)
+button_save_data_metod_click isn't unique (./metod/SimpleAFH/metod.spf)
+button_load_data_metod_click isn't unique (./metod/SimpleAFH/metod.spf)
+but_start_click isn't unique (./metod/SimpleAFH/metod.spf)
+timer_ticket isn't unique (./metod/SimpleAFH/metod.spf)
+but_pause_click isn't unique (./metod/SimpleAFH/metod.spf)
+StartMetod isn't unique (./metod/SimpleAFH/metod.spf)
+load glade file :metod/SimpleAFH/metod.glade 
+gtk_file_chooser_set_uri =1 
+ SeeOne: 55 Пауза между воздействиями, мс -> 1 
+ I: 1  
+ SeeOne: 52 Время одного воздействия, мс-> 1 
+ I: 2  
+ SeeOne: 42 Начальная частота, МГц -> 2 
+  I: 3  
+ SeeOne: 40 Конечная частота, МГц -> 2 
+  I: 4  
+ SeeOne: 74 ТИП РАБОТЫ: (-1)-%, (0)-линейный, (1)-по таблице-> 1 
+ I: 5  
+ SeeOne: 27 Шаг по частоте -> 2 
+  I: 6  
+ SeeOne: 20 Калибровка-> 4 
+ I: 7  
+ SeeOne: 18 Генератор-> 5 
+ I: 8  
+ SeeOne: 21 Измеритель -> 5 
+ I: 9  
+ SeeOne: 0 .. gtk_file_chooser_get_filename = 89451864 
+LOAD_TO_BUFER= C:\progs\SPForth\emctest\metod\SimpleAFH\default.nast
+LOAD_TO_BUFER= C:\progs\SPForth\emctest\prib\default\pribor.prib
+LOAD_TO_BUFER= C:\progs\SPForth\emctest\prib\default\pribor.prib
+LOAD_TO_BUFER= C:\progs\SPForth\emctest\metod\SimpleAFH\default.kal
+---------------------------------------------
+ COMMENT: Простой проход по частоте с использованием  заранее подготовленных настроек генератора и измерителя. 
+ STEP_TIME: 1000 
+ STEP_PAUSE: 1000 
+ FREQ_BEGIN: 1.0000000e01 
+ FREQ_END:  1.3000000e01 
+ FREQ_STEP:  1.0000000e00 
+ file_generator_buf: C:\progs\SPForth\emctest\prib\default\pribor.prib
+ file_izm_buf: C:\progs\SPForth\emctest\prib\default\pribor.prib
+ file_kalibrov_buf: C:\progs\SPForth\emctest\metod\SimpleAFH\default.kal
+ work_step: -1 
+---------------------------------------------
+
+
+ SeeOne: 55 Пауза между воздействиями, мс -> 1 
+ I: 1  
+ SeeOne: 52 Время одного воздействия, мс-> 1 
+ I: 2  
+ SeeOne: 42 Начальная частота, МГц -> 2 
+  I: 3  
+ SeeOne: 40 Конечная частота, МГц -> 2 
+  I: 4  
+ SeeOne: 74 ТИП РАБОТЫ: (-1)-%, (0)-линейный, (1)-по таблице-> 1 
+ I: 5  
+ SeeOne: 27 Шаг по частоте -> 2 
+  I: 6  
+ SeeOne: 20 Калибровка-> 4 
+ I: 7  
+ SeeOne: 18 Генератор-> 5 
+ I: 8  
+ SeeOne: 21 Измеритель -> 5 
+ I: 9  
+ SeeOne: 0 .but_start_click begin  SeeOne: 
+55--------------------------------------------- 
+ COMMENT: Пауза между воздействиями, мс Простой проход по частоте с использованием  заранее подготовленных настроек генератора и измерителя. -> 
+1 STEP_TIME:  1000
+ 
+ I:  STEP_PAUSE: 11000   
+
+ FREQ_BEGIN: SeeOne:  521.0000000e01  
+Время одного воздействия, мс FREQ_END: ->  11.3000000e01  
+
+ I:  FREQ_STEP: 2  1.0000000e00  
+
+ SeeOne:  file_generator_buf: 42C:\progs\SPForth\emctest\prib\default\pribor.prib 
+ file_izm_buf: Начальная частота, МГц C:\progs\SPForth\emctest\prib\default\pribor.prib-> 
+2 file_kalibrov_buf:  C:\progs\SPForth\emctest\metod\SimpleAFH\default.kal
+
+  work_step:  I: -13  
+ ---------------------------------------------
+
+ SeeOne: 
+40 file_generator_buf   
+Конечная частота, МГц -> 2Load Pribor... 
+
+ 1_Prib I:  isn't unique (4 ) 
+
+ SeeOne: 74 ТИП РАБОТЫ: (-1)-%, (0)-линейный, (1)-по таблице-> 1 
+ I: 5  
+ SeeOne: 27.....Load Pribor 
+Шаг по частоте -> 2 
+  I: 6  
+ SeeOne: 20 Калибровка-> 4 
+ I: 7  
+ SeeOne: 18 Генератор-> 5 
+ I: 8  
+ SeeOne: 21 Измеритель -> 5 
+ I: 9  
+ SeeOne: 0  file_izm_buf   
+Load Pribor...
+1_Prib isn't unique ()
+.....Load Pribor
+. start   
+
+0 
+
+0 
+ kalibrovka 
+ Include: C:\progs\SPForth\emctest\metod\SimpleAFH\default.kal
+. kalibrovka:  
+ 1.0000000e01  1.0000000e02  1.0000000e00  1.0000000e00 
+ 1.0000000e02  1.0000000e02  1.0000000e00  1.0000000e00 
+ 1.0000000e03  1.0000000e02  1.0000000e00  1.0000000e00 
+ 1.0000000e04  1.0000000e02  1.0000000e00  1.0000000e00 
+
+ result.txt_2020_8_22_21_11_44.sce  минимальное  значение не соответствует калибровке. Поправлено. 
+   start:      21        11        44     
+  Частота,МГц               ПОДАНО               ПРИНЯТО  
+ begin-ok
+word BEGIN  - ok  
+ work... SetFreq= 1.0000000e01 SetFreq= 1.0000000e01      10.000000                     SetLevel = 1.0000000e00 . >минимальное  значение не соответствует калибровке. Поправлено. 
+ start:  21  11  44 
+Частота,МГц               ПОДАНО               ПРИНЯТО
+ 10.000000                <        1.0000000                    GetLevel= 0.0000000e00      0.0000000          
+  ...work 
+. > 1.0000000                0.0000000    
+<    work... SetFreq= 1.0100000e01 SetFreq= 1.0100000e01      10.100000                     SetLevel = 1.0000000e00 . > 10.100000                <        1.0000000                    GetLevel= 0.0000000e00      0.0000000          
+  ...work 
+. > 1.0000000                0.0000000    
+<    work... SetFreq= 1.0201000e01 SetFreq= 1.0201000e01      10.201000                     SetLevel = 1.0000000e00 . > 10.201000                <   .     1.0000000                    GetLevel= 0.0000000e00      0.0000000          
+  ...work 
+. > 1.0000000                0.0000000    
+<    work... SetFreq= 1.0303010e01 SetFreq= 1.0303010e01      10.303010                     SetLevel = 1.0000000e00 . > 10.303010                <        1.0000000                    GetLevel= 0.0000000e00      0.0000000          
+  ...work 
+. > 1.0000000                0.0000000    
+<    work... SetFreq= 1.0406040e01 SetFreq= 1.0406040e01      10.406040                     SetLevel = 1.0000000e00 . > 10.406040                <   .     1.0000000                    GetLevel= 0.0000000e00      0.0000000          
+  ...work 
+. > 1.0000000                0.0000000    
+<    work... SetFreq= 1.0510101e01 SetFreq= 1.0510101e01      10.510101                     SetLevel = 1.0000000e00 . > 10.510101                <        1.0000000                    GetLevel= 0.0000000e00      0.0000000          
+  ...work 
+. > 1.0000000                0.0000000    
+<    work... SetFreq= 1.0615202e01 SetFreq= 1.0615202e01      10.615202                     SetLevel = 1.0000000e00 . > 10.615202                <   .     1.0000000                    GetLevel= 0.0000000e00      0.0000000          
+  ...work 
+. > 1.0000000                0.0000000    
+<   TreeView_start_metod_click
+  work... SetFreq= 1.0721354e01 SetFreq= 1.0721354e01      10.721354                     SetLevel = 1.0000000e00 . > 10.721354                <        1.0000000                    GetLevel= 0.0000000e00      0.0000000          
+  ...work 
+. > 1.0000000                0.0000000    
+<    work... SetFreq= 1.0828567e01 SetFreq= 1.0828567e01      10.828567                     SetLevel = 1.0000000e00 . > 10.828567                <        1.0000000                    GetLevel= 0.0000000e00      0.0000000          
+  ...work 
+. > 1.0000000                0.0000000    
+<   flag: 2 
+ NUMBER: 10.0000000  1.0000000e01 
+ SeeOne: 55 Пауза между воздействиями, мс -> 1 
+ I: 1  
+ SeeOne: 52 Время одного воздействия, мс-> 1 
+ I: 2  
+ SeeOne: 42 Начальная частота, МГц -> 2 
+  I: 3  
+ SeeOne: 40 Конечная частота, МГц -> 2 
+  I: 4  
+ SeeOne: 74 ТИП РАБОТЫ: (-1)-%, (0)-линейный, (1)-по таблице-> 1 
+ I: 5  
+ SeeOne: 27 Шаг по частоте -> 2 
+  I: 6  
+ SeeOne: 20 Калибровка-> 4 
+ I: 7  
+ SeeOne: 18 Генератор-> 5 
+ I: 8  
+ SeeOne: 21 Измеритель -> 5 
+ I: 9  
+ SeeOne: 0 . work... SetFreq= 1.0936853e01 SetFreq= 1.0936853e01      10.936853                     SetLevel = 1.0000000e00 . > 10.936853                <        1.0000000                    GetLevel= 0.0000000e00      0.0000000          
+  ...work 
+. > 1.0000000                0.0000000    
+<    work... SetFreq= 1.2030538e01 SetFreq= 1.2030538e01      12.030538                     SetLevel = 1.0000000e00 . > 12.030538                <        1.0000000                    GetLevel= 0.0000000e00      0.0000000          
+  ...work 
+. > 1.0000000                0.0000000    
+<   . work... SetFreq= 1.3000000e01 SetFreq= 1.3000000e01      13.000000                     SetLevel = 1.0000000e00 . > 13.000000                <        1.0000000                    GetLevel= 0.0000000e00      0.0000000          
+  ...work 
+
+word WorkCicle -ok  
+ stop:      21        12        13     
+ off
+word END - ok  
+
+WorkCicle STOP
+. > 1.0000000                0.0000000    
+stop:  21  12  13 
+<   ...............................................................................................................................................................................................................................................................TreeView_start_metod_click
+ ...flag: 2 
+ NUMBER: -10.000000  -1.0000000e01 
+ SeeOne: 55 Пауза между воздействиями, мс -> 1 
+ I: 1  
+ SeeOne: 52 Время одного воздействия, мс-> 1 
+ I: 2  
+ SeeOne: 42 Начальная частота, МГц -> 2 
+  I: 3  
+ SeeOne: 40 Конечная частота, МГц -> 2 
+  I: 4  
+ SeeOne: 74 ТИП РАБОТЫ: (-1)-%, (0)-линейный, (1)-по таблице-> 1 
+ I: 5  
+ SeeOne: 27 Шаг по частоте -> 2 
+  I: 6  
+ SeeOne: 20 Калибровка-> 4 
+ I: 7  
+ SeeOne: 18 Генератор-> 5 
+ I: 8  
+ SeeOne: 21 Измеритель -> 5 
+ I: 9  
+ SeeOne: 0 ..but_start_click SeeOne:  begin 55
+ ---------------------------------------------
+Пауза между воздействиями, мс  COMMENT: -> Простой проход по частоте с использованием  заранее подготовленных настроек генератора и измерителя. 1
+  STEP_TIME: 
+1000  I: 
+1 STEP_PAUSE:  1000  
+
+ SeeOne:  FREQ_BEGIN:52  1.0000000e01Время одного воздействия, мс -> 
+1 FREQ_END:   
+1.3000000e01  I: 
+2 FREQ_STEP:    -1.0000000e01
+  SeeOne: 
+42 file_generator_buf:  C:\progs\SPForth\emctest\prib\default\pribor.prib
+Начальная частота, МГц  file_izm_buf: -> C:\progs\SPForth\emctest\prib\default\pribor.prib2
+  file_kalibrov_buf: 
+C:\progs\SPForth\emctest\metod\SimpleAFH\default.kal
+  work_step:  I: -13  
+ ---------------------------------------------
+
+ SeeOne: 
+40 file_generator_buf   
+Конечная частота, МГц -> 2Load Pribor... 
+
+1_Prib  isn't unique ( I: 4) 
+ 
+ SeeOne: 74 ТИП РАБОТЫ: (-1)-%, (0)-линейный, (1)-по таблице-> 1 
+ I: 5  
+ SeeOne: 27 Шаг по частоте .....Load Pribor-> 
+2 
+  I: 6  
+ SeeOne: 20 Калибровка-> 4 
+ I: 7  
+ SeeOne: 18 Генератор-> 5 
+ I: 8  
+ SeeOne: 21 Измеритель -> 5 
+ I: 9  
+ SeeOne: 0 . file_izm_buf   
+Load Pribor...
+1_Prib isn't unique ()
+.....Load Pribor
+ start   
+
+0 
+
+0 
+ kalibrovka 
+. Include: C:\progs\SPForth\emctest\metod\SimpleAFH\default.kal
+ kalibrovka:  
+ 1.0000000e01  1.0000000e02  1.0000000e00  1.0000000e00 
+ 1.0000000e02  1.0000000e02  1.0000000e00  1.0000000e00 
+ 1.0000000e03  1.0000000e02  1.0000000e00  1.0000000e00 
+ 1.0000000e04  1.0000000e02  1.0000000e00  1.0000000e00 
+
+ result.txt_2020_8_22_21_16_39.sce  минимальное  значение не соответствует калибровке. Поправлено. 
+   start:      21        16        39     
+  Частота,МГц               ПОДАНО               ПРИНЯТО  
+ begin-ok
+word BEGIN  - ok  
+ work... SetFreq= 1.3000000e01 SetFreq= 1.3000000e01      13.000000                     SetLevel = 1.0000000e00 . >минимальное  значение не соответствует калибровке. Поправлено. 
+ start:  21  16  39 
+Частота,МГц               ПОДАНО               ПРИНЯТО
+ 13.000000                <        1.0000000                    GetLevel= 0.0000000e00      0.0000000          
+  ...work 
+. > 1.0000000                0.0000000    
+<    work... SetFreq= 1.1700000e01 SetFreq= 1.1700000e01      11.700000                     SetLevel = 1.0000000e00 . > 11.700000                <   .     1.0000000                    GetLevel= 0.0000000e00      0.0000000          
+  ...work 
+. > 1.0000000                0.0000000    
+<    work... SetFreq= 1.0530000e01 SetFreq= 1.0530000e01      10.530000                     SetLevel = 1.0000000e00 . > 10.530000                <        1.0000000                    GetLevel= 0.0000000e00      0.0000000          
+  ...work 
+. > 1.0000000                0.0000000    
+<    work... SetFreq= 1.0000000e01 SetFreq= 1.0000000e01      10.000000                     SetLevel = 1.0000000e00 . > 10.000000                <   .     1.0000000                    GetLevel= 0.0000000e00      0.0000000          
+  ...work 
+
+word WorkCicle -ok  
+ stop:      21        16        48     
+ off
+word END - ok  
+
+WorkCicle STOP
+. > 1.0000000                0.0000000    
+stop:  21  16  48 
+<   .............but_stop_click.filechooserbutton_pribor =0 
+filechooserbutton_pribor =0 
