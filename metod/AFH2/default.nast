@@ -1,0 +1,14 @@
+COMMENT( Снятие АЧХ с настройкой по калибровочной таблице   и измерениями)
+ "  1000 " S>FLOAT DROP F>D DROP  metod-info STEP_TIME           !  
+ "  1000 " S>FLOAT DROP F>D DROP  metod-info STEP_PAUSE          ! 
+ "  10.000000 " S>FLOAT DROP           metod-info FREQ_BEGIN          F! 
+ "  20.000000 " S>FLOAT DROP           metod-info FREQ_END            F! 
+ "  1.0000000 " S>FLOAT DROP           metod-info FREQ_STEP           F! 
+ "  0 " S>FLOAT DROP F>D DROP  metod-info work_step           ! 
+ " C:\progs\SPForth\emctest\prib\default\pribor.prib" metod-info file_generator_buf	LOAD_TO_BUFER 
+ " C:\progs\SPForth\emctest\prib\default\pribor.prib" metod-info file_izm_kal_buf	 	LOAD_TO_BUFER 
+ " C:\progs\SPForth\emctest\metod\GOST_RV_6601-001n.5.5\test-k.kal" metod-info file_kalibrov_buf		LOAD_TO_BUFER 
+ " C:\progs\SPForth\emctest\prib\default\pribor.prib" metod-info file_izm_buf	 	LOAD_TO_BUFER 
+ "  0.3000000  " S>FLOAT DROP	   metod-info Tochnost             F! 
+ "  -10.000000  " S>FLOAT DROP	    metod-info GenMax              F! 
+ "  10.000000  " S>FLOAT DROP	    metod-info GenMaxStep	   F! 
