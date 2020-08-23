@@ -6,491 +6,66 @@
 без какого-либо контроля.
 Проход по частоте, с установкой калибровочных данных в одной части цепи
 и последующим измерением параметров в другой части цепи.
-load grafic file :./metod/GenOnly/bildo.png 
-button_load_metod_click
-load metod file :./metod/GenOnly/metod.spf 
-StoFile isn't unique (./metod/GenOnly/metod.spf)
-FtoFile isn't unique (./metod/GenOnly/metod.spf)
-DtoFile isn't unique (./metod/GenOnly/metod.spf)
-CRtoFile isn't unique (./metod/GenOnly/metod.spf)
-TYPE_BUFER isn't unique (./metod/GenOnly/metod.spf)
-timer_ticket isn't unique (./metod/GenOnly/metod.spf)
-load glade file :metod/GenOnly/metod.glade 
-gtk_file_chooser_set_uri =1 
- SeeOne: 17 Пауза, мс -> 1 
- I: 1  
- SeeOne: 22 Выдержка, мс-> 1 
- I: 2  
- SeeOne: 31 Частота нач., МГц -> 2 
-  I: 3  
- SeeOne: 32 Частота кон., МГц  -> 2 
-  I: 4  
- SeeOne: 27 Шаг по частоте -> 2 
-  I: 5  
- SeeOne: 74 ТИП РАБОТЫ: (-1)-%, (0)-линейный, (1)-по таблице-> 1 
- I: 6  
- SeeOne: 29 Файл калибровки-> 4 
- I: 7  
- SeeOne: 29 Файл генератора-> 5 
- I: 8  
- SeeOne: 0 . SeeOne: 17 Пауза, мс -> 1 
- I: 1  
- SeeOne: 22 Выдержка, мс-> 1 
- I: 2  
- SeeOne: 31 Частота нач., МГц -> 2 
-  I: 3  
- SeeOne: 32 Частота кон., МГц  -> 2 
-  I: 4  
- SeeOne: 27 Шаг по частоте -> 2 
-  I: 5  
- SeeOne: 74 ТИП РАБОТЫ: (-1)-%, (0)-линейный, (1)-по таблице-> 1 
- I: 6  
- SeeOne: 29 Файл калибровки-> 4 
- I: 7  
- SeeOne: 29 Файл генератора-> 5 
- I: 8  
- SeeOne: 0  gtk_file_chooser_get_filename = 50814880 
-LOAD_TO_BUFER= C:\progs\SPForth\emctest\metod\GenOnly\default.nast
-LOAD_TO_BUFER= C:\progs\SPForth\emctest\prib\default\pribor.prib
-LOAD_TO_BUFER= C:\progs\SPForth\emctest\metod\GenOnly\default.kal
----------------------------------------------
- COMMENT: Простой проход по частоте с использованием  заранее подготовленных настроек генератора. 
- STEP_TIME: 1000 
- STEP_PAUSE: 1000 
- FREQ_BEGIN: 1.0000000e02 
- FREQ_END:  1.3000000e02 
- FREQ_STEP:  -1.0000000e01 
- file_generator_buf: C:\progs\SPForth\emctest\prib\default\pribor.prib
- file_kalibrov_buf: C:\progs\SPForth\emctest\metod\GenOnly\default.kal
- work_step: 0 
----------------------------------------------
-
-
- SeeOne: 17 Пауза, мс -> 1 
- I: 1  
- SeeOne: 22 Выдержка, мс-> 1 
- I: 2  
- SeeOne: 31 Частота нач., МГц -> 2 
-  I: 3  
- SeeOne: 32 Частота кон., МГц  -> 2 
-  I: 4  
- SeeOne: 27 Шаг по частоте -> 2 
-  I: 5  
- SeeOne: 74 ТИП РАБОТЫ: (-1)-%, (0)-линейный, (1)-по таблице-> 1 
- I: 6  
- SeeOne: 29 Файл калибровки-> 4 
- I: 7  
- SeeOne: 29 Файл генератора-> 5 
- I: 8  
- SeeOne: 0 . SeeOne: 17 Пауза, мс -> 1 
- I: 1  
- SeeOne: 22 Выдержка, мс-> 1 
- I: 2  
- SeeOne: 31 Частота нач., МГц -> 2 
-  I: 3  
- SeeOne: 32 Частота кон., МГц  -> 2 
-  I: 4  
- SeeOne: 27 Шаг по частоте -> 2 
-  I: 5  
- SeeOne: 74 ТИП РАБОТЫ: (-1)-%, (0)-линейный, (1)-по таблице-> 1 
- I: 6  
- SeeOne: 29 Файл калибровки-> 4 
- I: 7  
- SeeOne: 29 Файл генератора-> 5 
- I: 8  
- SeeOne: 0 . SeeOne: 17 Пауза, мс -> 1 
- I: 1  
- SeeOne: 22 Выдержка, мс-> 1 
- I: 2  
- SeeOne: 31 Частота нач., МГц -> 2 
-  I: 3  
- SeeOne: 32 Частота кон., МГц  -> 2 
-  I: 4  
- SeeOne: 27 Шаг по частоте -> 2 
-  I: 5  
- SeeOne: 74 ТИП РАБОТЫ: (-1)-%, (0)-линейный, (1)-по таблице-> 1 
- I: 6  
- SeeOne: 29 Файл калибровки-> 4 
- I: 7  
- SeeOne: 29 Файл генератора-> 5 
- I: 8  
- SeeOne: 0 but_stop_click.filechooserbutton_pribor =0 
-filechooserbutton_pribor =0 
- SeeOne: 17 Пауза, мс -> 1 
- I: 1  
- SeeOne: 22 Выдержка, мс-> 1 
- I: 2  
- SeeOne: 31 Частота нач., МГц -> 2 
-  I: 3  
- SeeOne: 32 Частота кон., МГц  -> 2 
-  I: 4  
- SeeOne: 27 Шаг по частоте -> 2 
-  I: 5  
- SeeOne: 74 ТИП РАБОТЫ: (-1)-%, (0)-линейный, (1)-по таблице-> 1 
- I: 6  
- SeeOne: 29 Файл калибровки-> 4 
- I: 7  
- SeeOne: 29 Файл генератора-> 5 
- I: 8  
- SeeOne: 0 load grafic file :./metod/GOST_RV_6601-001n.5.5/bildo.png 
-button_load_metod_click
-load metod file :./metod/GOST_RV_6601-001n.5.5/metod.spf 
-NoError isn't unique (./metod/GOST_RV_6601-001n.5.5/metod.spf)
-work_Execute isn't unique (./metod/GOST_RV_6601-001n.5.5/metod.spf)
-work_Stop isn't unique (./metod/GOST_RV_6601-001n.5.5/metod.spf)
-work_Pause isn't unique (./metod/GOST_RV_6601-001n.5.5/metod.spf)
-error_begin_problem isn't unique (./metod/GOST_RV_6601-001n.5.5/metod.spf)
-error_end_problem isn't unique (./metod/GOST_RV_6601-001n.5.5/metod.spf)
-error_cicle_problem isn't unique (./metod/GOST_RV_6601-001n.5.5/metod.spf)
-error_metod_file isn't unique (./metod/GOST_RV_6601-001n.5.5/metod.spf)
-error_nastr_file isn't unique (./metod/GOST_RV_6601-001n.5.5/metod.spf)
-error_out_file isn't unique (./metod/GOST_RV_6601-001n.5.5/metod.spf)
-error_face isn't unique (./metod/GOST_RV_6601-001n.5.5/metod.spf)
-Data_buffer isn't unique (./metod/GOST_RV_6601-001n.5.5/metod.spf)
-_file_name_bufer_ isn't unique (./metod/GOST_RV_6601-001n.5.5/metod.spf)
-ERROR_PROG_BUFER isn't unique (./metod/GOST_RV_6601-001n.5.5/metod.spf)
-ERROR_PROG isn't unique (./metod/GOST_RV_6601-001n.5.5/metod.spf)
-work_thread isn't unique (./metod/GOST_RV_6601-001n.5.5/metod.spf)
-tid-thead isn't unique (./metod/GOST_RV_6601-001n.5.5/metod.spf)
--upravl_thead- isn't unique (./metod/GOST_RV_6601-001n.5.5/metod.spf)
-refresh isn't unique (./metod/GOST_RV_6601-001n.5.5/metod.spf)
-sysup-work-info isn't unique (./metod/GOST_RV_6601-001n.5.5/metod.spf)
-STEP_PAUSE isn't unique (./metod/GOST_RV_6601-001n.5.5/metod.spf)
-STEP_TIME isn't unique (./metod/GOST_RV_6601-001n.5.5/metod.spf)
-FREQ_BEGIN isn't unique (./metod/GOST_RV_6601-001n.5.5/metod.spf)
-FREQ_END isn't unique (./metod/GOST_RV_6601-001n.5.5/metod.spf)
-FREQ_STEP isn't unique (./metod/GOST_RV_6601-001n.5.5/metod.spf)
-file_kalibrov_buf isn't unique (./metod/GOST_RV_6601-001n.5.5/metod.spf)
-file_generator_buf isn't unique (./metod/GOST_RV_6601-001n.5.5/metod.spf)
-work_step isn't unique (./metod/GOST_RV_6601-001n.5.5/metod.spf)
-N_STEP isn't unique (./metod/GOST_RV_6601-001n.5.5/metod.spf)
-file_nastr_buf isn't unique (./metod/GOST_RV_6601-001n.5.5/metod.spf)
-Len_Coment_buffer isn't unique (./metod/GOST_RV_6601-001n.5.5/metod.spf)
-Coment_buffer isn't unique (./metod/GOST_RV_6601-001n.5.5/metod.spf)
-FREQ isn't unique (./metod/GOST_RV_6601-001n.5.5/metod.spf)
-kalibrovka isn't unique (./metod/GOST_RV_6601-001n.5.5/metod.spf)
-generator isn't unique (./metod/GOST_RV_6601-001n.5.5/metod.spf)
-result isn't unique (./metod/GOST_RV_6601-001n.5.5/metod.spf)
-sysup-metod-info isn't unique (./metod/GOST_RV_6601-001n.5.5/metod.spf)
-work-info isn't unique (./metod/GOST_RV_6601-001n.5.5/metod.spf)
-metod-info isn't unique (./metod/GOST_RV_6601-001n.5.5/metod.spf)
-To_Data_buffer isn't unique (./metod/GOST_RV_6601-001n.5.5/metod.spf)
-Str_Data_buffer isn't unique (./metod/GOST_RV_6601-001n.5.5/metod.spf)
-StoFile isn't unique (./metod/GOST_RV_6601-001n.5.5/metod.spf)
-FtoFile isn't unique (./metod/GOST_RV_6601-001n.5.5/metod.spf)
-DtoFile isn't unique (./metod/GOST_RV_6601-001n.5.5/metod.spf)
-CRtoFile isn't unique (./metod/GOST_RV_6601-001n.5.5/metod.spf)
-COMMENT( isn't unique (./metod/GOST_RV_6601-001n.5.5/metod.spf)
-LOAD_TO_ERR_BUFER isn't unique (./metod/GOST_RV_6601-001n.5.5/metod.spf)
-TYPE_BUFER isn't unique (./metod/GOST_RV_6601-001n.5.5/metod.spf)
-CLEAR_ERROR_BUFER isn't unique (./metod/GOST_RV_6601-001n.5.5/metod.spf)
-TO_ERROR_PROG_BUFER isn't unique (./metod/GOST_RV_6601-001n.5.5/metod.spf)
-TYPE_ERROR_PROG_BUFER isn't unique (./metod/GOST_RV_6601-001n.5.5/metod.spf)
-:ERROR isn't unique (./metod/GOST_RV_6601-001n.5.5/metod.spf)
-PAUSE-PROG isn't unique (./metod/GOST_RV_6601-001n.5.5/metod.spf)
-SeeOne isn't unique (./metod/GOST_RV_6601-001n.5.5/metod.spf)
-see isn't unique (./metod/GOST_RV_6601-001n.5.5/metod.spf)
-SAVE_NASTR_DATA isn't unique (./metod/GOST_RV_6601-001n.5.5/metod.spf)
-IF_END: isn't unique (./metod/GOST_RV_6601-001n.5.5/metod.spf)
-BEGIN: isn't unique (./metod/GOST_RV_6601-001n.5.5/metod.spf)
-WORK: isn't unique (./metod/GOST_RV_6601-001n.5.5/metod.spf)
-END: isn't unique (./metod/GOST_RV_6601-001n.5.5/metod.spf)
-NewStep isn't unique (./metod/GOST_RV_6601-001n.5.5/metod.spf)
-WORK_END: isn't unique (./metod/GOST_RV_6601-001n.5.5/metod.spf)
-WorkStep isn't unique (./metod/GOST_RV_6601-001n.5.5/metod.spf)
-WorkCicle isn't unique (./metod/GOST_RV_6601-001n.5.5/metod.spf)
-file_nastr_reqiured isn't unique (./metod/GOST_RV_6601-001n.5.5/metod.spf)
-num_data isn't unique (./metod/GOST_RV_6601-001n.5.5/metod.spf)
-dialog isn't unique (./metod/GOST_RV_6601-001n.5.5/metod.spf)
-builder_metod isn't unique (./metod/GOST_RV_6601-001n.5.5/metod.spf)
-WinMetod isn't unique (./metod/GOST_RV_6601-001n.5.5/metod.spf)
-button_close_metod isn't unique (./metod/GOST_RV_6601-001n.5.5/metod.spf)
-WinMetod_timer isn't unique (./metod/GOST_RV_6601-001n.5.5/metod.spf)
-treeview_metod_data isn't unique (./metod/GOST_RV_6601-001n.5.5/metod.spf)
-liststore_metod_text isn't unique (./metod/GOST_RV_6601-001n.5.5/metod.spf)
-button_save_data isn't unique (./metod/GOST_RV_6601-001n.5.5/metod.spf)
-tree_view_metod isn't unique (./metod/GOST_RV_6601-001n.5.5/metod.spf)
-filechooserbutton_file_nastr isn't unique (./metod/GOST_RV_6601-001n.5.5/metod.spf)
-filechooserbutton_metod isn't unique (./metod/GOST_RV_6601-001n.5.5/metod.spf)
-button_save_data_metod isn't unique (./metod/GOST_RV_6601-001n.5.5/metod.spf)
-button_load_data_metod isn't unique (./metod/GOST_RV_6601-001n.5.5/metod.spf)
-filefilter_kal isn't unique (./metod/GOST_RV_6601-001n.5.5/metod.spf)
-filefilter_prib isn't unique (./metod/GOST_RV_6601-001n.5.5/metod.spf)
-filefilter_nast isn't unique (./metod/GOST_RV_6601-001n.5.5/metod.spf)
-button_start isn't unique (./metod/GOST_RV_6601-001n.5.5/metod.spf)
-button_stop isn't unique (./metod/GOST_RV_6601-001n.5.5/metod.spf)
-button_pause isn't unique (./metod/GOST_RV_6601-001n.5.5/metod.spf)
-textview_result isn't unique (./metod/GOST_RV_6601-001n.5.5/metod.spf)
-textview_result_bufer isn't unique (./metod/GOST_RV_6601-001n.5.5/metod.spf)
-button_norma isn't unique (./metod/GOST_RV_6601-001n.5.5/metod.spf)
-button_error isn't unique (./metod/GOST_RV_6601-001n.5.5/metod.spf)
-dialog_entry isn't unique (./metod/GOST_RV_6601-001n.5.5/metod.spf)
-dialog_label isn't unique (./metod/GOST_RV_6601-001n.5.5/metod.spf)
-dialog_filechooserbutton isn't unique (./metod/GOST_RV_6601-001n.5.5/metod.spf)
-iter_store_text isn't unique (./metod/GOST_RV_6601-001n.5.5/metod.spf)
-iter_n isn't unique (./metod/GOST_RV_6601-001n.5.5/metod.spf)
-iter_k isn't unique (./metod/GOST_RV_6601-001n.5.5/metod.spf)
-textview_comment_metod isn't unique (./metod/GOST_RV_6601-001n.5.5/metod.spf)
-textview_comment_bufer isn't unique (./metod/GOST_RV_6601-001n.5.5/metod.spf)
-Refresh_list isn't unique (./metod/GOST_RV_6601-001n.5.5/metod.spf)
-but_stop_click isn't unique (./metod/GOST_RV_6601-001n.5.5/metod.spf)
-on_metod_destroy isn't unique (./metod/GOST_RV_6601-001n.5.5/metod.spf)
-button_close_metod_click isn't unique (./metod/GOST_RV_6601-001n.5.5/metod.spf)
-button_norma_click isn't unique (./metod/GOST_RV_6601-001n.5.5/metod.spf)
-button_error_click isn't unique (./metod/GOST_RV_6601-001n.5.5/metod.spf)
-TreeView_start_metod_click isn't unique (./metod/GOST_RV_6601-001n.5.5/metod.spf)
-SaveDefaultNastrData isn't unique (./metod/GOST_RV_6601-001n.5.5/metod.spf)
-button_save_data_metod_click isn't unique (./metod/GOST_RV_6601-001n.5.5/metod.spf)
-button_load_data_metod_click isn't unique (./metod/GOST_RV_6601-001n.5.5/metod.spf)
-but_start_click isn't unique (./metod/GOST_RV_6601-001n.5.5/metod.spf)
-timer_ticket isn't unique (./metod/GOST_RV_6601-001n.5.5/metod.spf)
-but_pause_click isn't unique (./metod/GOST_RV_6601-001n.5.5/metod.spf)
-StartMetod isn't unique (./metod/GOST_RV_6601-001n.5.5/metod.spf)
-load glade file :metod/GOST_RV_6601-001n.5.5/metod.glade 
-gtk_file_chooser_set_uri =1 
- SeeOne: 55 Пауза между воздействиями, мс -> 1 
- I: 1  
- SeeOne: 52 Время одного воздействия, мс-> 1 
- I: 2  
- SeeOne: 40 Начальная частота, Гц -> 2 
-  I: 3  
- SeeOne: 38 Конечная частота, Гц -> 2 
-  I: 4  
- SeeOne: 74 ТИП РАБОТЫ: (-1)-%, (0)-линейный, (1)-по таблице-> 1 
- I: 5  
- SeeOne: 27 Шаг по частоте -> 2 
-  I: 6  
- SeeOne: 20 Калибровка-> 4 
- I: 7  
- SeeOne: 18 Генератор-> 5 
- I: 8  
- SeeOne: 21 Измеритель -> 5 
- I: 9  
- SeeOne: 35 Точность установки-> 2 
-  I: 10  
- SeeOne: 37 Наибольшее значение-> 2 
-  I: 11  
- SeeOne: 65 Наибольший шаг подаваемой мощности-> 2 
-  I: 12  
- SeeOne: 0 . gtk_file_chooser_get_filename = 50549544 
-LOAD_TO_BUFER= C:\progs\SPForth\emctest\metod\GOST_RV_6601-001n.5.5\default.nast
-LOAD_TO_BUFER= C:\progs\SPForth\emctest\prib\default\pribor.prib
-LOAD_TO_BUFER= C:\progs\SPForth\emctest\prib\default\pribor.prib
-LOAD_TO_BUFER= C:\progs\SPForth\emctest\metod\GOST_RV_6601-001n.5.5\test-k.kal
----------------------------------------------
- COMMENT: испытания по ГОСТ РВ 6601 с одним  проходом по частоте и настройкой поля по датчику.
- STEP_TIME: 1000 
- STEP_PAUSE: 1000 
- FREQ_BEGIN: 1.0000000e01 
- FREQ_END:  2.0000000e01 
- FREQ_STEP:  1.0000000e00 
- file_generator_buf: C:\progs\SPForth\emctest\prib\default\pribor.prib
- file_izm_buf: C:\progs\SPForth\emctest\prib\default\pribor.prib
- file_kalibrov_buf: C:\progs\SPForth\emctest\metod\GOST_RV_6601-001n.5.5\test-k.kal
- work_step: 0 
----------------------------------------------
-
-
- SeeOne: 55 Пауза между воздействиями, мс -> 1 
- I: 1  
- SeeOne: 52 Время одного воздействия, мс-> 1 
- I: 2  
- SeeOne: 40 Начальная частота, Гц -> 2 
-  I: 3  
- SeeOne: 38 Конечная частота, Гц -> 2 
-  I: 4  
- SeeOne: 74 ТИП РАБОТЫ: (-1)-%, (0)-линейный, (1)-по таблице-> 1 
- I: 5  
- SeeOne: 27 Шаг по частоте -> 2 
-  I: 6  
- SeeOne: 20 Калибровка-> 4 
- I: 7  
- SeeOne: 18 Генератор-> 5 
- I: 8  
- SeeOne: 21 Измеритель -> 5 
- I: 9  
- SeeOne: 35 Точность установки-> 2 
-  I: 10  
- SeeOne: 37 Наибольшее значение-> 2 
-  I: 11  
- SeeOne: 65 Наибольший шаг подаваемой мощности-> 2 
-  I: 12  
- SeeOne: 0 .but_stop_click.filechooserbutton_pribor =0 
-filechooserbutton_pribor =0 
 load grafic file :./metod/SimpleAFH/bildo.png 
-button_load_metod_click
-load metod file :./metod/SimpleAFH/metod.spf 
-NoError isn't unique (./metod/SimpleAFH/metod.spf)
-work_Execute isn't unique (./metod/SimpleAFH/metod.spf)
-work_Stop isn't unique (./metod/SimpleAFH/metod.spf)
-work_Pause isn't unique (./metod/SimpleAFH/metod.spf)
-error_begin_problem isn't unique (./metod/SimpleAFH/metod.spf)
-error_end_problem isn't unique (./metod/SimpleAFH/metod.spf)
-error_cicle_problem isn't unique (./metod/SimpleAFH/metod.spf)
-error_metod_file isn't unique (./metod/SimpleAFH/metod.spf)
-error_nastr_file isn't unique (./metod/SimpleAFH/metod.spf)
-error_out_file isn't unique (./metod/SimpleAFH/metod.spf)
-error_face isn't unique (./metod/SimpleAFH/metod.spf)
-Data_buffer isn't unique (./metod/SimpleAFH/metod.spf)
-_file_name_bufer_ isn't unique (./metod/SimpleAFH/metod.spf)
-ERROR_PROG_BUFER isn't unique (./metod/SimpleAFH/metod.spf)
-ERROR_PROG isn't unique (./metod/SimpleAFH/metod.spf)
-work_thread isn't unique (./metod/SimpleAFH/metod.spf)
-tid-thead isn't unique (./metod/SimpleAFH/metod.spf)
--upravl_thead- isn't unique (./metod/SimpleAFH/metod.spf)
-refresh isn't unique (./metod/SimpleAFH/metod.spf)
-sysup-work-info isn't unique (./metod/SimpleAFH/metod.spf)
-STEP_PAUSE isn't unique (./metod/SimpleAFH/metod.spf)
-STEP_TIME isn't unique (./metod/SimpleAFH/metod.spf)
-FREQ_BEGIN isn't unique (./metod/SimpleAFH/metod.spf)
-FREQ_END isn't unique (./metod/SimpleAFH/metod.spf)
-FREQ_STEP isn't unique (./metod/SimpleAFH/metod.spf)
-file_kalibrov_buf isn't unique (./metod/SimpleAFH/metod.spf)
-file_generator_buf isn't unique (./metod/SimpleAFH/metod.spf)
-file_izm_buf isn't unique (./metod/SimpleAFH/metod.spf)
-work_step isn't unique (./metod/SimpleAFH/metod.spf)
-N_STEP isn't unique (./metod/SimpleAFH/metod.spf)
-file_nastr_buf isn't unique (./metod/SimpleAFH/metod.spf)
-Len_Coment_buffer isn't unique (./metod/SimpleAFH/metod.spf)
-Coment_buffer isn't unique (./metod/SimpleAFH/metod.spf)
-FREQ isn't unique (./metod/SimpleAFH/metod.spf)
-kalibrovka isn't unique (./metod/SimpleAFH/metod.spf)
-generator isn't unique (./metod/SimpleAFH/metod.spf)
-kalibr_izm isn't unique (./metod/SimpleAFH/metod.spf)
-result isn't unique (./metod/SimpleAFH/metod.spf)
-sysup-metod-info isn't unique (./metod/SimpleAFH/metod.spf)
-work-info isn't unique (./metod/SimpleAFH/metod.spf)
-metod-info isn't unique (./metod/SimpleAFH/metod.spf)
-To_Data_buffer isn't unique (./metod/SimpleAFH/metod.spf)
-Str_Data_buffer isn't unique (./metod/SimpleAFH/metod.spf)
-StoFile isn't unique (./metod/SimpleAFH/metod.spf)
-FtoFile isn't unique (./metod/SimpleAFH/metod.spf)
-DtoFile isn't unique (./metod/SimpleAFH/metod.spf)
-CRtoFile isn't unique (./metod/SimpleAFH/metod.spf)
-COMMENT( isn't unique (./metod/SimpleAFH/metod.spf)
-LOAD_TO_ERR_BUFER isn't unique (./metod/SimpleAFH/metod.spf)
-TYPE_BUFER isn't unique (./metod/SimpleAFH/metod.spf)
-CLEAR_ERROR_BUFER isn't unique (./metod/SimpleAFH/metod.spf)
-TO_ERROR_PROG_BUFER isn't unique (./metod/SimpleAFH/metod.spf)
-TYPE_ERROR_PROG_BUFER isn't unique (./metod/SimpleAFH/metod.spf)
-:ERROR isn't unique (./metod/SimpleAFH/metod.spf)
-PAUSE-PROG isn't unique (./metod/SimpleAFH/metod.spf)
-SeeOne isn't unique (./metod/SimpleAFH/metod.spf)
-see isn't unique (./metod/SimpleAFH/metod.spf)
-SAVE_NASTR_DATA isn't unique (./metod/SimpleAFH/metod.spf)
-IF_END: isn't unique (./metod/SimpleAFH/metod.spf)
-BEGIN: isn't unique (./metod/SimpleAFH/metod.spf)
-WORK: isn't unique (./metod/SimpleAFH/metod.spf)
-END: isn't unique (./metod/SimpleAFH/metod.spf)
-NewStep isn't unique (./metod/SimpleAFH/metod.spf)
-WORK_END: isn't unique (./metod/SimpleAFH/metod.spf)
-WorkStep isn't unique (./metod/SimpleAFH/metod.spf)
-WorkCicle isn't unique (./metod/SimpleAFH/metod.spf)
-file_nastr_reqiured isn't unique (./metod/SimpleAFH/metod.spf)
-num_data isn't unique (./metod/SimpleAFH/metod.spf)
-dialog isn't unique (./metod/SimpleAFH/metod.spf)
-builder_metod isn't unique (./metod/SimpleAFH/metod.spf)
-WinMetod isn't unique (./metod/SimpleAFH/metod.spf)
-button_close_metod isn't unique (./metod/SimpleAFH/metod.spf)
-WinMetod_timer isn't unique (./metod/SimpleAFH/metod.spf)
-treeview_metod_data isn't unique (./metod/SimpleAFH/metod.spf)
-liststore_metod_text isn't unique (./metod/SimpleAFH/metod.spf)
-button_save_data isn't unique (./metod/SimpleAFH/metod.spf)
-tree_view_metod isn't unique (./metod/SimpleAFH/metod.spf)
-filechooserbutton_file_nastr isn't unique (./metod/SimpleAFH/metod.spf)
-filechooserbutton_metod isn't unique (./metod/SimpleAFH/metod.spf)
-button_save_data_metod isn't unique (./metod/SimpleAFH/metod.spf)
-button_load_data_metod isn't unique (./metod/SimpleAFH/metod.spf)
-filefilter_kal isn't unique (./metod/SimpleAFH/metod.spf)
-filefilter_prib isn't unique (./metod/SimpleAFH/metod.spf)
-filefilter_nast isn't unique (./metod/SimpleAFH/metod.spf)
-button_start isn't unique (./metod/SimpleAFH/metod.spf)
-button_stop isn't unique (./metod/SimpleAFH/metod.spf)
-button_pause isn't unique (./metod/SimpleAFH/metod.spf)
-textview_result isn't unique (./metod/SimpleAFH/metod.spf)
-textview_result_bufer isn't unique (./metod/SimpleAFH/metod.spf)
-button_norma isn't unique (./metod/SimpleAFH/metod.spf)
-button_error isn't unique (./metod/SimpleAFH/metod.spf)
-dialog_entry isn't unique (./metod/SimpleAFH/metod.spf)
-dialog_label isn't unique (./metod/SimpleAFH/metod.spf)
-dialog_filechooserbutton isn't unique (./metod/SimpleAFH/metod.spf)
-iter_store_text isn't unique (./metod/SimpleAFH/metod.spf)
-iter_n isn't unique (./metod/SimpleAFH/metod.spf)
-iter_k isn't unique (./metod/SimpleAFH/metod.spf)
-textview_comment_metod isn't unique (./metod/SimpleAFH/metod.spf)
-textview_comment_bufer isn't unique (./metod/SimpleAFH/metod.spf)
-Refresh_list isn't unique (./metod/SimpleAFH/metod.spf)
-but_stop_click isn't unique (./metod/SimpleAFH/metod.spf)
-on_metod_destroy isn't unique (./metod/SimpleAFH/metod.spf)
-button_close_metod_click isn't unique (./metod/SimpleAFH/metod.spf)
-button_norma_click isn't unique (./metod/SimpleAFH/metod.spf)
-button_error_click isn't unique (./metod/SimpleAFH/metod.spf)
-TreeView_start_metod_click isn't unique (./metod/SimpleAFH/metod.spf)
-SaveDefaultNastrData isn't unique (./metod/SimpleAFH/metod.spf)
-button_save_data_metod_click isn't unique (./metod/SimpleAFH/metod.spf)
-button_load_data_metod_click isn't unique (./metod/SimpleAFH/metod.spf)
-but_start_click isn't unique (./metod/SimpleAFH/metod.spf)
-timer_ticket isn't unique (./metod/SimpleAFH/metod.spf)
-but_pause_click isn't unique (./metod/SimpleAFH/metod.spf)
-StartMetod isn't unique (./metod/SimpleAFH/metod.spf)
-load glade file :metod/SimpleAFH/metod.glade 
-gtk_file_chooser_set_uri =1 
- SeeOne: 55 Пауза между воздействиями, мс -> 1 
- I: 1  
- SeeOne: 52 Время одного воздействия, мс-> 1 
- I: 2  
- SeeOne: 42 Начальная частота, МГц -> 2 
-  I: 3  
- SeeOne: 40 Конечная частота, МГц -> 2 
-  I: 4  
- SeeOne: 74 ТИП РАБОТЫ: (-1)-%, (0)-линейный, (1)-по таблице-> 1 
- I: 5  
- SeeOne: 27 Шаг по частоте -> 2 
-  I: 6  
- SeeOne: 20 Калибровка-> 4 
- I: 7  
- SeeOne: 18 Генератор-> 5 
- I: 8  
- SeeOne: 21 Измеритель -> 5 
- I: 9  
- SeeOne: 0 . gtk_file_chooser_get_filename = 84248768 
-LOAD_TO_BUFER= C:\progs\SPForth\emctest\metod\SimpleAFH\default.nast
-LOAD_TO_BUFER= C:\progs\SPForth\emctest\prib\default\pribor.prib
-LOAD_TO_BUFER= C:\progs\SPForth\emctest\prib\default\pribor.prib
-LOAD_TO_BUFER= C:\progs\SPForth\emctest\metod\SimpleAFH\default.kal
----------------------------------------------
- COMMENT: Простой проход по частоте с использованием  заранее подготовленных настроек генератора и измерителя. 
- STEP_TIME: 1000 
- STEP_PAUSE: 1000 
- FREQ_BEGIN: 1.0000000e01 
- FREQ_END:  1.3000000e01 
- FREQ_STEP:  1.0000000e00 
- file_generator_buf: C:\progs\SPForth\emctest\prib\default\pribor.prib
- file_izm_buf: C:\progs\SPForth\emctest\prib\default\pribor.prib
- file_kalibrov_buf: C:\progs\SPForth\emctest\metod\SimpleAFH\default.kal
- work_step: -1 
----------------------------------------------
-
-
- SeeOne: 55 Пауза между воздействиями, мс -> 1 
- I: 1  
- SeeOne: 52 Время одного воздействия, мс-> 1 
- I: 2  
- SeeOne: 42 Начальная частота, МГц -> 2 
-  I: 3  
- SeeOne: 40 Конечная частота, МГц -> 2 
-  I: 4  
- SeeOne: 74 ТИП РАБОТЫ: (-1)-%, (0)-линейный, (1)-по таблице-> 1 
- I: 5  
- SeeOne: 27 Шаг по частоте -> 2 
-  I: 6  
- SeeOne: 20 Калибровка-> 4 
- I: 7  
- SeeOne: 18 Генератор-> 5 
- I: 8  
- SeeOne: 21 Измеритель -> 5 
- I: 9  
- SeeOne: 0 ..but_stop_click.filechooserbutton_pribor =0 
-filechooserbutton_pribor =0 
+load grafic file :./metod/GOST_RV_6601-001n.5.5/bildo.png 
+load grafic file :./metod/GenOnly/bildo.png 
+load grafic file :./metod/GOST_RV_6601-001n.5.5/bildo.png 
+load grafic file :./metod/SimpleAFH/bildo.png 
+load grafic file :./metod/GenOnly/bildo.png 
+load grafic file :./metod/SimpleAFH/bildo.png 
+load grafic file :./metod/GOST_RV_6601-001n.5.5/bildo.png 
+load grafic file :./metod/AFH2/bildo.png 
+load grafic file :./metod/GenOnly/bildo.png 
+load grafic file :./metod/GOST_RV_6601-001n.5.5/bildo.png 
+load grafic file :./metod/SimpleAFH/bildo.png 
+load grafic file :./metod/AFH2/bildo.png 
+load grafic file :./metod/GenOnly/bildo.png 
+load grafic file :./metod/GOST_RV_6601-001n.5.5/bildo.png 
+load grafic file :./metod/SimpleAFH/bildo.png 
+load grafic file :./metod/GOST_RV_6601-001n.5.5/bildo.png 
+load grafic file :./metod/SimpleAFH/bildo.png 
+load grafic file :./metod/GOST_RV_6601-001n.5.5/bildo.png 
+load grafic file :./metod/SimpleAFH/bildo.png 
+load grafic file :./metod/GOST_RV_6601-001n.5.5/bildo.png 
+load grafic file :./metod/SimpleAFH/bildo.png 
+load grafic file :./metod/GOST_RV_6601-001n.5.5/bildo.png 
+load grafic file :./metod/GenOnly/bildo.png 
+load grafic file :./metod/GOST_RV_6601-001n.5.5/bildo.png 
+load grafic file :./metod/SimpleAFH/bildo.png 
+load grafic file :./metod/GOST_RV_6601-001n.5.5/bildo.png 
+load grafic file :./metod/GenOnly/bildo.png 
+load grafic file :./metod/AFH2/bildo.png 
+load grafic file :./metod/GOST_RV_6601-001n.5.5/bildo.png 
+load grafic file :./metod/GenOnly/bildo.png 
+load grafic file :./metod/SimpleAFH/bildo.png 
+load grafic file :./metod/GenOnly/bildo.png 
+load grafic file :./metod/GOST_RV_6601-001n.5.5/bildo.png 
+load grafic file :./metod/GOST_RV_6601-001n.5.5/bildo.png 
+load grafic file :./metod/SimpleAFH/bildo.png 
+load grafic file :./metod/GOST_RV_6601-001n.5.5/bildo.png 
+load grafic file :./metod/SimpleAFH/bildo.png 
+load grafic file :./metod/GOST_RV_6601-001n.5.5/bildo.png 
+load grafic file :./metod/GenOnly/bildo.png 
+load grafic file :./metod/AFH2/bildo.png 
+load grafic file :./metod/GenOnly/bildo.png 
+load grafic file :./metod/GOST_RV_6601-001n.5.5/bildo.png 
+load grafic file :./metod/SimpleAFH/bildo.png 
+load grafic file :./metod/GOST_RV_6601-001n.5.5/bildo.png 
+load grafic file :./metod/GenOnly/bildo.png 
+load grafic file :./metod/SimpleAFH/bildo.png 
+load grafic file :./metod/AFH2/bildo.png 
+load grafic file :./metod/SimpleAFH/bildo.png 
+load grafic file :./metod/GOST_RV_6601-001n.5.5/bildo.png 
+load grafic file :./metod/GenOnly/bildo.png 
+load grafic file :./metod/AFH2/bildo.png 
+load grafic file :./metod/GenOnly/bildo.png 
+load grafic file :./metod/GOST_RV_6601-001n.5.5/bildo.png 
+load grafic file :./metod/SimpleAFH/bildo.png 
+load grafic file :./metod/GOST_RV_6601-001n.5.5/bildo.png 
+load grafic file :./metod/GenOnly/bildo.png 
+load grafic file :./metod/SimpleAFH/bildo.png 
+load grafic file :./metod/GOST_RV_6601-001n.5.5/bildo.png 
+load grafic file :./metod/GenOnly/bildo.png 
+load grafic file :./metod/AFH2/bildo.png 
 
 Exit 
