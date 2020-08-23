@@ -457,11 +457,11 @@ VARIABLE textview_comment_bufer
 	liststore_metod_text  @ 1 gtk_list_store_clear	 DROP
 	0 -> I
 	BEGIN
-		I SeeOne  ."  SeeOne: " DUP . ." " 
+		I SeeOne  \ ."  SeeOne: " DUP . ." " 
 		DUP  0 >  
 	WHILE
 		-> u -> adr   -> flag      -> data-adr  
-		adr u TYPE ." -> " flag . CR
+		\ adr u TYPE ." -> " flag . CR
 		I iter_store_text  liststore_metod_text  @  3 gtk_list_store_insert DROP
 		\ -1  adr u STR>S DUP >R STR@ DROP 1 iter_store_text liststore_text  @ 5 gtk_list_store_set DROP R> STRFREE
 		flag 1 = 
@@ -482,7 +482,7 @@ VARIABLE textview_comment_bufer
 		THEN
 		-1 I 0 adr u STR>S DUP >R STR@ DROP 1  s DUP >R STR@ DROP 2   iter_store_text liststore_metod_text  @ 9 gtk_list_store_set DROP R> STRFREE  R> STRFREE  
 		I 1 + -> I
-		."  I: " I . ."  " CR
+		\ ."  I: " I . ."  " CR
 	REPEAT
 	DROP
 ;

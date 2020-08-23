@@ -287,7 +287,7 @@
   </object>
   <object class="GtkWindow" id="winmetod">
     <property name="can_focus">False</property>
-    <property name="title" translatable="yes">SIMPLE AFH</property>
+    <property name="title" translatable="yes"> AFH2</property>
     <property name="modal">True</property>
     <property name="default_width">600</property>
     <signal name="destroy" handler="electo_destroy" swapped="no"/>
@@ -370,7 +370,8 @@
                 <property name="height_request">50</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Простое снятие АЧХ</property>
+                <property name="label" translatable="yes">   Снятие АЧХ с поддержанием
+параметров   выходного сигнала</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>

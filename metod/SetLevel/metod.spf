@@ -159,8 +159,8 @@ Data_Kalib
 	 0
 	n 0 = IF DROP metod-info STEP_PAUSE	1	S" Пауза между воздействиями, мс "  THEN
 	n 1 = IF DROP  metod-info STEP_TIME	1	S" Время одного воздействия, мс"  THEN
-	n 2 = IF DROP metod-info FREQ_BEGIN	2	S" Начальная частота, Гц "  THEN
-	n 3 = IF DROP  metod-info FREQ_END	2	S" Конечная частота, Гц "  THEN
+	n 2 = IF DROP metod-info FREQ_BEGIN	2	S" Начальная частота, МГц "  THEN
+	n 3 = IF DROP  metod-info FREQ_END	2	S" Конечная частота, МГц "  THEN
 	n 4 = IF DROP   metod-info work_step  1		S" ТИП РАБОТЫ: (-1)-%, (0)-линейный, (1)-по таблице"  THEN
 	n 5 = IF DROP   metod-info FREQ_STEP	2	S" Шаг по частоте "   THEN
 	n 6 = IF DROP   metod-info file_kalibrov_buf 4	S" Калибровка"  THEN
@@ -506,7 +506,7 @@ VARIABLE textview_comment_bufer
 	liststore_metod_text  @ 1 gtk_list_store_clear	 DROP
 	0 -> I
 	BEGIN
-		I SeeOne  ."  SeeOne: " DUP . ." " 
+		I SeeOne  \ ."  SeeOne: " DUP . ." " 
 		DUP  0 >  
 	WHILE
 		-> u -> adr   -> flag      -> data-adr  
@@ -531,7 +531,7 @@ VARIABLE textview_comment_bufer
 		THEN
 		-1 I 0 adr u STR>S DUP >R STR@ DROP 1  s DUP >R STR@ DROP 2   iter_store_text liststore_metod_text  @ 9 gtk_list_store_set DROP R> STRFREE  R> STRFREE  
 		I 1 + -> I
-		."  I: " I . ."  " CR
+		\ ."  I: " I . ."  " CR
 	REPEAT
 	DROP
 ;
