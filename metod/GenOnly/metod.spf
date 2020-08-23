@@ -738,7 +738,7 @@ CALLBACK: but_start_click
 	IF 
 		DROP	\ ASCIIZ> TYPE 
 	ELSE 
-		DROP 	   " ./" >R  R@ STR@  DROP dialog_filechooserbutton  @ 2 gtk_file_chooser_set_current_folder   R> STRFREE   ." filechooserbutton_pribor =" . CR	
+		DROP 	   " ./metod/GenOnly/" >R  R@ STR@  DROP dialog_filechooserbutton  @ 2 gtk_file_chooser_set_current_folder   R> STRFREE   ." filechooserbutton_pribor =" . CR	
 	THEN
 	
 	Refresh_list

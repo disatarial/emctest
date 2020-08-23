@@ -791,7 +791,7 @@ CALLBACK: but_start_click
 	IF 
 		DROP	\ ASCIIZ> TYPE 
 	ELSE 
-		DROP 	   " ./metod/SimpleAFH/" >R  R@ STR@  DROP filechooserbutton_file_nastr  @ 2 gtk_file_chooser_set_current_folder   R> STRFREE   ." filechooserbutton_pribor =" . CR	
+		DROP 	   " ./metod/AFH2/" >R  R@ STR@  DROP filechooserbutton_file_nastr  @ 2 gtk_file_chooser_set_current_folder   R> STRFREE   ." filechooserbutton_pribor =" . CR	
 	THEN
 
 	dialog_filechooserbutton  @   1 gtk_file_chooser_get_current_folder DUP 
@@ -799,7 +799,7 @@ CALLBACK: but_start_click
 	IF 
 		DROP	\ ASCIIZ> TYPE 
 	ELSE 
-		DROP 	   " ./" >R  R@ STR@  DROP dialog_filechooserbutton  @ 2 gtk_file_chooser_set_current_folder   R> STRFREE   ." filechooserbutton_pribor =" . CR	
+		DROP 	   " ./metod/AFH2/" >R  R@ STR@  DROP dialog_filechooserbutton  @ 2 gtk_file_chooser_set_current_folder   R> STRFREE   ." filechooserbutton_pribor =" . CR	
 	THEN
 
 	WinMetod_timer @  ;  1 CELLS  

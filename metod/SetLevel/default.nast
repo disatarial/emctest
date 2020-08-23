@@ -7,7 +7,7 @@ COMMENT( испытания по ГОСТ РВ 6601 с одним  проход�
  "  0 " S>FLOAT DROP F>D DROP  metod-info work_step           ! 
  " C:\progs\SPForth\emctest\prib\default\pribor.prib" metod-info file_generator_buf	LOAD_TO_BUFER 
  " C:\progs\SPForth\emctest\prib\default\pribor.prib" metod-info file_izm_buf	 	LOAD_TO_BUFER 
- " C:\progs\SPForth\emctest\metod\GOST_RV_6601-001n.5.5\test-k.kal" metod-info file_kalibrov_buf		LOAD_TO_BUFER 
+ " C:\progs\github\emctest\metod\SetLevel\test-k.kal" metod-info file_kalibrov_buf		LOAD_TO_BUFER 
  "  0.3000000  " S>FLOAT DROP	   metod-info Tochnost             F! 
  "  -10.000000  " S>FLOAT DROP	    metod-info GenMax              F! 
  "  10.000000  " S>FLOAT DROP	    metod-info GenMaxStep	   F! 
