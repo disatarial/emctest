@@ -105,12 +105,14 @@ VARIABLE button_cancel
 	\	0 
 	\	DO	
 		I 0  kalibrovka @ ^ take_data_in_number  FDUP F.   \ F>D frequency
+ 1e6 F/  \   перевели в мгц 
 		-1   >FNUM   STR>S  >R R@ STR@ DROP  1  iter_store_pribor liststore_param_kal  @ 5 gtk_list_store_set DROP 	R> STRFREE	
 		I 1  kalibrovka @ ^  take_data_in_number FDUP F.  \ F>D
 		-1   >FNUM STR>S  >R R@ STR@ DROP 2 iter_store_pribor liststore_param_kal  @ 5 gtk_list_store_set DROP 	R> STRFREE	
 		kalibrovka @ ^ num_datas_in_string @ 2 >
 		IF
 			I 2  kalibrovka @ ^ take_data_in_number  FDUP F.  \ F>D
+			
 			-1   >FNUM STR>S  >R R@ STR@ DROP 3 iter_store_pribor liststore_param_kal  @ 5 gtk_list_store_set DROP 	R> STRFREE		
 		THEN
 	\	LOOP
@@ -199,6 +201,7 @@ tree_view  ! path !  column !
  		LoadKalFile
 \		kalibrovka @ SeeDatas       \   F@ F.
 		num @ 0  kalibrovka @   ^ take_data_in_number   \ F. \ F>D
+1e6 F/	
 		>FNUM    STR>S
 		DUP >R  STR@ DROP dialog_entry_freq @ 2 gtk_entry_set_text DROP R> STRFREE		
 		num @ 1  kalibrovka @   ^ take_data_in_number   \ F>D
@@ -237,7 +240,9 @@ CALLBACK:  treeview_param_prib_click
 	IF 
 		dialog_entry_freq @ 1 gtk_entry_get_text     adr !   u ! \ adr u 	
 		adr @ u @ ."  NUMBER 0 : "  TYPE ."  " 			
-		adr @ u  @ STR>FLOAT      flag !  data  F! \ F. CR
+		adr @ u  @ STR>FLOAT      flag !  \ 1e6 F*  \ перевели в √ц !
+1e6 F*
+		data  F! \ F. CR
 
 		num @ 1 <  \ первое значение 
 		IF ." o= " CR 
@@ -370,7 +375,7 @@ CALLBACK: button_cancel_click
  	 " filechooserdialog_save"  DUP >R STR@  DROP builder_pribor @ 2 gtk_builder_get_object  filechooserdialog_save !  R> STRFREE \ 2DROP
  	" destroy"  >R 0 0 0  [']  filechooserdialog_save_destroy  R@ STR@ DROP filechooserdialog_save   @ 6 g_signal_connect_data   R> STRFREE  DROP \ 2DROP 2DROP 2DROP
 	 filefilter_kal @ filechooserdialog_save  @ 2 gtk_file_chooser_add_filter DROP
-	 " ./" >R  R@ STR@  DROP filechooserdialog_save  @ 2 gtk_file_chooser_set_current_folder   R> STRFREE   ." filechooserbutton_pribor =" . CR	
+	 " ./metod/" >R  R@ STR@  DROP filechooserdialog_save  @ 2 gtk_file_chooser_set_current_folder   R> STRFREE   ." filechooserbutton_pribor =" . CR	
 	 " entryName" >R  R@ STR@  DROP builder_pribor @ 2 gtk_builder_get_object entryName !    R> STRFREE \ 2DROP
 	" button_create" >R  R@ STR@  DROP builder_pribor @ 2 gtk_builder_get_object button_create !    R> STRFREE \ 2DROP
    	" clicked"  >R 0 0 0  ['] button_create_click R@ STR@ DROP button_create @ 6 g_signal_connect_data   R> STRFREE  DROP \ 2DROP 2DROP 2DROP 
@@ -415,7 +420,7 @@ CALLBACK: buttonDel_click
 	IF 
 		DROP	\ ASCIIZ> TYPE 
 	ELSE 
-		DROP 	   " ./" >R  R@ STR@  DROP filechooserbutton_kal  @ 2 gtk_file_chooser_set_current_folder   R> STRFREE   ." filechooserbutton_pribor =" . CR	
+		DROP 	   " ./metod/" >R  R@ STR@  DROP filechooserbutton_kal  @ 2 gtk_file_chooser_set_current_folder   R> STRFREE   ." filechooserbutton_pribor =" . CR	
 	THEN
  1 ;  1 CELLS CALLBACK:  timer_ticket 
 
@@ -439,7 +444,7 @@ createtablkalibr
 	 " filechooserbutton_kal" >R  R@ STR@  DROP builder_pribor   @  2 gtk_builder_get_object filechooserbutton_kal !    R> STRFREE \ 2DROP
 	 " filefilter_kal" >R  R@ STR@  DROP builder_pribor   @  2 gtk_builder_get_object filefilter_kal !    R> STRFREE \ 2DROP
 	 filefilter_kal @ filechooserbutton_kal  @ 2 gtk_file_chooser_add_filter DROP
-	   " ./" >R  R@ STR@  DROP filechooserbutton_kal  @ 2 gtk_file_chooser_set_current_folder   R> STRFREE   ." filechooserbutton_pribor =" . CR	
+	   " ./metod/" >R  R@ STR@  DROP filechooserbutton_kal  @ 2 gtk_file_chooser_set_current_folder   R> STRFREE   ." filechooserbutton_pribor =" . CR	
 	 " file-set"    >R 0 0 0  ['] filechooserbutton_kal_open  R@ STR@ DROP filechooserbutton_kal  @ 6 g_signal_connect_data   R> STRFREE  DROP \ 2DROP 2DROP 2DROP
  \	 " file-activated"    >R 0 0 0  ['] filechooserbutton_kal_press  R@ STR@ DROP filechooserbutton_kal  @ 6 g_signal_connect_data   R> STRFREE  DROP \ 2DROP 2DROP 2DROP
  
@@ -494,11 +499,6 @@ STARTLOG
 ; 
 
  
-    FALSE TO ?GUI
-  \   ' CECONSOLE MAINX !
-	 ' start MAINX !
-         S" kalfile.exe"  SAVE
-\	BYE
  
  
  
@@ -517,4 +517,9 @@ STARTLOG
 	save_file outFileClose
 ;
 
+    FALSE TO ?GUI
+  \   ' CECONSOLE MAINX !
+	 ' start MAINX !
+         S" kalfile.exe"  SAVE
+\	BYE
 
