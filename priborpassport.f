@@ -1,4 +1,4 @@
-
+.( pribor_passport start ...)  
 
 : LOAD_TO_BUFER { s-adr adr \ u   -- }
 ." LOAD_TO_BUFER= " s-adr STR@  TYPE CR
@@ -88,3 +88,5 @@ PriborPassport_info interface	LOAD_TO_BUFER  ; \ TO  SaveInterface
 REPEAT
 DEPTH .
 DROP ;
+
+.( ...pribor passport.normal) CR

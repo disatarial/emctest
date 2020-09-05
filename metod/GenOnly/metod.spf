@@ -3,6 +3,7 @@
 \ REQUIRE  dBuV->V  ~disa/algoritm.f
 \ REQUIRE WildCMP-U ~pinka/lib/mask.f
 
+
  
 	0 CONSTANT NoError
 \ коды управления
@@ -42,6 +43,8 @@ CONSTANT sysup-work-info
 	  1 FLOATS  -- FREQ_BEGIN  \ начальная частота
 	  1 FLOATS  -- FREQ_END   \ конечная частота
 	  1 FLOATS  -- FREQ_STEP \ шаг
+	    CELL  -- FREQ_DEGREE \ десятичный множитель
+
 	  256	   -- file_kalibrov_buf	\ буфер имени файла калибровки	
 	  256	   -- file_generator_buf	\ буфер имени файла генератора
 	 \ 256	   -- file_izm_buf	\ буфер имени файла измерителя 
@@ -141,22 +144,27 @@ CONSTANT sysup-metod-info
 		LOOP 
 	THEN 
 ;
+ : ->degree  \ freq, decimal -- freq2** 
+ 10e  metod-info FREQ_DEGREE @   DS>F   F**  \ возвели в степень 
+ ;
  
 : SeeOne \ подготовить в выводу описание переменной из настроек
 	\ :NONAME  
 	{ n } ( n -- num/fnum  flag adr u    | flag )
-	\ flag:   0 - нет описания 1 - целое 2-действительное 3- строка 4 -имя файла  калибровки, 4 -имя файла  прибора
+	\ flag:   0 - нет описания 1 - целое 2-действительное 3- строка 4 -имя файла  калибровки, 5 -имя файла  прибора
+	\ 6-  частота (МГц)
 	\ ( если отричательные значения - нередактируемое поле)
 	\ CASE
 	 0
 	n 0 = IF DROP metod-info STEP_PAUSE	1	S" Пауза, мс "  THEN
 	n 1 = IF DROP  metod-info STEP_TIME	1	S" Выдержка, мс"  THEN
-	n 2 = IF DROP metod-info FREQ_BEGIN	2	S" Частота нач., МГц "  THEN
-	n 3 = IF DROP  metod-info FREQ_END	2	S" Частота кон., МГц  "  THEN
-	n 4 = IF DROP   metod-info FREQ_STEP	2	S" Шаг по частоте "   THEN
-	n 5 = IF DROP   metod-info work_step  1		S" ТИП РАБОТЫ: (-1)-%, (0)-линейный, (1)-по таблице"  THEN
-	n 6 = IF DROP   metod-info file_kalibrov_buf 4	S" Файл калибровки"  THEN
-	n 7 = IF DROP   metod-info file_generator_buf 5	S" Файл генератора"  THEN
+	n 2 = IF DROP metod-info FREQ_BEGIN  6		S" Частота нач.,  "  THEN
+	n 3 = IF DROP  metod-info FREQ_END   6		S" Частота кон.,  "  THEN
+	n 4 = IF DROP   metod-info FREQ_STEP	2	S" Шаг по частоте  "   THEN
+	n 5 = IF DROP   metod-info FREQ_DEGREE	1	S" Множитель частоты Гц:0, кГц:3, МГц:6, ГГц:9"   THEN
+	n 6 = IF DROP   metod-info work_step     1	S" ТИП РАБОТЫ: (-1)-%, (0)-линейный, (1)-по таблице"  THEN
+	n 7 = IF DROP   metod-info file_kalibrov_buf 4	S" Файл калибровки"  THEN
+	n 8 = IF DROP   metod-info file_generator_buf 5	S" Файл генератора"  THEN
 	\ n 8 = IF DROP   metod-info file_izm_buf 5	S" Измеритель "  THEN
 	\ 0
 	\ ENDCASE
@@ -192,13 +200,17 @@ CONSTANT sysup-metod-info
 	" )" save_file StoFile save_file CRtoFile
 	\	"  {''} " save_file StoFile metod-info file_result_buf 1+ metod-info   file_result_buf  C@    	STR>S save_file StoFile  " {''} metod-info file_result_buf	LOAD_TO_BUFER " save_file StoFile  save_file CRtoFile
 \ задержки
-	"  {''} " save_file StoFile  metod-info	STEP_TIME	@  save_file DtoFile  " {''} S>FLOAT DROP F>D DROP  metod-info STEP_TIME           !  "   save_file StoFile  save_file CRtoFile
+	"  {''} " save_file StoFile  metod-info	STEP_TIME	@  save_file DtoFile  " {''} S>FLOAT DROP F>D DROP  metod-info STEP_TIME           ! "   save_file StoFile  save_file CRtoFile
 	"  {''} " save_file StoFile metod-info	STEP_PAUSE	@  save_file DtoFile  " {''} S>FLOAT DROP F>D DROP  metod-info STEP_PAUSE          ! "   save_file StoFile  save_file CRtoFile
 	"  {''} " save_file StoFile metod-info	FREQ_BEGIN	F@ save_file FtoFile  " {''} S>FLOAT DROP           metod-info FREQ_BEGIN          F! "  save_file StoFile  save_file CRtoFile	
 	"  {''} " save_file StoFile metod-info	FREQ_END	F@ save_file FtoFile  " {''} S>FLOAT DROP           metod-info FREQ_END            F! "  save_file StoFile  save_file CRtoFile
 	"  {''} " save_file StoFile metod-info	FREQ_STEP	F@ save_file FtoFile  " {''} S>FLOAT DROP           metod-info FREQ_STEP           F! "  save_file StoFile  save_file CRtoFile
+	"  {''} " save_file StoFile  metod-info FREQ_DEGREE	@ save_file  DtoFile  " {''} S>FLOAT DROP F>D DROP  metod-info FREQ_DEGREE	   ! "   save_file StoFile  save_file CRtoFile
+	
+
 \  тип шага- линейный, процентный, ?добавить по формуле?????
 	"  {''} " save_file StoFile metod-info	work_step	@ save_file DtoFile   " {''} S>FLOAT DROP F>D DROP  metod-info work_step           ! "  save_file StoFile  save_file CRtoFile
+
 \ имена файлов
 	"  {''} " save_file StoFile metod-info	file_generator_buf  1 +	metod-info	file_generator_buf	C@ STR>S 
 \	 Directory ASCIIZ> STR>S "" replace-str-
@@ -330,7 +342,7 @@ CONSTANT sysup-metod-info
 	 CASE 
 		-1 OF  metod-info FREQ_STEP  F@ 1e2 F/ metod-info FREQ  F@ F*   ( sign  IF -1e F* THEN)  metod-info FREQ  F@ F+    ENDOF
 		1  OF  metod-info FREQ  F@  metod-info kalibrovka @ ^ NextFreq     ENDOF \ НЕ РАБОТАЕТ ПЕРЕБОР ВНИЗ по частоте!!!!! при табличной вводе
-		metod-info FREQ_STEP  F@    ( sign  IF -1e F* THEN) metod-info FREQ  F@ F+  
+		metod-info FREQ_STEP  F@   ->degree F*  ( sign  IF -1e F* THEN) metod-info FREQ  F@ F+  
 	 ENDCASE
 	metod-info FREQ  F!  
 \ ."  v4 " DEPTH . FDEPTH . ."  " 
@@ -464,22 +476,31 @@ VARIABLE textview_comment_bufer
 		\ adr u TYPE ." -> " flag . CR
 		I iter_store_text  liststore_metod_text  @  3 gtk_list_store_insert DROP
 		\ -1  adr u STR>S DUP >R STR@ DROP 1 iter_store_text liststore_text  @ 5 gtk_list_store_set DROP R> STRFREE
-		flag 1 = 
+		flag 1 =  \ целые
 		IF 
 			data-adr  @ >NUM  STR>S -> s 
 		THEN
-		flag 2 = 
+		flag 2 =  \ действительное
 		IF 
 			data-adr F@ >FNUM STR>S -> s 
 		THEN
 		flag 2 > flag 6 < AND 
-		IF 
+		IF  \ строчки
 			data-adr 1+ data-adr C@ STR>S -> s 
 		THEN
-		flag 5 > flag 1 < OR 
+		
+		flag 6 = 
+		IF \ частота с множителем 
+			data-adr F@    ->degree F/ 
+			>FNUM STR>S -> s 
+		THEN
+
+		flag 6 > flag 1 < OR 
 		IF 
 			"  закончено" -> s 
 		THEN
+
+
 		-1 I 0 adr u STR>S DUP >R STR@ DROP 1  s DUP >R STR@ DROP 2   iter_store_text liststore_metod_text  @ 9 gtk_list_store_set DROP R> STRFREE  R> STRFREE  
 		I 1 + -> I
 		\ ."  I: " I . ."  " CR
@@ -516,7 +537,7 @@ CALLBACK: button_close_metod_click
 	2DROP -> flag  -> adr_str  	
 	\ выясняем какой тип  данных 
 	." flag: " flag . CR 
-	flag  1 =  flag  2 =  OR \ действительное или  целое
+	flag  1 =  flag  2 =   OR  flag  6 = OR \ действительное или  целое b
 	IF  
 		dialog_entry  @ 1 gtk_entry_get_text_length   DUP 0 > 
 		IF 
@@ -525,7 +546,7 @@ CALLBACK: button_close_metod_click
 			adr u  STR>FLOAT    FDUP F. CR
 			\	1000 PAUSE			
 			IF
-				flag  2 =  IF	 adr_str F!  ELSE  F>D D>S  adr_str ! THEN \ действительное или целое
+				flag  2 =  flag  6 = OR IF  adr_str F!  ELSE  F>D D>S  adr_str ! THEN \ действительное или целое
 			ELSE FDROP -1 -> flag
 			THEN 
 \			CR DEPTH .   FDEPTH . CR
@@ -616,7 +637,12 @@ CALLBACK: button_error_click
 			filefilter_prib @ dialog_filechooserbutton   @ 2 gtk_file_chooser_add_filter DROP
 			\	 DUP STR@ DROP dialog_filechooserbutton @ 2 gtk_file_chooser_set_filename DROP    
 		THEN
-		flag 5 > flag 1 < OR 
+		flag 6 = 
+		IF 
+			F@    >FNUM  STR>S  
+		THEN      \ частота 
+
+		flag 6 > flag 1 < OR 
 		IF 
 			" ОШИБКА " 
 		THEN

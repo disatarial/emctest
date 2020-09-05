@@ -1,21 +1,21 @@
-\ СѓРїСЂР°РІР»РµРЅРёРµ РЅР°СЃС‚СЂРѕР№РєРѕР№ РїСЂРёР±РѕСЂРѕРІ
+\ управление настройкой приборов
 STARTLOG
  REQUIRE CAPI: lib/win/api-call/capi.f
- REQUIRE gtk_init  gtk-api.f
+ REQUIRE gtk_init  /emctest/gtk-api.spf
  REQUIRE  CASE  lib/ext/case.f
- REQUIRE WildCMP-U ~pinka/lib/mask.f \ \ СЃСЂР°РІРЅРµРЅРёРµ СЃС‚СЂРѕРєРё Рё РјР°СЃРєРё, РґР»СЏ  РїСЂРѕРІРµСЂРєРё РѕС‚РІРµС‚Р° РѕР±РѕСЂСѓРґРѕРІР°РЅРёСЏ
- REQUIRE  objLocalsSupport ~day/hype3/locals.f \ Р»РѕРєР°Р»СЊРЅС‹Рµ РїРµСЂРµРјРµРЅРЅС‹Рµ
- REQUIRE  tabl_kalibr  ~disa/kalibr_hype.f      \ РѕР±СЉРµРєС‚С‹
- REQUIRE  dBuV->V  ~disa/algoritm.f             \ СЂР°Р·Р»РёС‡РЅС‹Рµ Р°Р»РіРѕСЂРёС‚РјС‹
- REQUIRE FIND-FILES ~ac\FINDFILE.F         \ РїРѕРёСЃРє С„Р°Р№Р»РѕРІ
- REQUIRE AddNode ~ac\STR_LIST.F            \ СЃРїРёСЃРѕРє
- REQUIRE  STR@ ~ac\str5.f                    \ СЂР°Р±РѕС‚Р° СЃ РґРёРЅР°РјРёС‡РµСЃРєРёРјРё СЃС‚СЂРѕРєР°РјРё
+ REQUIRE WildCMP-U ~pinka/lib/mask.f \ \ сравнение строки и маски, для  проверки ответа оборудования
+ REQUIRE  objLocalsSupport ~day/hype3/locals.f \ локальные переменные
+ REQUIRE  tabl_kalibr  ~disa/kalibr_hype.f      \ объекты
+ REQUIRE  dBuV->V  ~disa/algoritm.f             \ различные алгоритмы
+ REQUIRE FIND-FILES ~ac\FINDFILE.F         \ поиск файлов
+ REQUIRE AddNode ~ac\STR_LIST.F            \ список
+ REQUIRE  STR@ ~ac\str5.f                    \ работа с динамическими строками
  
 
-VARIABLE num_data \ РЅРѕРјРµСЂ РїРѕСЃР»РµРґРЅРёС…/С‚РµРєСѓС‰РёС… РґР°РЅРЅС‹С… РІ СЃРїРёСЃРєРµ  gtk_tree... С‚РѕР»СЊРєРѕ РґР»СЏ РїРµСЂРµРґР°С‡Рё РІРЅСѓС‚СЂРё РіСЂР°С„. РёРЅС‚РµСЂС„РµР№СЃР°
-VARIABLE LoadPribor \ Р·Р°РіСЂСѓР¶РµРЅС‹Р№ РїСЂРёР±РѕСЂ
+VARIABLE num_data \ номер последних/текущих данных в списке  gtk_tree... только для передачи внутри граф. интерфейса
+VARIABLE LoadPribor \ загруженый прибор
 
- 0 , HERE 256 ALLOT  VALUE ERROR_PROG_BUFER \ Р±СѓС„РµСЂ РѕС€РёР±РѕРє
+ 0 , HERE 256 ALLOT  VALUE ERROR_PROG_BUFER \ буфер ошибок
 VARIABLE  ERROR_PROG 
 
 : LOAD_TO_ERR_BUFER { s-adr adr \ u    -- }
@@ -31,32 +31,32 @@ bufer  C@   DUP 0 > IF TYPE ELSE 2DROP ."  no info in buffer "  THEN
 
 : CLEAR_ERROR_BUFER 255 0 DO 0 ERROR_PROG_BUFER   I + C!  LOOP ;
 : TYPE_ERROR_PROG_BUFER  ERROR_PROG_BUFER   TYPE_BUFER ;	
-: TO_ERROR_PROG_BUFER    ERROR_PROG_BUFER  LOAD_TO_ERR_BUFER ;  ( s-adr  ) \ РѕС€РёР±РєСѓ РІ Р±СѓС„РµСЂ
+: TO_ERROR_PROG_BUFER    ERROR_PROG_BUFER  LOAD_TO_ERR_BUFER ;  ( s-adr  ) \ ошибку в буфер
 
-\ РѕС‚СЂР°Р±РѕС‚РєР° РѕС€РёР±РєРё
+\ отработка ошибки
 : :ERROR  { s-adr-err n-err  } 
    s-adr-err  LOAD_TO_ERR_BUFER  n-err ERROR_PROG ! TYPE_ERROR_PROG_BUFER   -1 ;
 
 
 REQUIRE PriborPassport priborpassport.f
 
-\ VECT Save_PriborPassport  \ РїСЂРѕС†РµРґСѓСЂР° СЃРѕС…СЂР°РЅРµРЅРёСЏ РґР°РЅРЅС‹С… РїСЂРёР±РѕСЂР° 
-\ VECT  PriborPassportSeeOne \ \ \ РїРѕРґРіРѕС‚РѕРІРёС‚СЊ РІ РІС‹РІРѕРґСѓ РѕРїРёСЃР°РЅРёРµ РїРµСЂРµРјРµРЅРЅРѕР№ РёР· РЅР°СЃС‚СЂРѕРµРє
-\ VECT SaveInterface	   \ РїСЂРѕС†РµРґСѓСЂР° СЃРѕС…СЂР°РЅРµРЅРёСЏ РёРЅС„РѕСЂРјР°С†РёРё РѕР± РёРЅС‚РµСЂС„РµР№СЃР°С…
-\ VECT FileInterface         \ РєРѕРјР°РЅРґР° РїРѕРєР°Р·Р° С„Р°Р№Р»Р° РёРЅС‚РµСЂС„РµР№СЃР°
+\ VECT Save_PriborPassport  \ процедура сохранения данных прибора 
+\ VECT  PriborPassportSeeOne \ \ \ подготовить в выводу описание переменной из настроек
+\ VECT SaveInterface	   \ процедура сохранения информации об интерфейсах
+\ VECT FileInterface         \ команда показа файла интерфейса
 
-\ РЅСѓР»РµРІС‹Рµ РґРµР№СЃС‚РІРёСЏ
+\ нулевые действия
 \ :NONAME DROP 0 ;  TO PriborPassportSeeOne
 \ :NONAME DROP 0 ;  TO PriborinterfaceSeeOne
 \ :NONAME STRFREE ;  TO SaveInterface
 \ :NONAME S" " DUP  0 SWAP  C!  ;  TO  FileInterface
 
-\ РѕР±РѕР»РѕС‡РєР° РґР»СЏ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ
+\ оболочка для пользователя
 VARIABLE pargv
 VARIABLE pargs
 VARIABLE window
 VARIABLE builder
-VARIABLE error  \ СЃСЋРґР° СЃРєРёРґС‹РІР°С‚СЊ РЅРѕРјРµСЂ РѕС€РёР±РєРё 
+VARIABLE error  \ сюда скидывать номер ошибки 
 
 VARIABLE builder_pribor
 VARIABLE win_pribor
@@ -75,7 +75,7 @@ VARIABLE  filechooserbuttoninterface
 VARIABLE  filefilter_interface
 
  
-\ РґРёР°Р»РѕРі РІРІРѕРґР° С†РёС„СЂ Рё С„Р°Р№Р»РѕРІ РІ РјРµС‚РѕРґС‹  
+\ диалог ввода цифр и файлов в методы  
 VARIABLE dialog 
 VARIABLE button_norma
 VARIABLE button_error 
@@ -88,7 +88,7 @@ VARIABLE  button_proverka
 VARIABLE  entry_proverka
   
   
-\ СЂР°Р·Р»РёС‡РЅС‹Рµ РёС‚РµСЂР°С‚РѕСЂРІС‹
+\ различные итераторвы
  0 , HERE  64 ALLOT  VALUE iter_store_interface
  0 , HERE  64 ALLOT  VALUE iter_store_pribor
 \ 0 , HERE  64 ALLOT  VALUE iter_n
@@ -99,7 +99,7 @@ VARIABLE  entry_proverka
    flag 1 = IF data-adr  @ >NUM  STR>S -> s THEN
    flag 2 = IF data-adr F@ >FNUM STR>S -> s THEN
    flag 2 > flag 6 < AND IF data-adr 1+ data-adr C@ STR>S -> s THEN
-   flag 5 > flag 1 < OR IF "  Р·Р°РєРѕРЅС‡РµРЅРѕ" -> s THEN
+   flag 5 > flag 1 < OR IF "  закончено" -> s THEN
 s ;
 
 : Refresh_param_prib_list { \ adr u I flag  s  data-adr }
@@ -137,7 +137,7 @@ DROP
 "" -> s "" -> s2
 ." DEPTH =" .S   ."  filechooserbutton_pribor_open  "  
 
-\ РіСЂСѓР·РёРј РёРјСЏ РЅР°СЃС‚СЂРѕРµРє
+\ грузим имя настроек
    filechooserbutton_pribor  @ 1 gtk_file_chooser_get_filename    -> file 
    ."  gtk_file_chooser_get_filename = " file .  ." DEPTH =" .S 	CR
 
@@ -148,7 +148,7 @@ DROP
 ." DEPTH  include =" .S  ." flag=" flag .  CR
  flag	
  IF   
-\ РіСЂСѓР·РёРј С„Р°Р№Р» РїСЂРёР±РѕСЂР° 
+\ грузим файл прибора 
 	s STRFREE
 	file ASCIIZ> STR>S   -> s  DEPTH . 
 	s STR@   ." INCLUDE FILE: " 2DUP TYPE CR
@@ -164,10 +164,10 @@ DROP
  ." DEPTH OBJ =" .S  ." flag=" flag .  CR
  flag	
  IF 
-	file NewObj  LoadPribor !   \ РїРѕРґРєР»СЋС‡РёР»Рё РґР»СЏ РїСЂРѕРІРµСЂРєРё
+	file NewObj  LoadPribor !   \ подключили для проверки
 	." filechooserbutton_pribor_open=" s STR@ TYPE  ."  " .S CR
  THEN
- \ РіСЂСѓР·РёРј РЅР°СЃС‚СЂРѕР№РєРё
+ \ грузим настройки
  flag IF
 		s STR@ 12 - STR>S -> s2 
 		" \haracter.spf"  s2  	  S+
@@ -195,30 +195,30 @@ DROP
   {  column path tree_view \ model  flag  adr u  tekFile }
 ." TreeView_start_metod_click"  CR
 dialog @  1 gtk_widget_show DROP
-\ РІС‹РґРµР»РµРЅРЅР°СЏ СЃС‚СЂРѕС‡РєР° 
+\ выделенная строчка 
   tree_view  1 gtk_tree_view_get_model   -> model 
   path iter_store_pribor  model 3   gtk_tree_model_get_iter DROP \ (model, &iter, path_string)
   iter_store_pribor model 2 gtk_tree_model_get_string_from_iter    ASCIIZ> STR>S   \ STYPE ."  "
    S>FLOAT 
-\ Р’СЂРµРјРµРЅРЅРѕ 
- IF F>D D>S  num_data ! \ Р·Р°РїРѕРјРЅРёС‚СЊ РЅРѕРјРµСЂ СЃС‚СЂРѕС‡РєРё СЃ РґР°РЅРЅС‹РјРё
-	num_data @ PriborPassportSeeOne \ Р°РґСЂРµСЃ РґР°РЅРЅС‹С…,С‚РёРї РґР°РЅРЅС‹С…,  РЅР°Р·РІР°РЅРёРµ РґР°РЅРЅС‹С…   РґР»РёРЅРЅР° РЅР°Р·РІР°РЅРёСЏ
+\ Временно 
+ IF F>D D>S  num_data ! \ запомнить номер строчки с данными
+	num_data @ PriborPassportSeeOne \ адрес данных,тип данных,  название данных   длинна названия
 	-> u -> adr  -> flag
 	adr u STR>S DUP >R  STR@ DROP dialog_label @ 2 gtk_label_set_text DROP R> STRFREE
-	flag 1 = IF @  >NUM  STR>S   THEN	 \ С†РµР»РѕРµ
-	flag 2 = IF F@ >FNUM  STR>S  THEN      \ РґРµР№СЃС‚РІРёС‚РµР»СЊРЅРѕРµ
+	flag 1 = IF @  >NUM  STR>S   THEN	 \ целое
+	flag 2 = IF F@ >FNUM  STR>S  THEN      \ действительное
 	flag 3 = 
 	flag 4 = OR 
 	flag 5 = OR
-	IF DUP 1+ SWAP C@ STR>S  THEN \ РїСЂРѕСЃС‚Рѕ С‚РµРєСЃС‚
-\	flag 4 = IF  			\ РёРјСЏ С„Р°Р№Р»Р° РєР°Р»РёР±СЂРѕРІРєРё
+	IF DUP 1+ SWAP C@ STR>S  THEN \ просто текст
+\	flag 4 = IF  			\ имя файла калибровки
 \		DUP 1+ SWAP C@ STR>S 
 \		Directory   ASCIIZ>  "" DUP -> tekFile  STR+   " /default.kal" tekFile  S+ tekFile   STR@ ." Directory   " TYPE CR 
 \		tekFile    >R  R@ STR@  DROP dialog_filechooserbutton  @ 2 gtk_file_chooser_set_uri  R> STRFREE  ." dialog_filechooserbutton =" . CR 	
 \		filefilter_kal @ dialog_filechooserbutton   @ 2 gtk_file_chooser_add_filter DROP
 	\	 DUP STR@ DROP dialog_filechooserbutton @ 2 gtk_file_chooser_set_filename DROP    		
 \		THEN
-\	flag 5 = IF  			\ РёРјСЏ С„Р°Р№Р»Р° РїСЂРёР±РѕСЂР°
+\	flag 5 = IF  			\ имя файла прибора
 \		DUP 1+ SWAP C@ STR>S 
 \		" ./prib" -> tekFile    " /default.prib" tekFile  S+ tekFile   STR@ ." Directory   " TYPE CR 
 \		tekFile    >R  R@ STR@  DROP dialog_filechooserbutton  @ 2 gtk_file_chooser_set_uri  R> STRFREE  ." dialog_filechooserbutton =" . CR 	
@@ -242,11 +242,11 @@ column path tree_view 	window @   ;  3 CELLS  CALLBACK:  treeview_param_prib_cli
 \ DEPTH . 
 s STR@ ?STR_FILE int STR@ ?STR_FILE
   AND 
-  IF  \ РѕР±Р° С„Р°Р№Р»Р° РІ РЅР°Р»РёС‡РёРё
-	s STR@ 12 - STR>S -> s2  \ СѓРґР°Р»РёР»Рё РЅР°Р·РІР°РЅРёРµ С„Р°Р№Р»Р°
+  IF  \ оба файла в наличии
+	s STR@ 12 - STR>S -> s2  \ удалили название файла
 	s STRFREE
-	s2 STR@ STR>S -> s  \ РѕСЃС‚Р°РІРёР»Рё С‚РѕР»СЊРєРѕ РїСѓС‚СЊ Рє РєР°С‚Р°Р»РѕРіСѓ
-	" \haracter.spf" s2 S+   \ РІСЃС‚Р°РёРІР»Рё РЅРѕРІРѕРµ
+	s2 STR@ STR>S -> s  \ оставили только путь к каталогу
+	" \haracter.spf" s2 S+   \ встаивли новое
 	."  savefile= " s2 STR@ TYPE CR
 	\ " tst.txt"
 	 s2 
@@ -254,8 +254,8 @@ s STR@ ?STR_FILE int STR@ ?STR_FILE
 	save_file  Save_PriborPassport
 	save_file outFileClose
 	
- 	\ s SaveInterface \ РїРѕСЃР»Рµ РёСЃРїРѕР»СЊР·РѕРІР°РЅРёСЏ s -СѓРґР°Р»СЏРµС‚СЃСЏ Р°РІС‚РѕРјР°С‚РёС‡РµСЃРєРё
-	"" -> s		\ РїРІРѕСЃСЃС‚Р°РЅР°РІР»РёРІР°РµРј s РґР»СЏ СѓРґР°Р»РµРЅРёСЏ РїРѕСЃР»Рµ РР¤Р°	
+ 	\ s SaveInterface \ после использования s -удаляется автоматически
+	"" -> s		\ пвосстанавливаем s для удаления после ИФа	
 \ sadr STR@  ."  "  TYPE ."  " 
 \ s2 STRFREE
 ." ...file-save. " CR
@@ -270,11 +270,11 @@ s STR@ ?STR_FILE int STR@ ?STR_FILE
  
  
 :NONAME   { \ flag  adr_str  adr u tekFile }
-  num_data @ PriborPassportSeeOne \ Р°РґСЂРµСЃ РґР°РЅРЅС‹С…,С‚РёРї РґР°РЅРЅС‹С…,  РЅР°Р·РІР°РЅРёРµ РґР°РЅРЅС‹С…   РґР»РёРЅРЅР° РЅР°Р·РІР°РЅРёСЏ
+  num_data @ PriborPassportSeeOne \ адрес данных,тип данных,  название данных   длинна названия
   2DROP -> flag  -> adr_str  	
-\ РІС‹СЏСЃРЅСЏРµРј РєР°РєРѕР№ С‚РёРї  РґР°РЅРЅС‹С… 
+\ выясняем какой тип  данных 
 ." flag: " flag . CR 
- flag  1 =  flag  2 =  OR \ РґРµР№СЃС‚РІРёС‚РµР»СЊРЅРѕРµ РёР»Рё  С†РµР»РѕРµ
+ flag  1 =  flag  2 =  OR \ действительное или  целое
 	IF  dialog_entry  @ 1 gtk_entry_get_text_length   DUP 0 > 
 		IF 
 			dialog_entry  @ 1 gtk_entry_get_text    -> adr  -> u \ adr u 	
@@ -282,7 +282,7 @@ s STR@ ?STR_FILE int STR@ ?STR_FILE
 			adr u  STR>FLOAT    FDUP F. CR
 		\	1000 PAUSE
 			IF
-				flag  2 =  IF	 adr_str F!  ELSE  F>D D>S  adr_str ! THEN \ РґРµР№СЃС‚РІРёС‚РµР»СЊРЅРѕРµ РёР»Рё С†РµР»РѕРµ
+				flag  2 =  IF	 adr_str F!  ELSE  F>D D>S  adr_str ! THEN \ действительное или целое
 			ELSE FDROP -1 -> flag
 			THEN 
 \		CR DEPTH .   FDEPTH . CR
@@ -291,9 +291,9 @@ s STR@ ?STR_FILE int STR@ ?STR_FILE
 
 		THEN
 	THEN
-	flag  3 =  \ СЃС‚СЂРѕРєР°,РЅР°Р·РІР°РЅРёРµ
-	flag  4 =  \ СЃС‚СЂРѕРєР°,РЅР°Р·РІР°РЅРёРµ
-	flag  5 =  \ СЃС‚СЂРѕРєР°,РЅР°Р·РІР°РЅРёРµ
+	flag  3 =  \ строка,название
+	flag  4 =  \ строка,название
+	flag  5 =  \ строка,название
 	OR OR
 	IF   
 	 dialog_entry  @ 1 gtk_entry_get_text_length   DUP 0 > 
@@ -305,26 +305,26 @@ s STR@ ?STR_FILE int STR@ ?STR_FILE
 		THEN
 		
 	THEN
-(	flag  4 =  \ С„Р°Р№Р» РєР°Р»РёР±СЂРѕРІРєРё
+(	flag  4 =  \ файл калибровки
 	IF
 		filefilter_kal @ dialog_filechooserbutton   @ 2 gtk_file_chooser_remove_filter DROP
 	
-		 dialog_filechooserbutton @ 1 gtk_file_chooser_get_filename \  РІР·СЏР»Рё РёРјСЏ
+		 dialog_filechooserbutton @ 1 gtk_file_chooser_get_filename \  взяли имя
 		DUP 
-		IF ASCIIZ> 2DUP ?STR_FILE			\ РїСЂРѕРІРµСЂРёР»Рё РЅР°Р»РёС‡РёРµ С„Р°Р№Р»Р°
+		IF ASCIIZ> 2DUP ?STR_FILE			\ проверили наличие файла
 			IF  STR>S adr_str LOAD_TO_BUFER		\
 			ELSE  -1 -> flag 
 			THEN  
 		ELSE -1 -> flag 
 		THEN
 	THEN
-	flag  5 =  \ С„Р°Р№Р» РѕР±РѕСЂСѓРґРѕРІР°РЅРёСЏ
+	flag  5 =  \ файл оборудования
 	IF
 			filefilter_prib @ dialog_filechooserbutton   @ 2 gtk_file_chooser_remove_filter DROP
 
-		 dialog_filechooserbutton @ 1 gtk_file_chooser_get_filename \  РІР·СЏР»Рё РёРјСЏ
+		 dialog_filechooserbutton @ 1 gtk_file_chooser_get_filename \  взяли имя
 		DUP 
-		IF ASCIIZ> 2DUP ?STR_FILE			\ РїСЂРѕРІРµСЂРёР»Рё РЅР°Р»РёС‡РёРµ С„Р°Р№Р»Р°
+		IF ASCIIZ> 2DUP ?STR_FILE			\ проверили наличие файла
 			IF  STR>S adr_str LOAD_TO_BUFER		\
 			ELSE  -1 -> flag 
 			THEN  
@@ -344,11 +344,11 @@ dialog   @
  
   :NONAME   { \ s   }
  ."  filechooserbuttoninterface_open  " 
-\ РіСЂСѓР·РёРј РёРјСЏ РЅР°СЃС‚СЂРѕРµРє
+\ грузим имя настроек
    filechooserbuttoninterface  @ 1 gtk_file_chooser_get_filename    DUP  ."  filechooserbuttoninterface_open = " . CR
 \ DEPTH .
   DUP  IF \  DEPTH .
-\ РіСЂСѓР·РёРј С„Р°Р№Р» РїСЂРёР±РѕСЂР° РЅР°СЃС‚СЂРѕР№РєРё
+\ грузим файл прибора настройки
 	ASCIIZ> STR>S   -> s   DEPTH . 
 	s STR@  INCLUDE-PROBE   DEPTH . 
 ." filechooserbuttoninterface_open2=" s STR@ TYPE  DEPTH . CR
@@ -357,7 +357,7 @@ dialog   @
 		s SaveInterface 
 		"" -> s
 		THEN
-\ РіСЂСѓР·РёРј РЅР°СЃС‚СЂРѕР№РєРё
+\ грузим настройки
 \	s STR@ 12 - STR>S -> s2 
 \    " \haracter.spf"  s2  	  S+
 \ ." filechooserbutton_haracter_pribor_open=" s2 STR@ TYPE CR
@@ -390,7 +390,7 @@ dialog   @
   " pribor"  >R R@ STR@  DROP builder_pribor @ 2 gtk_builder_get_object win_pribor !  R> STRFREE \ 2DROP
   win_pribor @  1 gtk_widget_show DROP \ DROP
 
-   \ Р”Р•Р™РЎРўР’Рћ Р—РђРљР Р«РўРР• РџР РћР“Р РђРњРњР«
+   \ ДЕЙСТВО ЗАКРЫТИЕ ПРОГРАММЫ
    " destroy"  >R 0 0 0  ['] on_pribor_destroy  R@ STR@ DROP win_pribor @ 6 g_signal_connect_data   R> STRFREE  DROP \ 2DROP 2DROP 2DROP
 
  " buttonClosePribor" >R  R@ STR@  DROP builder_pribor   @ 2 gtk_builder_get_object buttonClosePribor  !    R> STRFREE \ 2DROP
@@ -408,7 +408,7 @@ dialog   @
    " entry_proverka" >R  R@ STR@  DROP builder_pribor   @ 2 gtk_builder_get_object entry_proverka  !    R> STRFREE \ 2DROP
 
   
-  \ СѓРєР°Р·Р°С‚РµР»СЊ РґР»СЏ Р·Р°РіСЂСѓР·РєРё Рё  СЃРѕС…СЂР°РЅРµРЅРёРё , СѓСЃС‚Р°РЅР°РІР»РёРІР°РµРј С„РёР»СЊС‚СЂ РґР»СЏ РїСЂРёР±РѕСЂРѕРІ
+  \ указатель для загрузки и  сохранении , устанавливаем фильтр для приборов
  " filechooserbutton_pribor" >R  R@ STR@  DROP builder_pribor   @  2 gtk_builder_get_object filechooserbutton_pribor !    R> STRFREE \ 2DROP
  " filefilter_prib" >R  R@ STR@  DROP builder_pribor   @  2 gtk_builder_get_object filefilter_prib !    R> STRFREE \ 2DROP
  filefilter_prib @ filechooserbutton_pribor  @ 2 gtk_file_chooser_add_filter DROP
@@ -417,7 +417,7 @@ dialog   @
  " file-set"    >R 0 0 0  ['] filechooserbutton_pribor_open  R@ STR@ DROP filechooserbutton_pribor  @ 6 g_signal_connect_data   R> STRFREE  DROP \ 2DROP 2DROP 2DROP
     
 
-  \ СѓРєР°Р·Р°С‚РµР»СЊ РґР»СЏ Р·Р°РіСЂСѓР·РєРё , СѓСЃС‚Р°РЅР°РІР»РёРІР°РµРј С„РёР»СЊС‚СЂ РґР»СЏ РёРЅС‚РµСЂС„РµР№СЃРѕРІ
+  \ указатель для загрузки , устанавливаем фильтр для интерфейсов
  " filechooserbuttoninterface" >R  R@ STR@  DROP builder_pribor   @  2 gtk_builder_get_object filechooserbuttoninterface !    R> STRFREE \ 2DROP
  " filefilter_interface" >R  R@ STR@  DROP builder_pribor   @  2 gtk_builder_get_object filefilter_interface !    R> STRFREE \ 2DROP
   filefilter_interface @ filechooserbuttoninterface @ 2 gtk_file_chooser_add_filter DROP
@@ -427,7 +427,7 @@ dialog   @
 
 
 
-  \ РіРѕС‚РѕРІРёРј РѕРєРѕС€РєРѕ РїРѕРґ РїР°СЂР°РјРµС‚СЂС‹ РѕР±РѕСЂСѓРґРѕРІР°РЅРёСЏ
+  \ готовим окошко под параметры оборудования
     " treeview_param_prib"  >R R@ STR@ DROP builder_pribor    @ 2 gtk_builder_get_object treeview_param_prib  ! R> STRFREE
     " liststore_param_prib" >R R@ STR@ DROP builder_pribor   @ 2 gtk_builder_get_object liststore_param_prib ! R> STRFREE  
   \  iter_store_param_prib liststore_param_prib  @ 2 gtk_list_store_append DROP
@@ -435,7 +435,7 @@ dialog   @
    " row-activated"    >R 0 0 0  ['] treeview_param_prib_click R@ STR@ DROP treeview_param_prib @ 6 g_signal_connect_data   R> STRFREE  DROP \ 2DROP 2DROP 2DROP
 
 
-  \ РІСЃС‚Р°РІР»СЏРµРј РёРЅС‚РµСЂС„РµР№СЃС‹
+  \ вставляем интерфейсы
  \   " treeview_interface"  >R R@ STR@ DROP builder_pribor @ 2 gtk_builder_get_object treeview_interface  ! R> STRFREE
  \   " liststore_interface" >R R@ STR@ DROP builder_pribor @ 2 gtk_builder_get_object liststore_interface ! R> STRFREE  
 \    iter_store_interface liststore_interface  @ 2 gtk_list_store_append DROP
@@ -447,8 +447,8 @@ dialog   @
 \ 1 ['] timer_pribor  1000 3 g_timeout_add DROP
 
 
-\ РїРѕРґРЅСЏС‚РёРµ РґРёР°Р»РѕРіР° РІС‹Р±РѕСЂР°  РІРѕС‚ С‚СѓС‚ РїСЂРѕР±Р»РµРјРјР° С‡С‚Рѕ РµСЃР»Рё СѓРґР°Р»СЏС‚СЊ Рё РІРєР»СЋС‡Р°С‚СЊ. С‚Рѕ  РІС‚РѕСЂРѕРј Рё РїРѕСЃР»РµРґСѓСЋС‰РёС… РІРєР»СЋС‡РµРЅРёСЏС… РїРѕСЏРІР»СЏРµС‚СЏ РіРѕР»РѕРµ РѕРєРЅРѕ Р±РµР· РєРЅРѕРїРѕС‡РµРє.
- " dialog_label" >R  R@ STR@  DROP builder_pribor @ 2 gtk_builder_get_object dialog_label !    R> STRFREE \ РёР·РјРµРЅСЏРµРјР°СЏ РЅР°РґРїРёСЃСЊ
+\ поднятие диалога выбора  вот тут проблемма что если удалять и включать. то  втором и последующих включениях появляетя голое окно без кнопочек.
+ " dialog_label" >R  R@ STR@  DROP builder_pribor @ 2 gtk_builder_get_object dialog_label !    R> STRFREE \ изменяемая надпись
  " dialog"  DUP >R STR@  DROP builder_pribor @ 2 gtk_builder_get_object  dialog !  R> STRFREE \ 2DROP
  " button_norma" >R  R@ STR@  DROP builder_pribor @  2 gtk_builder_get_object button_norma !    R> STRFREE \ 2DROP
  " clicked"  >R 0 0 0  ['] button_norma_click   R@ STR@ DROP button_norma @ 6 g_signal_connect_data   R> STRFREE  DROP \ 2DROP 2DROP 2DROP
@@ -459,7 +459,7 @@ dialog   @
    dialog @  1 gtk_widget_hide DROP 
  \ dialog  @  1 gtk_widget_show DROP \ DROP
  
-\ СѓСЃС‚Р°РЅР°РІР»РёРІР°РµРј С„РёР»СЊС‚СЂ РґР»СЏ РЅР°СЃС‚СЂРѕРµРє
+\ устанавливаем фильтр для настроек
 \ filefilter_nast @ filechooserbutton_file_nastr   @ 2 gtk_file_chooser_add_filter DROP
  0 gtk_main  DROP 
 ;
@@ -472,18 +472,19 @@ dialog   @
   runthread START
 ; 
 
+start 
   
     TRUE TO ?GUI
  \    ' CECONSOLE MAINX !
  ' start MAINX !
          S" pribor.exe"  SAVE
-     BYE
+   \  BYE
  
  
  
 \ : T S" .\metod\*.*" ['] addListMetod FIND-FILES ; T
 
- start
+\ start
 
 : ssf { \ save_file s -- }
 	S" tst.txt" W/O CREATE-FILE-SHARED IF   ." file not created" CR  DROP 0 THEN
