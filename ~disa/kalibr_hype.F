@@ -82,8 +82,8 @@ freq F@ F/
 	\	<< F: freq -- F:freq1 D: flag >>
 	|| F: freq D: flag ||
 	freq F! 0 flag !
-	 0 take_freq_in_number			freq F@	F>= IF  0		take_freq_in_number  freq F! 1 flag ! THEN
-	 num_datas @ 1 - take_freq_in_number	freq F@ F<= IF  num_datas @ 1 -  take_freq_in_number  freq F! 1 flag ! THEN 
+	 0 take_freq_in_number			freq F@	F> IF  0		take_freq_in_number  freq F! 1 flag ! THEN
+	 num_datas @ 1 - take_freq_in_number	freq F@ F< IF  num_datas @ 1 -  take_freq_in_number  freq F! 1 flag ! THEN 
 	freq F@ flag @
 ;
 

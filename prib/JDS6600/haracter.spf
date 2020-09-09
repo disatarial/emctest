@@ -4,6 +4,6 @@
  " *pribor*" PriborPassport_info NamePribor	LOAD_TO_BUFER 
  " C:\progs\SPForth\emctest\interface\COMPORT.interface" PriborPassport_info interface	LOAD_TO_BUFER 
  " com_port" PriborPassport_info Nameinterface	LOAD_TO_BUFER 
- " COM6" PriborPassport_info interface_data1	LOAD_TO_BUFER 
+ " \\.\COM17" PriborPassport_info interface_data1	LOAD_TO_BUFER 
  5025  PriborPassport_info interface_data2		! 
  

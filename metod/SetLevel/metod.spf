@@ -3,7 +3,6 @@
  REQUIRE  dBuV->V  ~disa/algoritm.f
  REQUIRE WildCMP-U ~pinka/lib/mask.f
 
-
  
 
 	0 CONSTANT NoError
@@ -44,13 +43,14 @@ CONSTANT sysup-work-info
 	  1 FLOATS  -- FREQ_BEGIN  \ начальная частота
 	  1 FLOATS  -- FREQ_END   \ конечная частота
 	  1 FLOATS  -- FREQ_STEP \ шаг
+	    CELL  -- FREQ_DEGREE \ десятичный множитель
+	  
 	  256	   -- file_kalibrov_buf	\ буфер имени файла калибровки	
 	  256	   -- file_generator_buf	\ буфер имени файла генератора
 	  256	   -- file_izm_buf	\ буфер имени файла измерителя 
 	CELL -- work_step    \ 1- процентный шаг,  0 линейшый шаг, -1  по таблице
 	CELL  -- N_STEP	\ наибольшее количество шагов для выхода на мощность
 	  1 FLOATS  -- GenMaxStep 	\ ограничение на шаг генераторе
-	
 	  1 FLOATS  -- Tochnost	   \ точность выхода на значение
 	  1 FLOATS  -- GenMax	  \  максимальное значение генератора	
 	\ внутренние переменные
@@ -101,8 +101,8 @@ CONSTANT sysup-metod-info
 
 : FtoFile { file } "  " file StoFile  >FNUM  STR>S file StoFile  "  " file StoFile  ; \ флоат число в выходной файл
 : DtoFile { file } "  " file StoFile   >NUM  STR>S file StoFile  "  " file StoFile  ; \ целое число в выходной файл
- : CRtoFile " {CRLF}" SWAP StoFile ;
-Data_Kalib
+: CRtoFile " {CRLF}" SWAP StoFile ;
+
 : COMMENT( { \ num  adr len  -- }
 	0 -> num 
 	BEGIN
@@ -145,30 +145,36 @@ Data_Kalib
 	IF  PAUSE  
 	ELSE 50 / 
 		0 DO work-info -upravl_thead- @  work_Execute = 
-			IF  50 PAUSE THEN  Data_Kalib  
+			IF  50 PAUSE THEN    
 		LOOP 
 	THEN 
 ;
+
+  : ->degree  \ freq, decimal -- freq2** 
+ 10e  metod-info FREQ_DEGREE @   DS>F   F**  \ возвели в степень 
+ ;
  
 : SeeOne \ подготовить в выводу описание переменной из настроек
 	\ :NONAME  
 	{ n } ( n -- num/fnum  flag adr u    | flag )
 	\ flag:   0 - нет описания 1 - целое 2-действительное 3- строка 4 -имя файла  калибровки, 4 -имя файла  прибора
+	\ 6-  частота (МГц)
 	\ ( если отричательные значения - нередактируемое поле)
 	\ CASE
 	 0
 	n 0 = IF DROP metod-info STEP_PAUSE	1	S" Пауза между воздействиями, мс "  THEN
 	n 1 = IF DROP  metod-info STEP_TIME	1	S" Время одного воздействия, мс"  THEN
-	n 2 = IF DROP metod-info FREQ_BEGIN	2	S" Начальная частота, МГц "  THEN
-	n 3 = IF DROP  metod-info FREQ_END	2	S" Конечная частота, МГц "  THEN
-	n 4 = IF DROP   metod-info work_step  1		S" ТИП РАБОТЫ: (-1)-%, (0)-линейный, (1)-по таблице"  THEN
-	n 5 = IF DROP   metod-info FREQ_STEP	2	S" Шаг по частоте "   THEN
-	n 6 = IF DROP   metod-info file_kalibrov_buf 4	S" Калибровка"  THEN
-	n 7 = IF DROP   metod-info file_generator_buf 5	S" Генератор"  THEN
-	n 8 = IF DROP   metod-info file_izm_buf 5	S" Измеритель "  THEN
-	n 9 = IF DROP   metod-info Tochnost	2	S" Точность установки"   THEN
-	n 10 = IF DROP   metod-info GenMax	2	S" Наибольшее значение"  THEN
-	n 11 = IF DROP   metod-info GenMaxStep	2	S" Наибольший шаг подаваемой мощности"  THEN
+	n 2 = IF DROP metod-info FREQ_BEGIN	6	S" Начальная частота, МГц "  THEN
+	n 3 = IF DROP  metod-info FREQ_END	6	S" Конечная частота, МГц "  THEN
+	n 4 = IF DROP   metod-info FREQ_DEGREE	1	S" Множитель частоты Гц:0, кГц:3, МГц:6, ГГц:9"   THEN
+	n 5 = IF DROP   metod-info work_step  1		S" ТИП РАБОТЫ: (-1)-%, (0)-линейный, (1)-по таблице"  THEN
+	n 6 = IF DROP   metod-info FREQ_STEP	2	S" Шаг по частоте "   THEN
+	n 7 = IF DROP   metod-info file_kalibrov_buf 4	S" Калибровка"  THEN
+	n 8 = IF DROP   metod-info file_generator_buf 5	S" Генератор"  THEN
+	n 9 = IF DROP   metod-info file_izm_buf 5	S" Измеритель "  THEN
+	n 10 = IF DROP   metod-info Tochnost	2	S" Точность установки"   THEN
+	n 11 = IF DROP   metod-info GenMax	2	S" Наибольшее значение"  THEN
+	n 12 = IF DROP   metod-info GenMaxStep	2	S" Наибольший шаг подаваемой мощности"  THEN
 	\ 0
 	\ ENDCASE
 	 \ какой-то глюк кейса 
@@ -208,12 +214,17 @@ Data_Kalib
 	"  {''} " save_file StoFile metod-info	FREQ_BEGIN	F@ save_file FtoFile  " {''} S>FLOAT DROP           metod-info FREQ_BEGIN          F! "  save_file StoFile  save_file CRtoFile	
 	"  {''} " save_file StoFile metod-info	FREQ_END	F@ save_file FtoFile  " {''} S>FLOAT DROP           metod-info FREQ_END            F! "  save_file StoFile  save_file CRtoFile
 	"  {''} " save_file StoFile metod-info	FREQ_STEP	F@ save_file FtoFile  " {''} S>FLOAT DROP           metod-info FREQ_STEP           F! "  save_file StoFile  save_file CRtoFile
+	"  {''} " save_file StoFile  metod-info FREQ_DEGREE	@ save_file  DtoFile  " {''} S>FLOAT DROP F>D DROP  metod-info FREQ_DEGREE	   ! "   save_file StoFile  save_file CRtoFile
+
+
 \  тип шага- линейный, процентный, ?добавить по формуле?????
 	"  {''} " save_file StoFile metod-info	work_step	@ save_file DtoFile   " {''} S>FLOAT DROP F>D DROP  metod-info work_step           ! "  save_file StoFile  save_file CRtoFile
+
 \ имена файлов
 	"  {''} " save_file StoFile metod-info	file_generator_buf  1 +	metod-info	file_generator_buf	C@ STR>S save_file StoFile  " {''} metod-info file_generator_buf	LOAD_TO_BUFER " save_file StoFile  save_file CRtoFile
 	"  {''} " save_file StoFile metod-info	file_izm_buf        1 + metod-info	file_izm_buf	        C@ STR>S save_file StoFile  " {''} metod-info file_izm_buf	 	LOAD_TO_BUFER " save_file StoFile  save_file CRtoFile
 	"  {''} " save_file StoFile metod-info	file_kalibrov_buf   1 +	metod-info	file_kalibrov_buf	C@ STR>S save_file StoFile  " {''} metod-info file_kalibrov_buf		LOAD_TO_BUFER " save_file StoFile  save_file CRtoFile 
+
 
 \ диапазон в которое требуется попасть после калибровки
 	"  {''} " save_file StoFile metod-info	Tochnost	F@ save_file FtoFile  "  {''} S>FLOAT DROP	   metod-info Tochnost             F! "  save_file StoFile  save_file CRtoFile
@@ -264,7 +275,7 @@ Data_Kalib
 	metod-info   FREQ_END   F@  metod-info kalibrovka  @ ^ MinMax metod-info   FREQ_END   F! IF " максимальное значение не соответствует калибровке. Поправлено. {CRLF}" metod-info result @  StoFile THEN
 	metod-info   FREQ_BEGIN F@ metod-info   FREQ  F!  
 	" start: " metod-info result @ StoFile TIME&DATE  DROP DROP DROP metod-info result @ DtoFile  metod-info result @ DtoFile  metod-info result @ DtoFile   metod-info result @  CRtoFile  
-	" Частота,МГц             генератор, дБмВт              поле, дБмкВ/м"  metod-info result  @ StoFile  metod-info result @ CRtoFile 
+	" Частота,             генератор, дБмВт              поле, дБмкВ/м"  metod-info result  @ StoFile  metod-info result @ CRtoFile 
 	\ коментари ф файл вывода
 	\	"  // " metod-info result @ StoFile
 	\	work-info Coment_buffer  work-info  Len_Coment_buffer @   STR>S metod-info result @ StoFile
@@ -371,15 +382,12 @@ work_Execute work-info -upravl_thead- @ =
 
 	
 : NewStep   \ { \ sign } 
-	\ metod-info FREQ_STEP F@ 0e F< IF -1 -> sign THEN  \ если идем по частоте вниз !
-	\ ."  NewStep " CR 
-	\ ."  v1 " DEPTH . FDEPTH . ."  "
 	 metod-info  work_step  @ 
 	\  ."  v2 " DEPTH . FDEPTH . ."  " 
 	 CASE 
-		-1 OF  metod-info FREQ_STEP  F@ metod-info FREQ  F@ F*   ( sign  IF -1e F* THEN)  metod-info FREQ  F@ F+    ENDOF
+		-1 OF  metod-info FREQ_STEP  F@ 1e2 F/ metod-info FREQ  F@ F*   ( sign  IF -1e F* THEN)  metod-info FREQ  F@ F+    ENDOF
 		1  OF  metod-info FREQ  F@  metod-info kalibrovka @ ^ NextFreq     ENDOF \ НЕ РАБОТАЕТ ПЕРЕБОР ВНИЗ по частоте!!!!! при табличной вводе
-		metod-info FREQ_STEP  F@    ( sign  IF -1e F* THEN) metod-info FREQ  F@ F+  
+		metod-info FREQ_STEP  F@  ->degree F*  ( sign  IF -1e F* THEN) metod-info FREQ  F@ F+  
 	 ENDCASE
 	metod-info FREQ  F!  
 \ ."  v4 " DEPTH . FDEPTH . ."  " 
@@ -510,7 +518,7 @@ VARIABLE textview_comment_bufer
 		DUP  0 >  
 	WHILE
 		-> u -> adr   -> flag      -> data-adr  
-		adr u TYPE ." -> " flag . CR
+		\ adr u TYPE ." -> " flag . CR
 		I iter_store_text  liststore_metod_text  @  3 gtk_list_store_insert DROP
 		\ -1  adr u STR>S DUP >R STR@ DROP 1 iter_store_text liststore_text  @ 5 gtk_list_store_set DROP R> STRFREE
 		flag 1 = 
@@ -525,10 +533,19 @@ VARIABLE textview_comment_bufer
 		IF 
 			data-adr 1+ data-adr C@ STR>S -> s 
 		THEN
-		flag 5 > flag 1 < OR 
+		
+		flag 6 = 
+		IF \ частота с множителем 
+			data-adr F@    ->degree F/ 
+			>FNUM STR>S -> s 
+		THEN
+
+		flag 6 > flag 1 < OR 
 		IF 
 			"  закончено" -> s 
 		THEN
+		
+		
 		-1 I 0 adr u STR>S DUP >R STR@ DROP 1  s DUP >R STR@ DROP 2   iter_store_text liststore_metod_text  @ 9 gtk_list_store_set DROP R> STRFREE  R> STRFREE  
 		I 1 + -> I
 		\ ."  I: " I . ."  " CR
@@ -565,7 +582,7 @@ CALLBACK: button_close_metod_click
 	2DROP -> flag  -> adr_str  	
 	\ выясняем какой тип  данных 
 	." flag: " flag . CR 
-	flag  1 =  flag  2 =  OR \ действительное или  целое
+	flag  1 =  flag  2 =  OR  flag  6 = OR \ действительное или  целое
 	IF  
 		dialog_entry  @ 1 gtk_entry_get_text_length   DUP 0 > 
 		IF 
@@ -574,7 +591,7 @@ CALLBACK: button_close_metod_click
 			adr u  STR>FLOAT    FDUP F. CR
 			\	1000 PAUSE			
 			IF
-				flag  2 =  IF	 adr_str F!  ELSE  F>D D>S  adr_str ! THEN \ действительное или целое
+				flag  2 =  flag  6 = OR IF  adr_str F!  ELSE  F>D D>S  adr_str ! THEN \ действительное, частота или целое
 			ELSE FDROP -1 -> flag
 			THEN 
 \			CR DEPTH .   FDEPTH . CR
@@ -665,7 +682,12 @@ CALLBACK: button_error_click
 			filefilter_prib @ dialog_filechooserbutton   @ 2 gtk_file_chooser_add_filter DROP
 			\	 DUP STR@ DROP dialog_filechooserbutton @ 2 gtk_file_chooser_set_filename DROP    
 		THEN
-		flag 5 > flag 1 < OR 
+		flag 6 = 
+		IF 
+			F@    >FNUM  STR>S  
+		THEN      \ частота 
+
+		flag 6 > flag 1 < OR 
 		IF 
 			" ОШИБКА " 
 		THEN
@@ -774,6 +796,7 @@ CALLBACK: but_start_click
 	
 	textview_result_bufer @  1 gtk_text_buffer_get_insert -> s
 	0 0 0 0 s textview_result @ 6 gtk_text_view_scroll_to_mark DROP
+	
 	filechooserbutton_file_nastr  @   1 gtk_file_chooser_get_current_folder DUP 
 	0<> 
 	IF 
@@ -790,6 +813,7 @@ CALLBACK: but_start_click
 		DROP 	   " ./metod/SetLevel/" >R  R@ STR@  DROP dialog_filechooserbutton  @ 2 gtk_file_chooser_set_current_folder   R> STRFREE   ." filechooserbutton_pribor =" . CR	
 	THEN
 
+	Refresh_list
 	WinMetod_timer @  ;  1 CELLS  
 CALLBACK:  timer_ticket 
 

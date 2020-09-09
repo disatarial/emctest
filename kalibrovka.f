@@ -105,7 +105,7 @@ VARIABLE button_cancel
 	\	0 
 	\	DO	
 		I 0  kalibrovka @ ^ take_data_in_number  FDUP F.   \ F>D frequency
- 1e6 F/  \   перевели в мгц 
+ F->Mega   \   перевели в мгц 
 		-1   >FNUM   STR>S  >R R@ STR@ DROP  1  iter_store_pribor liststore_param_kal  @ 5 gtk_list_store_set DROP 	R> STRFREE	
 		I 1  kalibrovka @ ^  take_data_in_number FDUP F.  \ F>D
 		-1   >FNUM STR>S  >R R@ STR@ DROP 2 iter_store_pribor liststore_param_kal  @ 5 gtk_list_store_set DROP 	R> STRFREE	
@@ -201,7 +201,7 @@ tree_view  ! path !  column !
  		LoadKalFile
 \		kalibrovka @ SeeDatas       \   F@ F.
 		num @ 0  kalibrovka @   ^ take_data_in_number   \ F. \ F>D
-1e6 F/	
+F->Mega 	
 		>FNUM    STR>S
 		DUP >R  STR@ DROP dialog_entry_freq @ 2 gtk_entry_set_text DROP R> STRFREE		
 		num @ 1  kalibrovka @   ^ take_data_in_number   \ F>D
@@ -241,7 +241,7 @@ CALLBACK:  treeview_param_prib_click
 		dialog_entry_freq @ 1 gtk_entry_get_text     adr !   u ! \ adr u 	
 		adr @ u @ ."  NUMBER 0 : "  TYPE ."  " 			
 		adr @ u  @ STR>FLOAT      flag !  \ 1e6 F*  \ перевели в √ц !
-1e6 F*
+Mega->F
 		data  F! \ F. CR
 
 		num @ 1 <  \ первое значение 

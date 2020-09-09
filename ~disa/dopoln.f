@@ -195,11 +195,12 @@ adr n
 
 : S>FLOAT {  \ str adr u  m1 m2 n_str E0 delta  flag -- flag }
 \ del_probel -> str 
+
 0 N_S_PickUpWord -> str 
 str STR@ ONLYNUMBER  -> u -> adr
 u 0= IF 0 EXIT THEN
 -1 -> flag
-\ adr u  "   <" STYPE TYPE   " >   " STYPE 
+ adr u  "   <" STYPE TYPE   " >   " STYPE 
 u  DUP -> m1 -> m2
 u 0  DO
 adr I + C@  [CHAR] . = IF  I -> m1 THEN

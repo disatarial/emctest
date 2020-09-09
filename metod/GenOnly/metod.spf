@@ -1,7 +1,7 @@
 
-\ REQUIRE  tabl_kalibr  ~disa/kalibr_hype.f
-\ REQUIRE  dBuV->V  ~disa/algoritm.f
-\ REQUIRE WildCMP-U ~pinka/lib/mask.f
+ REQUIRE  tabl_kalibr  ~disa/kalibr_hype.f
+ REQUIRE  dBuV->V  ~disa/algoritm.f
+ REQUIRE WildCMP-U ~pinka/lib/mask.f
 
 
  
@@ -50,6 +50,9 @@ CONSTANT sysup-work-info
 	 \ 256	   -- file_izm_buf	\ буфер имени файла измерителя 
 	CELL -- work_step    \ 1- процентный шаг,  0 линейшый шаг, -1  по таблице
 	CELL  -- N_STEP	\ наибольшее количество шагов для выхода на мощность
+	
+	
+	
 	\ внутренние переменные
 	  256 -- file_nastr_buf		\ имя файла настроек
 	  CELL -- Len_Coment_buffer \ размер данных в буфере для коментария настроек
@@ -60,6 +63,8 @@ CONSTANT sysup-work-info
 	\ CELL -- kalibr_izm		\  имя файла измерителя 
 	 \ CELL -- izmeritel		\  имя файла измерителя
 	 CELL -- result			\  имя файла результата
+	 
+	 
 CONSTANT sysup-metod-info
 
 0 VALUE work-info \ минимальный набор дла запуска программы
@@ -144,6 +149,7 @@ CONSTANT sysup-metod-info
 		LOOP 
 	THEN 
 ;
+
  : ->degree  \ freq, decimal -- freq2** 
  10e  metod-info FREQ_DEGREE @   DS>F   F**  \ возвели в степень 
  ;
@@ -212,14 +218,18 @@ CONSTANT sysup-metod-info
 	"  {''} " save_file StoFile metod-info	work_step	@ save_file DtoFile   " {''} S>FLOAT DROP F>D DROP  metod-info work_step           ! "  save_file StoFile  save_file CRtoFile
 
 \ имена файлов
-	"  {''} " save_file StoFile metod-info	file_generator_buf  1 +	metod-info	file_generator_buf	C@ STR>S 
-\	 Directory ASCIIZ> STR>S "" replace-str-
-	save_file StoFile  " {''} metod-info file_generator_buf	LOAD_TO_BUFER " save_file StoFile  save_file CRtoFile
-
-
-	\ "  {''} " save_file StoFile metod-info	file_izm_buf        1 + metod-info	file_izm_buf	        C@ STR>S save_file StoFile  " {''} metod-info file_izm_buf	 	LOAD_TO_BUFER " save_file StoFile  save_file CRtoFile
+	"  {''} " save_file StoFile metod-info	file_generator_buf  1 +	metod-info	file_generator_buf	C@ STR>S save_file StoFile  " {''} metod-info file_generator_buf	LOAD_TO_BUFER " save_file StoFile  save_file CRtoFile
+\       "  {''} " save_file StoFile metod-info	file_izm_buf        1 + metod-info	file_izm_buf	        C@ STR>S save_file StoFile  " {''} metod-info file_izm_buf	 	LOAD_TO_BUFER " save_file StoFile  save_file CRtoFile
 	"  {''} " save_file StoFile metod-info	file_kalibrov_buf   1 +	metod-info	file_kalibrov_buf	C@ STR>S save_file StoFile  " {''} metod-info file_kalibrov_buf		LOAD_TO_BUFER " save_file StoFile  save_file CRtoFile 
 ;
+
+
+
+
+
+
+
+
 	\
 : IF_END:
 	\ ." ifend "
@@ -262,6 +272,7 @@ CONSTANT sysup-metod-info
 	\ устанавливаем мин и макс по калибровке, если они не соответствуют ей
 	metod-info   FREQ_BEGIN F@  metod-info kalibrovka  @ ^ MinMax metod-info   FREQ_BEGIN F! IF " минимальное  значение не соответствует калибровке. Поправлено. {CRLF} " metod-info result @  StoFile THEN 
 	metod-info   FREQ_END   F@  metod-info kalibrovka  @ ^ MinMax metod-info   FREQ_END   F! IF " максимальное значение не соответствует калибровке. Поправлено. {CRLF}" metod-info result @  StoFile THEN
+	metod-info   FREQ_BEGIN F@ metod-info   FREQ  F!  
 	
 	metod-info FREQ_STEP F@ 0e F>
 	IF \ едем вверх
@@ -271,7 +282,7 @@ CONSTANT sysup-metod-info
 	THEN
 
 	" start: " metod-info result @ StoFile TIME&DATE  DROP DROP DROP metod-info result @ DtoFile  metod-info result @ DtoFile  metod-info result @ DtoFile   metod-info result @  CRtoFile  
-	" Частота,МГц               ПОДАНО       "  metod-info result  @ StoFile  metod-info result @ CRtoFile 
+	" Частота,                ПОДАНО       "  metod-info result  @ StoFile  metod-info result @ CRtoFile 
 	\ коментари ф файл вывода
 	\	"  // " metod-info result @ StoFile
 	\	work-info Coment_buffer  work-info  Len_Coment_buffer @   STR>S metod-info result @ StoFile
@@ -281,7 +292,6 @@ CONSTANT sysup-metod-info
 	\	" x= [{CRLF}" metod-info result @ StoFile
 	\ metod-info generator @ ^ On
 	." begin-ok"
-
 ; 
 
 : WORK:     || F: gen F: kal  D: n_step   ||
@@ -342,7 +352,7 @@ CONSTANT sysup-metod-info
 	 CASE 
 		-1 OF  metod-info FREQ_STEP  F@ 1e2 F/ metod-info FREQ  F@ F*   ( sign  IF -1e F* THEN)  metod-info FREQ  F@ F+    ENDOF
 		1  OF  metod-info FREQ  F@  metod-info kalibrovka @ ^ NextFreq     ENDOF \ НЕ РАБОТАЕТ ПЕРЕБОР ВНИЗ по частоте!!!!! при табличной вводе
-		metod-info FREQ_STEP  F@   ->degree F*  ( sign  IF -1e F* THEN) metod-info FREQ  F@ F+  
+		metod-info FREQ_STEP  F@  ->degree F*  ( sign  IF -1e F* THEN) metod-info FREQ  F@ F+  
 	 ENDCASE
 	metod-info FREQ  F!  
 \ ."  v4 " DEPTH . FDEPTH . ."  " 
@@ -711,6 +721,7 @@ CALLBACK: button_load_data_metod_click
 			work-info work_thread @ START 
 		THEN
 	THEN
+	Refresh_list
 	 S" " SWAP textview_result_bufer @  3 gtk_text_buffer_set_text DROP \ обнуляем окно
 	\	0 button_start @ 2 gtk_widget_set_sensitive DROP
 	0 ;  1 CELLS  
