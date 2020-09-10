@@ -9,7 +9,8 @@ STARTLOG
  REQUIRE FIND-FILES ~ac\FINDFILE.F         \ поиск файлов
  REQUIRE AddNode ~ac\STR_LIST.F            \ список
  REQUIRE  STR@ ~ac\str5.f                    \ работа с динамическими строками
- 
+ REQUIRE  F. ~disa\dopoln.f
+
   
   
 : LOAD_TO_BUFER { s-adr adr \ u   -- }

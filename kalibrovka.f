@@ -10,7 +10,8 @@ STARTLOG
  REQUIRE FIND-FILES ~ac\FINDFILE.F         \ поиск файлов
  REQUIRE AddNode ~ac\STR_LIST.F            \ список
  REQUIRE  STR@ ~ac\str5.f                    \ работа с динамическими строками
- 
+ REQUIRE  F. ~disa\dopoln.f
+
  0 , HERE 256 ALLOT  VALUE ERROR_PROG_BUFER \ буфер ошибок
 
 VARIABLE  ERROR_PROG 
@@ -80,6 +81,7 @@ VARIABLE  button_norma
 VARIABLE  button_error
 
 
+
 VARIABLE  buttonAdd
 VARIABLE  buttonDel
 VARIABLE  buttonNew
@@ -89,9 +91,27 @@ VARIABLE entryName
 VARIABLE button_create
 VARIABLE button_cancel
 
+VARIABLE entry_degree
+VARIABLE button_refr
 \ различные итераторвы
   0 , HERE  64 ALLOT  VALUE iter_store_pribor
   0 , HERE  64 ALLOT  VALUE iter_store_text 
+
+ : ->degree  
+ || D: adr D: u ||
+ ." degree " 
+ \ freq, decimal -- freq2** 
+ entry_degree   @ 1 gtk_entry_get_text_length     DUP 0 > 
+	IF 
+		entry_degree @ 1 gtk_entry_get_text     adr !   u ! \ adr u 
+	\	adr @ u @ TYPE CR
+		adr @ u @  STR>S S>FLOAT 
+		IF
+			10e  \ metod-info FREQ_DEGREE @  
+			FSWAP F**  \ возвели в степень 
+		ELSE 1e THEN
+	ELSE DROP 1e	THEN
+ ;
   
  : Refresh_param_kal_list 
 	liststore_param_kal  @ 1 gtk_list_store_clear	 DROP
@@ -105,7 +125,10 @@ VARIABLE button_cancel
 	\	0 
 	\	DO	
 		I 0  kalibrovka @ ^ take_data_in_number  FDUP F.   \ F>D frequency
- F->Mega   \   перевели в мгц 
+
+ \ F->Mega 
+->degree  F/
+   \   перевели в мгц 
 		-1   >FNUM   STR>S  >R R@ STR@ DROP  1  iter_store_pribor liststore_param_kal  @ 5 gtk_list_store_set DROP 	R> STRFREE	
 		I 1  kalibrovka @ ^  take_data_in_number FDUP F.  \ F>D
 		-1   >FNUM STR>S  >R R@ STR@ DROP 2 iter_store_pribor liststore_param_kal  @ 5 gtk_list_store_set DROP 	R> STRFREE	
@@ -201,7 +224,8 @@ tree_view  ! path !  column !
  		LoadKalFile
 \		kalibrovka @ SeeDatas       \   F@ F.
 		num @ 0  kalibrovka @   ^ take_data_in_number   \ F. \ F>D
-F->Mega 	
+\ F->Mega 
+->degree  F/	
 		>FNUM    STR>S
 		DUP >R  STR@ DROP dialog_entry_freq @ 2 gtk_entry_set_text DROP R> STRFREE		
 		num @ 1  kalibrovka @   ^ take_data_in_number   \ F>D
@@ -241,7 +265,8 @@ CALLBACK:  treeview_param_prib_click
 		dialog_entry_freq @ 1 gtk_entry_get_text     adr !   u ! \ adr u 	
 		adr @ u @ ."  NUMBER 0 : "  TYPE ."  " 			
 		adr @ u  @ STR>FLOAT      flag !  \ 1e6 F*  \ перевели в √ц !
-Mega->F
+\ Mega->F
+->degree F*
 		data  F! \ F. CR
 
 		num @ 1 <  \ первое значение 
@@ -382,8 +407,12 @@ CALLBACK: button_cancel_click
 	 " button_cancel" >R  R@ STR@  DROP builder_pribor @ 2 gtk_builder_get_object button_cancel !    R> STRFREE \ 2DROP
   	" clicked"  >R 0 0 0  ['] button_cancel_click R@ STR@ DROP button_cancel @ 6 g_signal_connect_data   R> STRFREE  DROP \ 2DROP 2DROP 2DROP 
  	filechooserdialog_save  @  1 gtk_widget_show DROP \ DROP
-	builder_pribor @  ;  1 CELLS  
-CALLBACK:  buttonNew_click 
+
+
+
+
+	builder_pribor @  
+	;  	1 CELLS  CALLBACK:  buttonNew_click 
  
 :NONAME 
 	|| D: flag ||  
@@ -422,8 +451,15 @@ CALLBACK: buttonDel_click
 	ELSE 
 		DROP 	   " ./metod/" >R  R@ STR@  DROP filechooserbutton_kal  @ 2 gtk_file_chooser_set_current_folder   R> STRFREE   ." filechooserbutton_pribor =" . CR	
 	THEN
- 1 ;  1 CELLS CALLBACK:  timer_ticket 
+ 1 ;  1 CELLS 
+ CALLBACK:  timer_ticket 
 
+
+ :NONAME 
+\ ."  entry_degree_activate "
+\ Refresh_param_kal_list
+	1 ;  1 CELLS 
+ CALLBACK:  button_refr_click
 
 
 : Startpribor
@@ -462,6 +498,14 @@ createtablkalibr
 
 	 " buttonNew" >R  R@ STR@  DROP builder_pribor   @ 2 gtk_builder_get_object buttonNew !    R> STRFREE \ 2DROP
 	  " clicked"  >R 0 0 0  ['] buttonNew_click R@ STR@ DROP buttonNew @ 6 g_signal_connect_data   R> STRFREE  DROP \ 2DROP 2DROP 2DROP 
+
+
+	 " entry_degree" >R  R@ STR@  DROP builder_pribor @ 2 gtk_builder_get_object entry_degree !    R> STRFREE \ 2DROP
+	\  " move-cursor"  >R 0 0 0  ['] entry_degree_activate R@ STR@ DROP entry_degree @ 6 g_signal_connect_data   R> STRFREE  DROP \ 2DROP 2DROP 2DROP 
+	 " button_refr" >R  R@ STR@  DROP builder_pribor   @ 2 gtk_builder_get_object button_refr !    R> STRFREE \ 2DROP
+	  " clicked"  >R 0 0 0  ['] button_refr_click R@ STR@ DROP button_refr @ 6 g_signal_connect_data   R> STRFREE  DROP \ 2DROP 2DROP 2DROP 
+
+
 
 
 	\ 1 ['] timer_pribor  1000 3 g_timeout_add DROP
