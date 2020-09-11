@@ -162,12 +162,12 @@ CONSTANT sysup-metod-info
 	\ ( если отричательные значения - нередактируемое поле)
 	\ CASE
 	 0
-	n 0 = IF DROP metod-info STEP_PAUSE	1	S" Пауза, мс "  THEN
-	n 1 = IF DROP  metod-info STEP_TIME	1	S" Выдержка, мс"  THEN
-	n 2 = IF DROP metod-info FREQ_BEGIN  6		S" Частота нач.,  "  THEN
-	n 3 = IF DROP  metod-info FREQ_END   6		S" Частота кон.,  "  THEN
-	n 4 = IF DROP   metod-info FREQ_STEP	2	S" Шаг по частоте  "   THEN
+	n 0 = IF DROP metod-info STEP_PAUSE	1	S" Пауза между воздействиями , мс "  THEN
+	n 1 = IF DROP  metod-info STEP_TIME	1	S" время воздействия , мс"  THEN
+	n 2 = IF DROP metod-info FREQ_BEGIN  6		S" Частота начальная  "  THEN
+	n 3 = IF DROP  metod-info FREQ_END   6		S" Частота конконечная  "  THEN
 	n 5 = IF DROP   metod-info FREQ_DEGREE	1	S" Множитель частоты Гц:0, кГц:3, МГц:6, ГГц:9"   THEN
+	n 4 = IF DROP   metod-info FREQ_STEP	2	S" Шаг по частоте  "   THEN
 	n 6 = IF DROP   metod-info work_step     1	S" ТИП РАБОТЫ: (-1)-%, (0)-линейный, (1)-по таблице"  THEN
 	n 7 = IF DROP   metod-info file_kalibrov_buf 4	S" Файл калибровки"  THEN
 	n 8 = IF DROP   metod-info file_generator_buf 5	S" Файл генератора"  THEN
