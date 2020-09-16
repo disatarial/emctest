@@ -10,8 +10,8 @@ REQUIRE  StoFile ~disa\savefile.spf
 : dBuV->V 20e F/ 10E FSWAP F** 1e6 F/ ; 
 : dBm->V 107e F+ dBuV->V   ; 
 
-: V->dBuV 1e6 F* FLOG 20e F*  ;
-: W->dBm  1e3 F* FLOG 10e F*  ;
+: V->dBuV FDUP 1e-12 F< IF FDROP -120e ELSE 1e6 F* FLOG 20e F*  THEN ;
+: W->dBm  FDUP 1e-9 F< IF FDROP -60e ELSE 1e3 F* FLOG 10e F*  THEN ;
 
 :  F->Mega 1e6 F/ ; 
 : Mega->F 1e6 F* ;

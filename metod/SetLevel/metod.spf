@@ -444,7 +444,7 @@ work_Execute work-info -upravl_thead- @ =
 		" word END problem "  error_end_problem  :ERROR  DROP
 	ELSE  CR ." word END - ok  " CR 
 	THEN	
-	metod-info result @ outFileClose
+\	metod-info result @ outFileClose
 \	[']  FreePribor CATCH 0=  IF CR ." word FreePribor problem. " THEN	 
 	work-info -upravl_thead- @ 0= \ если не было ошибок 
 	IF  

@@ -319,7 +319,7 @@ CONSTANT sysup-metod-info
 	\	" xset({''}thickness{''},2); {CRLF} " metod-info result @ StoFile
 	\	" plot2d({''}nn{''},x(:,1),y,1); {CRLF}" metod-info result @ StoFile	\\\	" set(gca(),{''}grid{''},[1, 1]); {CRLF}" metod-info result @ StoFile
 	" stop: " metod-info result @  StoFile TIME&DATE  DROP DROP DROP metod-info result @  DtoFile  metod-info result @  DtoFile  metod-info result @  DtoFile   metod-info result @ CRtoFile  
-	\	metod-info result @ outFileClose
+		metod-info result @ outFileClose
 \ отключение оборудования
 	metod-info generator	@ ^ Off
 	metod-info generator	@ ^ Stop
@@ -395,7 +395,6 @@ CONSTANT sysup-metod-info
 		" word END problem "  error_end_problem  :ERROR  DROP
 	ELSE  CR ." word END - ok  " CR 
 	THEN	
-	metod-info result @ outFileClose
 \	[']  FreePribor CATCH 0=  IF CR ." word FreePribor problem. " THEN	 
 	work-info -upravl_thead- @ 0= \ если не было ошибок 
 	IF  

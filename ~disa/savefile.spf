@@ -35,7 +35,7 @@ sadr STRFREE
 
 : outFileCreateTime { sadr \ --  file } 
 sadr S+time  
-" .sce" sadr S+
+" .txt" sadr S+
 STR@  ."  " 2DUP TYPE ."  " 
  W/O \ CREATE-FILE 
  CREATE-FILE-SHARED 

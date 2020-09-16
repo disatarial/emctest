@@ -1,16 +1,17 @@
 STARTLOG
  REQUIRE CAPI: lib/win/api-call/capi.f
  REQUIRE gtk_init  /emctest/gtk-api.spf
- REQUIRE  CASE  lib/ext/case.f
+ REQUIRE CASE  lib/ext/case.f
  REQUIRE WildCMP-U ~pinka/lib/mask.f \ \ сравнение строки и маски, для  проверки ответа оборудования
- REQUIRE  objLocalsSupport ~day/hype3/locals.f \ локальные переменные
- REQUIRE  tabl_kalibr  ~disa/kalibr_hype.f      \ объекты
- REQUIRE  dBuV->V  ~disa/algoritm.f             \ различные алгоритмы
+ REQUIRE objLocalsSupport ~day/hype3/locals.f \ локальные переменные
+ REQUIRE tabl_kalibr  ~disa/kalibr_hype.f      \ объекты
+ REQUIRE dBuV->V  ~disa/algoritm.f             \ различные алгоритмы
  REQUIRE FIND-FILES ~ac\FINDFILE.F         \ поиск файлов
  REQUIRE AddNode ~ac\STR_LIST.F            \ список
- REQUIRE  STR@ ~ac\str5.f                    \ работа с динамическими строками
- REQUIRE  F. ~disa\dopoln.f
-
+ REQUIRE STR@ ~ac\str5.f                    \ работа с динамическими строками
+ REQUIRE F. ~disa\dopoln.f
+ REQUIRE socket_port ~disa/socket.f
+ REQUIRE com_port ~disa/COMM.F
   
   
 : LOAD_TO_BUFER { s-adr adr \ u   -- }

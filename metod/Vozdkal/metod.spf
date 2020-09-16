@@ -45,7 +45,8 @@ CONSTANT sysup-work-info
 	  1 FLOATS  -- FREQ_STEP \ шаг
 	    CELL  -- FREQ_DEGREE \ десятичный множитель
 	  
-	  256	   -- file_kalibrov_buf	\ буфер имени файла калибровки	
+	  256	   -- file_kalibrov_buf		\ буфер имени файла калибровки	
+	  256	   -- file_kal_result_buf	  \ буфер имени файла  результата калибровки	 (данные для воздействий )
 	  256	   -- file_generator_buf	\ буфер имени файла генератора
 	  256	   -- file_izm_buf	\ буфер имени файла измерителя 
 	CELL -- work_step    \ 1- процентный шаг,  0 линейшый шаг, -1  по таблице
@@ -163,19 +164,20 @@ CONSTANT sysup-metod-info
 	\ ( если отричательные значения - нередактируемое поле)
 	\ CASE
 	 0
-	n 0 = IF DROP metod-info STEP_PAUSE	1	S" Пауза между воздействиями, мс "  THEN
-	n 1 = IF DROP  metod-info STEP_TIME	1	S" Время одного воздействия, мс"  THEN
-	n 2 = IF DROP metod-info FREQ_BEGIN	6	S" Начальная частота "  THEN
-	n 3 = IF DROP  metod-info FREQ_END	6	S" Конечная частота "  THEN
-	n 4 = IF DROP   metod-info FREQ_DEGREE	1	S" Множитель частоты Гц:0, кГц:3, МГц:6, ГГц:9"   THEN
-	n 5 = IF DROP   metod-info work_step  1		S" ТИП РАБОТЫ: (-1)-%, (0)-линейный, (1)-по таблице"  THEN
-	n 6 = IF DROP   metod-info FREQ_STEP	2	S" Шаг по частоте "   THEN
-	n 7 = IF DROP   metod-info file_kalibrov_buf 4	S" Калибровка"  THEN
-	n 8 = IF DROP   metod-info file_generator_buf 5	S" Генератор"  THEN
-	n 9 = IF DROP   metod-info file_izm_buf 5	S" Измеритель "  THEN
-	n 10 = IF DROP   metod-info Tochnost	2	S" Точность установки калибровки"   THEN
-	n 11 = IF DROP   metod-info GenMax	2	S" Наибольшее мошность генератора"  THEN
-	n 12 = IF DROP   metod-info GenMaxStep	2	S" Наибольший шаг мощности"  THEN
+	n 0 = IF DROP metod-info STEP_PAUSE	1		S" Пауза между воздействиями, мс "  THEN
+	n 1 = IF DROP  metod-info STEP_TIME	1		S" Время одного воздействия, мс"  THEN
+	n 2 = IF DROP metod-info FREQ_BEGIN	6		S" Начальная частота "  THEN
+	n 3 = IF DROP  metod-info FREQ_END	6		S" Конечная частота "  THEN
+	n 4 = IF DROP   metod-info FREQ_DEGREE	1		S" Множитель частоты Гц:0, кГц:3, МГц:6, ГГц:9"   THEN
+	n 5 = IF DROP   metod-info work_step  1			S" ТИП РАБОТЫ: (-1)-%, (0)-линейный, (1)-по таблице"  THEN
+	n 6 = IF DROP   metod-info FREQ_STEP	2		S" Шаг по частоте "   THEN
+	n 7 = IF DROP   metod-info file_kalibrov_buf 4		S" Данные для калибровки"  THEN
+	n 8 = IF DROP   metod-info file_kal_result_buf 4	S" Результаты калибровки"  THEN
+	n 9 = IF DROP   metod-info file_generator_buf 5		S" Генератор"  THEN
+	n 10 = IF DROP   metod-info file_izm_buf 5		S" Измеритель "  THEN
+	n 11 = IF DROP   metod-info Tochnost	2		S" Точность установки калибровки"   THEN
+	n 12 = IF DROP   metod-info GenMax	2		S" Наибольшее мошность генератора"  THEN
+	n 13 = IF DROP   metod-info GenMaxStep	2		S" Наибольший шаг мощности"  THEN
 	\ 0
 	\ ENDCASE
 	 \ какой-то глюк кейса 
@@ -223,8 +225,9 @@ CONSTANT sysup-metod-info
 
 \ имена файлов
 	"  {''} " save_file StoFile metod-info	file_generator_buf  1 +	metod-info	file_generator_buf	C@ STR>S save_file StoFile  " {''} metod-info file_generator_buf	LOAD_TO_BUFER " save_file StoFile  save_file CRtoFile
-	"  {''} " save_file StoFile metod-info	file_izm_buf        1 + metod-info	file_izm_buf	        C@ STR>S save_file StoFile  " {''} metod-info file_izm_buf	 	LOAD_TO_BUFER " save_file StoFile  save_file CRtoFile
+	"  {''} " save_file StoFile metod-info	file_izm_buf        1 +	metod-info	file_izm_buf	        C@ STR>S save_file StoFile  " {''} metod-info file_izm_buf	 	LOAD_TO_BUFER " save_file StoFile  save_file CRtoFile
 	"  {''} " save_file StoFile metod-info	file_kalibrov_buf   1 +	metod-info	file_kalibrov_buf	C@ STR>S save_file StoFile  " {''} metod-info file_kalibrov_buf		LOAD_TO_BUFER " save_file StoFile  save_file CRtoFile 
+	"  {''} " save_file StoFile metod-info	file_kal_result_buf 1 +	metod-info	file_kal_result_buf	C@ STR>S save_file StoFile  " {''} metod-info file_kal_result_buf	LOAD_TO_BUFER " save_file StoFile  save_file CRtoFile 
 
 
 \ диапазон в которое требуется попасть после калибровки
@@ -299,14 +302,22 @@ CONSTANT sysup-metod-info
 	THEN
 	."  kalibrovka " CR	    
 \ создали объект-основу калибровки
-	500 PAUSE
 	tabl_kalibr NewObj metod-info kalibrovka  !
-	metod-info kalibrovka  @ 	metod-info  file_kalibrov_buf  DUP  1+  SWAP C@   ERR-INCLUDE-PROBE 
+	metod-info   kalwork @ 
+	IF  \ только в режиме калибровки
+		metod-info kalibrovka  @ 	metod-info  file_kalibrov_buf  DUP  1+  SWAP C@   ERR-INCLUDE-PROBE 
 		IF "  error_in_file_kalibrovka "  DUP STR@ TYPE TO_ERROR_PROG_BUFER  error_out_file  work-info  ERROR_PROG !
 		ELSE ."  kalibrovka:  " metod-info kalibrovka  @ ^ SeeDatas  THEN CR
+		metod-info  file_kal_result_buf  DUP  1+  SWAP C@ STR>S
+			 outFileCreate metod-info result !
+	ELSE \ в режиме испытаний
+		metod-info kalibrovka  @ 	metod-info  file_kal_result_buf  DUP  1+  SWAP C@   ERR-INCLUDE-PROBE 
+		IF "  error_in_file_kalibrovka "  DUP STR@ TYPE TO_ERROR_PROG_BUFER  error_out_file  work-info  ERROR_PROG !
+		ELSE ."  kalibrovka:  " metod-info kalibrovka  @ ^ SeeDatas  THEN CR
+		" result.txt" outFileCreateTime metod-info result !
+	THEN
 	  \ в режиме калибровки или рабочем режиме
-	 metod-info   kalwork @  IF " ./metod\Vozdkal\result.kal" ELSE " result.txt" THEN  
-	 outFileCreate metod-info result !
+	\ metod-info   kalwork @  IF " ./metod\Vozdkal\result.kal" ELSE " result.txt" THEN  
 	\ устанавливаем мин и макс по калибровке, если они не соответствуют ей
 	metod-info   FREQ_BEGIN F@  metod-info kalibrovka  @ ^ MinMax metod-info   FREQ_BEGIN F! IF " \ минимальное  значение не соответствует калибровке. Поправлено. {CRLF} " metod-info result @  StoFile THEN 
 	metod-info   FREQ_END   F@  metod-info kalibrovka  @ ^ MinMax metod-info   FREQ_END   F! IF " \ максимальное значение не соответствует калибровке. Поправлено. {CRLF}" metod-info result @  StoFile THEN
@@ -423,6 +434,10 @@ work_Execute work-info -upravl_thead- @ =
 		\ калибровочные данные
 		 metod-info kalibr_izm	@ ^ GetLevel  DUP 0 >   IF   0 DO   metod-info result @ FtoFile  LOOP ELSE DROP    THEN
 		 "    "  metod-info result @  StoFile  
+	ELSE
+		metod-info FREQ  F@ 3 metod-info kalibrovka @ ^ TakeData  	 \ данные калибровки
+		 metod-info result @ FtoFile 
+		  "    "  metod-info result @  StoFile  
 	THEN
 
 \ записали номер шага
@@ -509,7 +524,6 @@ work_Execute work-info -upravl_thead- @ =
 		" word END problem "  error_end_problem  :ERROR  DROP
 	ELSE  CR ." word END - ok  " CR 
 	THEN	
-\	metod-info result @ outFileClose
 \	[']  FreePribor CATCH 0=  IF CR ." word FreePribor problem. " THEN	 
 	work-info -upravl_thead- @ 0= \ если не было ошибок 
 	IF  
@@ -834,10 +848,10 @@ CALLBACK: button_load_data_metod_click
 CALLBACK: but_start_click
 
 :NONAME { \ s }
-." ."
+\ ." ."
 	Str_Data_buffer   STR>S -> s
 	s STR@ NIP 
-	IF   ."  >"  s STR@ TYPE ." <   " \ TYPE
+	IF   \ ."  >"  s STR@ TYPE ." <   " \ TYPE
 \		S"  + " 
 		s STR@   SWAP  textview_result_bufer @ 3 gtk_text_buffer_insert_at_cursor DROP 
 	THEN
@@ -873,7 +887,7 @@ CALLBACK: but_start_click
 	IF 
 		DROP	\ ASCIIZ> TYPE 
 	ELSE 
-		DROP 	   " ./metod/SetLevel/" >R  R@ STR@  DROP filechooserbutton_file_nastr  @ 2 gtk_file_chooser_set_current_folder   R> STRFREE   ." filechooserbutton_pribor =" . CR	
+		DROP 	   " ./metod/Vozdkal/" >R  R@ STR@  DROP filechooserbutton_file_nastr  @ 2 gtk_file_chooser_set_current_folder   R> STRFREE   ." filechooserbutton_pribor =" . CR	
 	THEN
 
 	dialog_filechooserbutton  @   1 gtk_file_chooser_get_current_folder DUP 
@@ -881,7 +895,7 @@ CALLBACK: but_start_click
 	IF 
 		DROP	\ ASCIIZ> TYPE 
 	ELSE 
-		DROP 	   " ./metod/SetLevel/" >R  R@ STR@  DROP dialog_filechooserbutton  @ 2 gtk_file_chooser_set_current_folder   R> STRFREE   ." filechooserbutton_pribor =" . CR	
+		DROP 	   " ./metod/Vozdkal/" >R  R@ STR@  DROP dialog_filechooserbutton  @ 2 gtk_file_chooser_set_current_folder   R> STRFREE   ." filechooserbutton_pribor =" . CR	
 	THEN
 
 	Refresh_list

@@ -257,7 +257,9 @@ flag
 REQUIRE TIME&DATE lib/include/facil.f
 \ REQUIRE UseDLL ~nn/lib/usedll.f
 
+
  : F. >FNUM TYPE ."  " ;  \ 
+
 
  : FS. ( r -- )
    PrintFInf IF EXIT THEN
@@ -270,7 +272,7 @@ REQUIRE TIME&DATE lib/include/facil.f
    PAD-COUNT 0!
    ['] C-TO-PAD TO FEMIT
    ['] S-TO-PAD TO FTYPE
-     G.
+    FS.
    ['] EMIT TO FEMIT
    ['] TYPE TO FTYPE
    PAD PAD-COUNT @
