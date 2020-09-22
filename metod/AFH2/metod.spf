@@ -137,7 +137,7 @@ CONSTANT sysup-metod-info
 	bufer  C@   DUP 0 > IF TYPE ELSE 2DROP ."  no info in buffer "  THEN 
 ;
 
-: CLEAR_ERROR_BUFER 255 0 DO 0 work-info ERROR_PROG_BUFER   I + C!  LOOP ;
+: CLEAR_ERROR_BUFER 255 0 DO 0 work-info ERROR_PROG_BUFER   I + C!  LOOP  0 work-info  ERROR_PROG  ! ;
 : TO_ERROR_PROG_BUFER    work-info ERROR_PROG_BUFER  LOAD_TO_ERR_BUFER ;  ( s-adr  ) \ ошибку в буфер
 : TYPE_ERROR_PROG_BUFER  work-info ERROR_PROG_BUFER   TYPE_BUFER ;
 \ отработка ошибки
@@ -788,6 +788,7 @@ CALLBACK: but_start_click
 		work-info ERROR_PROG_BUFER C@   work-info ERROR_PROG_BUFER 1+ textview_result_bufer @ 3 gtk_text_buffer_insert_at_cursor DROP  
 		" {CRLF}" DUP  >R STR@ SWAP textview_result_bufer @ 3 gtk_text_buffer_insert_at_cursor DROP R> STRFREE
 		work_Stop  work-info -upravl_thead- ! 
+		CLEAR_ERROR_BUFER
 	THEN
 	
 	work-info -upravl_thead- @    work_Execute  \  2DUP . . 
