@@ -1,59 +1,51 @@
-\ РЅР°СЃС‚СЂРѕР№РєРё РїСЂРёР±РѕСЂР°
+\ настройки прибора
 REQUIRE  HYPE ~disa\~day\hype3\hype3.f
 REQUIRE PriborPassport priborpassport.f
 REQUIRE com_port ~disa/COMM.F
 
  
 
-S" Load Pribor..." TYPE CR
+S" Load jds6600..." TYPE CR
 
 
- CLASS 1_Prib 
+ CLASS jds6600 
 1 FLOATS  DEFS data 
 PriborPassport DEFS  Passport
- CELL DEFS generator
+ CELL DEFS pribor 
 
 : Start
 || D:  str_prib   D: etalon  D: flag  D: pribpath  ||
-\ pribpath ! \ РїСѓС‚СЊ Рє  С„Р°Р№Р»Сѓ РїСЂРёР±РѕСЂР°, РїСЂРёР»РµС‚Р°РµС‚ РґР»СЏ РєРѕРјР°РЅРґС‹ СЃС‚Р°СЂС‚
- \ " test pribor 1 data " str_prib !
+\ Подключаем файл характеристик прибора  
+ S" ./prib/JDS6600/haracter.spf"  
+ INCLUDE-PROBE IF ."   ERROR haracteristic pribor not found  " CR -1 flag ! THEN \ считываем характеристики прибора 
+ PriborPassport_info Passport PriborPassport CMOVE \ копируем свежесчитанные данные по прибору 
+ Passport NamePribor 1 +  Passport NamePribor C@  \ название
+ STR>S
+ etalon ! \ копируем эталон для сравнения
+
+\ подключаем интерфейс и необходимую инициализацию для работы
+  PriborPassport_info interface  DUP 1+ SWAP C@    DUP . 
+
+STR>S >R
+  " .interface" R@ S+ R>     \ " name.interface" 
+  " ./prib/JDS6600/" DUP >R      S+ \ " ./prib/JDS6600/name.interface"
   
-  S" ./prib\JDS6600/haracter.spf"  
- INCLUDE-PROBE IF ."   ERROR haracteristic pribor not found  " CR -1 flag ! THEN \ СЃС‡РёС‚С‹РІР°РµРј С…Р°СЂР°РєС‚РµСЂРёСЃС‚РёРєРё РїСЂРёР±РѕСЂР° 
-  PriborPassport_info Passport PriborPassport CMOVE \ РєРѕРїРёСЂСѓРµРј СЃРІРµР¶РµСЃС‡РёС‚Р°РЅРЅС‹Рµ РґР°РЅРЅС‹Рµ РїРѕ РїСЂРёР±РѕСЂСѓ 
-  Passport NamePribor 1 +  Passport NamePribor C@  \ РЅР°Р·РІР°РЅРёРµ
-  STR>S
-\  " *pribor*"  
-  etalon !
-\ РјРµРЅСЏСЋ С„РѕСЂРјР°С‚ СЃС‚СЂРѕРєРё РІ РїРµСЂРµРјРµРЅРЅРѕР№ 
-\  STR>S  pribpath !
-\ " \haracter.spf" pribpath @ S+
-\ pribpath @ STR@  2DUP TYPE CR
-\ INCLUDE-PROBE IF  	 ."   ERROR haracteristic pribor 1: not found  " CR -1 flag ! THEN
-\ pribpath @ STRFREE
- 
-\  PriborPassport_info  Passport  PriborPassport CMOVE
-\ str_prib @ STR@ etalon @ STR@ WildCMP-U
-\ IF
-\	 ."   ERROR pribor 1 not found  " CR -1 flag ! 
-\ ELSE  
-\	str_prib @ STR@ TYPE CR 0 flag ! 
-\	." pribor -ok: "
-	\ PriborPassportSee
+ R@ STR@   ." full name interface: "  2DUP TYPE CR
+  
+  EVALUATE
+  R> STRFREE 
 
-\ THEN
-." name: "    PriborPassport_info Nameinterface  1+ DUP SWAP C@   TYPE CR
- ." adres: "    PriborPassport_info interface_data1   1+ DUP SWAP C@   TYPE CR
-\ com_port NewObj pribor !
-\ " COM3"  pribor @ ^  open
- 
-PriborPassport_info Nameinterface 1+ DUP SWAP C@    EVALUATE   NewObj generator !
-PriborPassport_info interface_data1  1+ DUP SWAP C@ STR>S generator @ ^ open
+ ." interface: "   PriborPassport_info interface  DUP 1 + SWAP C@	DUP . TYPE CR
+ ." name: "   PriborPassport_info Nameinterface   DUP 1 + SWAP C@		DUP . TYPE CR
+ ." adres: "    PriborPassport_info interface_data1   DUP 1 + SWAP C@	DUP . TYPE CR
+  
+ PriborPassport_info Nameinterface 1+ DUP SWAP C@    EVALUATE   NewObj pribor  !
+ PriborPassport_info interface_data1  1+ DUP SWAP C@ STR>S pribor  @ ^ open
 
-115200 8 0 0 generator  @ ^ set_comm ( BaudRate ByteSize StopBits Parity -- ior ) 
+\ PriborPassport_info interface_data2	\ pribor   @ StartInterface 
+ 115200 8 0 0   pribor   @ ^ set_comm ( BaudRate ByteSize StopBits Parity -- ior ) 
  
- 
-\ etalon @  STRFREE  str_prib @ STRFREE 
+ etalon @  STRFREE    
 ." testing no execute" CR
   CR
   flag @ DUP . CR
@@ -61,24 +53,24 @@ PriborPassport_info interface_data1  1+ DUP SWAP C@ STR>S generator @ ^ open
  
  
 : SetFreq    FDUP ." SetFreq=" F.
-  F>D  DROP  100 M* \ РЅР° СЃС‚РµРєРµ РґРІРѕР№РЅРѕРµ С‡РёСЃР»Рѕ!
+  F>D  DROP  100 M* \ на стеке двойное число!
 \   >NUM 
   (D.) " :w23=" DUP >R STR+  
   S" ." R@ STR+
 R>  S+CRLF    
 DUP STR@ TYPE
-  generator   @ ^   write  
+  pribor    @ ^   write  
  ; 
  
 : SetLevel    
   dBm->V  1e3 F* 
    ." SetLevel =" FDUP  F.   
-   F>D DROP  DUP .  >NUM        \ С‡РёСЃР»Рѕ С‚СЂРµР±СѓРµС‚СЃСЏ РІ РјРёР»РёРІРѕР»СЊС‚Р°С… 
+   F>D DROP  DUP .  >NUM        \ число требуется в миливольтах 
   " :w25=" DUP >R STR+  
   S" ." R@ STR+
   R>  S+CRLF    
   DUP STR@ TYPE
-  generator   @ ^   write  
+  pribor    @ ^   write  
  ;
   
 : GetLevel  ." GetLevel=" data F@ FDUP F. 1 ; 
@@ -86,11 +78,11 @@ DUP STR@ TYPE
 
 : Stop
  100 PAUSE
- generator @ ^    close \ Р·Р°РєСЂС‹Р»Рё РїРѕСЃР»Рµ РёСЃРїРѕР»СЊР·РѕРІР°РЅРёСЏ
- generator @ FreeObj
+ pribor  @ ^    close \ закрыли после использования
+ pribor  @ FreeObj
  ;
 
  
-;CLASS 1_Prib
-S" .....Load Pribor" TYPE CR
+;CLASS jds6600 
+S" .....Load jds6600" TYPE CR
 

@@ -1,51 +1,268 @@
-Воздействия необходим уровнем с предварительной калибровкой в заданных границах. 
-Воздействия восстанавливаются по измерителю.
-Воздействия необходим уровнем с предварительной калибровкой в заданных границах. 
-Воздействия восстанавливаются по генератору.
-простая подача сигнала с генератора по значениям калибровочных таблииц 
-без какого-либо контроля.
-снятие простой амплитудно-частотной характеристики. 
-1 генератор + 1 измеритель.
-Установка и поддержание тебуемого уровня воздействий в заданных границах.
-простая подача сигнала с генератора по значениям калибровочных таблииц 
-без какого-либо контроля.
-Проход по частоте, с установкой калибровочных данных в одной части цепи
-и последующим измерением параметров в другой части цепи.
-
-load grafic file :./metod/test/bildo.png 
-load grafic file :./metod/test/bildo.png 
-button_load_metod_click
-load metod file :./metod/test/metod.spf 
-StoFile isn't unique (./metod/test/metod.spf)
-FtoFile isn't unique (./metod/test/metod.spf)
-DtoFile isn't unique (./metod/test/metod.spf)
-CRtoFile isn't unique (./metod/test/metod.spf)
-TYPE_BUFER isn't unique (./metod/test/metod.spf)
-timer_ticket isn't unique (./metod/test/metod.spf)
-load glade file :metod/test/metod.glade 
-gtk_file_chooser_set_uri =1 
-. gtk_file_chooser_get_filename = 52315064 
-LOAD_TO_BUFER= C:\progs\SPForth\emctest\metod\test\default.nast
-  <10000>     <1000>     <1.0000000e04>     <6.0000000e04>     <1.0000000e01>     <3>     <0>   LOAD_TO_BUFER= C:\progs\SPForth\emctest\prib\default\pribor.prib
-LOAD_TO_BUFER= C:\progs\SPForth\emctest\metod\GenOnly\default.kal
----------------------------------------------
- COMMENT: Простой проход по частоте с использованием  заранее подготовленных настроек генератора. 
- STEP_TIME: 10000 
- STEP_PAUSE: 1000 
- FREQ_BEGIN: 1.0000000e04 
- FREQ_END:  6.0000000e04 
- FREQ_STEP:  1.0000000e01 
- file_generator_buf: C:\progs\SPForth\emctest\prib\default\pribor.prib
- file_kalibrov_buf: C:\progs\SPForth\emctest\metod\GenOnly\default.kal
- work_step: 0 
----------------------------------------------
-
-
-.........TreeView_start_metod_click
-  <7>   Directory   ./metod/test/default.kal
-dialog_filechooserbutton =1 
-....filechooserbutton_pribor =0 
-but_stop_click.filechooserbutton_pribor =0 
-filechooserbutton_pribor =0 
-
-Exit 
+CODE isn't unique (C:\progs\SPForth\lib/asm/486asm.f)
+gtk_file_chooser_get_current_folder isn't unique (C:\progs\SPForth\/emctest/gtk-api.spf)
+REQUIRE isn't unique (C:\progs\SPForth\devel/~day\lib\includemodule.f)
+strCRLF isn't unique (~disa\dopoln.f)
+'' isn't unique (~disa\dopoln.f)
+F. isn't unique (~disa\dopoln.f)
+FS. isn't unique (~disa\dopoln.f)
+>FNUM isn't unique (~disa\dopoln.f)
+GetLocalTime isn't unique (~disa\savefile.spf)
+XCOUNT isn't unique (~ac\STR_LIST.F)
+TYPE_BUFER isn't unique (pribor.f)
+pribor_passport start ......pribor passport.normal
+Exception #32 at: pribor.f:490:29:
+         S" pribor.exe   SAVE
+                           ^ 32 ERROR_SHARING_VIOLATION
+filechooserbutton_pribor =1 
+DEPTH =33716080  filechooserbutton_pribor_open   gtk_file_chooser_get_filename = 51241792 DEPTH =33716080 
+DEPTH  include =33716080 flag=-1 
+1 INCLUDE FILE: C:\progs\SPForth\emctest\prib\JDS6600\jds6600.prib
+Load jds6600...
+.....Load jds6600
+33716080 5756244 0 DEPTH OBJ =33716080 flag=-1 
+filechooserbutton_pribor_open=C:\progs\SPForth\emctest\prib\JDS6600\jds6600.prib 33716080 
+filechooserbutton_haracter_pribor_open=C:\progs\SPForth\emctest\prib\JDS6600\\haracter.spf1 
+LOAD_TO_BUFER 9 : *ids6600*
+LOAD_TO_BUFER 7 : COMPORT
+LOAD_TO_BUFER 0 : 
+LOAD_TO_BUFER 9 : \\.\COM21
+DEPTH=33716080 
+ PriborPassportSeeOne: 32 Refresh_param_prib_list Название прибора -> 3 
+ I: 1  
+ PriborPassportSeeOne: 42 Refresh_param_prib_list Минимальая частота, Гц -> 2 
+ I: 2  
+ PriborPassportSeeOne: 45 Refresh_param_prib_list максимальная частота, Гц-> 2 
+ I: 3  
+ PriborPassportSeeOne: 52 Refresh_param_prib_list Максимальный уровень, дБмВт -> 2 
+ I: 4  
+ PriborPassportSeeOne: 65 Refresh_param_prib_list Название интерфейса (COMPORT, ETHERNET,GPIB-NI)-> 5 
+ I: 5  
+ PriborPassportSeeOne: 27 Refresh_param_prib_list данные 1 (адрес)-> 3 
+ I: 6  
+ PriborPassportSeeOne: 42 Refresh_param_prib_list данные 2 (порт,скорость)-> 1 
+ I: 7  
+ PriborPassportSeeOne: 0 2 end _pribor_open DEPTH=33716080 
+ filechooserbutton_pribor= 50636024 
+ savefile= C:\progs\SPForth\emctest\prib\JDS6600\\haracter.spf
+ outFileCreate= C:\progs\SPForth\emctest\prib\JDS6600\\haracter.spf SAVE_PriborPassport 
+    6.0000000e04      PriborPassport_info FREQ_MIN			F!   
+     3.0000000e05      PriborPassport_info FREQ_MAX			F!   
+     0.0000000e00      PriborPassport_info LEVEL_MAX			F!   
+   "   *ids6600*  " PriborPassport_info NamePribor	LOAD_TO_BUFER   
+   "   COMPORT  " PriborPassport_info interface	LOAD_TO_BUFER   
+   "     " PriborPassport_info Nameinterface	LOAD_TO_BUFER   
+   "   \\.\COM21  " PriborPassport_info interface_data1	LOAD_TO_BUFER   
+     115200      PriborPassport_info interface_data2		!   
+ ...file-save. 
+treeview_param_prib_click
+TreeView_start_metod_click
+  <5>   flag: 3 
+ string: \\.\COM22 LOAD_TO_BUFER 9 : \\.\COM22
+ PriborPassportSeeOne: 32 Refresh_param_prib_list Название прибора -> 3 
+ I: 1  
+ PriborPassportSeeOne: 42 Refresh_param_prib_list Минимальая частота, Гц -> 2 
+ I: 2  
+ PriborPassportSeeOne: 45 Refresh_param_prib_list максимальная частота, Гц-> 2 
+ I: 3  
+ PriborPassportSeeOne: 52 Refresh_param_prib_list Максимальный уровень, дБмВт -> 2 
+ I: 4  
+ PriborPassportSeeOne: 65 Refresh_param_prib_list Название интерфейса (COMPORT, ETHERNET,GPIB-NI)-> 5 
+ I: 5  
+ PriborPassportSeeOne: 27 Refresh_param_prib_list данные 1 (адрес)-> 3 
+ I: 6  
+ PriborPassportSeeOne: 42 Refresh_param_prib_list данные 2 (порт,скорость)-> 1 
+ I: 7  
+ PriborPassportSeeOne: 0 2  filechooserbutton_pribor= 51241280 
+ savefile= C:\progs\SPForth\emctest\prib\JDS6600\\haracter.spf
+ outFileCreate= C:\progs\SPForth\emctest\prib\JDS6600\\haracter.spf SAVE_PriborPassport 
+    6.0000000e04      PriborPassport_info FREQ_MIN			F!   
+     3.0000000e05      PriborPassport_info FREQ_MAX			F!   
+     0.0000000e00      PriborPassport_info LEVEL_MAX			F!   
+   "   *ids6600*  " PriborPassport_info NamePribor	LOAD_TO_BUFER   
+   "   COMPORT  " PriborPassport_info interface	LOAD_TO_BUFER   
+   "     " PriborPassport_info Nameinterface	LOAD_TO_BUFER   
+   "   \\.\COM22  " PriborPassport_info interface_data1	LOAD_TO_BUFER   
+     115200      PriborPassport_info interface_data2		!   
+ ...file-save. 
+DEPTH =33716080  filechooserbutton_pribor_open   gtk_file_chooser_get_filename = 51554352 DEPTH =33716080 
+DEPTH  include =33716080 flag=-1 
+1 INCLUDE FILE: C:\progs\SPForth\emctest\prib\JDS6600\jds6600.prib
+Load jds6600...
+jds6600 isn't unique ()
+.....Load jds6600
+33716080 5758144 0 DEPTH OBJ =33716080 flag=-1 
+filechooserbutton_pribor_open=C:\progs\SPForth\emctest\prib\JDS6600\jds6600.prib 33716080 
+filechooserbutton_haracter_pribor_open=C:\progs\SPForth\emctest\prib\JDS6600\\haracter.spf1 
+LOAD_TO_BUFER 9 : *ids6600*
+LOAD_TO_BUFER 7 : COMPORT
+LOAD_TO_BUFER 0 : 
+LOAD_TO_BUFER 9 : \\.\COM22
+DEPTH=33716080 
+ PriborPassportSeeOne: 32 Refresh_param_prib_list Название прибора -> 3 
+ I: 1  
+ PriborPassportSeeOne: 42 Refresh_param_prib_list Минимальая частота, Гц -> 2 
+ I: 2  
+ PriborPassportSeeOne: 45 Refresh_param_prib_list максимальная частота, Гц-> 2 
+ I: 3  
+ PriborPassportSeeOne: 52 Refresh_param_prib_list Максимальный уровень, дБмВт -> 2 
+ I: 4  
+ PriborPassportSeeOne: 65 Refresh_param_prib_list Название интерфейса (COMPORT, ETHERNET,GPIB-NI)-> 5 
+ I: 5  
+ PriborPassportSeeOne: 27 Refresh_param_prib_list данные 1 (адрес)-> 3 
+ I: 6  
+ PriborPassportSeeOne: 42 Refresh_param_prib_list данные 2 (порт,скорость)-> 1 
+ I: 7  
+ PriborPassportSeeOne: 0 2 end _pribor_open DEPTH=33716080 
+treeview_param_prib_click
+TreeView_start_metod_click
+  <5>   flag: 3 
+ string: \\.\COM21 LOAD_TO_BUFER 9 : \\.\COM21
+ PriborPassportSeeOne: 32 Refresh_param_prib_list Название прибора -> 3 
+ I: 1  
+ PriborPassportSeeOne: 42 Refresh_param_prib_list Минимальая частота, Гц -> 2 
+ I: 2  
+ PriborPassportSeeOne: 45 Refresh_param_prib_list максимальная частота, Гц-> 2 
+ I: 3  
+ PriborPassportSeeOne: 52 Refresh_param_prib_list Максимальный уровень, дБмВт -> 2 
+ I: 4  
+ PriborPassportSeeOne: 65 Refresh_param_prib_list Название интерфейса (COMPORT, ETHERNET,GPIB-NI)-> 5 
+ I: 5  
+ PriborPassportSeeOne: 27 Refresh_param_prib_list данные 1 (адрес)-> 3 
+ I: 6  
+ PriborPassportSeeOne: 42 Refresh_param_prib_list данные 2 (порт,скорость)-> 1 
+ I: 7  
+ PriborPassportSeeOne: 0 2  filechooserbutton_pribor= 51553136 
+ savefile= C:\progs\SPForth\emctest\prib\JDS6600\\haracter.spf
+ outFileCreate= C:\progs\SPForth\emctest\prib\JDS6600\\haracter.spf SAVE_PriborPassport 
+    6.0000000e04      PriborPassport_info FREQ_MIN			F!   
+     3.0000000e05      PriborPassport_info FREQ_MAX			F!   
+     0.0000000e00      PriborPassport_info LEVEL_MAX			F!   
+   "   *ids6600*  " PriborPassport_info NamePribor	LOAD_TO_BUFER   
+   "   COMPORT  " PriborPassport_info interface	LOAD_TO_BUFER   
+   "     " PriborPassport_info Nameinterface	LOAD_TO_BUFER   
+   "   \\.\COM21  " PriborPassport_info interface_data1	LOAD_TO_BUFER   
+     115200      PriborPassport_info interface_data2		!   
+ ...file-save. 
+treeview_param_prib_click
+TreeView_start_metod_click
+  <1>   flag: 2 
+ NUMBER: 1.0000000e00   <1.0000000e00>    1.0000000e00 
+ PriborPassportSeeOne: 32 Refresh_param_prib_list Название прибора -> 3 
+ I: 1  
+ PriborPassportSeeOne: 42 Refresh_param_prib_list Минимальая частота, Гц -> 2 
+ I: 2  
+ PriborPassportSeeOne: 45 Refresh_param_prib_list максимальная частота, Гц-> 2 
+ I: 3  
+ PriborPassportSeeOne: 52 Refresh_param_prib_list Максимальный уровень, дБмВт -> 2 
+ I: 4  
+ PriborPassportSeeOne: 65 Refresh_param_prib_list Название интерфейса (COMPORT, ETHERNET,GPIB-NI)-> 5 
+ I: 5  
+ PriborPassportSeeOne: 27 Refresh_param_prib_list данные 1 (адрес)-> 3 
+ I: 6  
+ PriborPassportSeeOne: 42 Refresh_param_prib_list данные 2 (порт,скорость)-> 1 
+ I: 7  
+ PriborPassportSeeOne: 0 2 treeview_param_prib_click
+TreeView_start_metod_click
+  <2>   flag: 2 
+ NUMBER: 60.0000000e6   <60.0000000e6>    6.0000000e07 
+ PriborPassportSeeOne: 32 Refresh_param_prib_list Название прибора -> 3 
+ I: 1  
+ PriborPassportSeeOne: 42 Refresh_param_prib_list Минимальая частота, Гц -> 2 
+ I: 2  
+ PriborPassportSeeOne: 45 Refresh_param_prib_list максимальная частота, Гц-> 2 
+ I: 3  
+ PriborPassportSeeOne: 52 Refresh_param_prib_list Максимальный уровень, дБмВт -> 2 
+ I: 4  
+ PriborPassportSeeOne: 65 Refresh_param_prib_list Название интерфейса (COMPORT, ETHERNET,GPIB-NI)-> 5 
+ I: 5  
+ PriborPassportSeeOne: 27 Refresh_param_prib_list данные 1 (адрес)-> 3 
+ I: 6  
+ PriborPassportSeeOne: 42 Refresh_param_prib_list данные 2 (порт,скорость)-> 1 
+ I: 7  
+ PriborPassportSeeOne: 0 2 treeview_param_prib_click
+TreeView_start_metod_click
+  <3>   flag: 2 
+ NUMBER: 146   <146>    1.4600000e02 
+ PriborPassportSeeOne: 32 Refresh_param_prib_list Название прибора -> 3 
+ I: 1  
+ PriborPassportSeeOne: 42 Refresh_param_prib_list Минимальая частота, Гц -> 2 
+ I: 2  
+ PriborPassportSeeOne: 45 Refresh_param_prib_list максимальная частота, Гц-> 2 
+ I: 3  
+ PriborPassportSeeOne: 52 Refresh_param_prib_list Максимальный уровень, дБмВт -> 2 
+ I: 4  
+ PriborPassportSeeOne: 65 Refresh_param_prib_list Название интерфейса (COMPORT, ETHERNET,GPIB-NI)-> 5 
+ I: 5  
+ PriborPassportSeeOne: 27 Refresh_param_prib_list данные 1 (адрес)-> 3 
+ I: 6  
+ PriborPassportSeeOne: 42 Refresh_param_prib_list данные 2 (порт,скорость)-> 1 
+ I: 7  
+ PriborPassportSeeOne: 0 2  filechooserbutton_pribor= 51553712 
+ savefile= C:\progs\SPForth\emctest\prib\JDS6600\\haracter.spf
+ outFileCreate= C:\progs\SPForth\emctest\prib\JDS6600\\haracter.spf SAVE_PriborPassport 
+    1.0000000e00      PriborPassport_info FREQ_MIN			F!   
+     6.0000000e07      PriborPassport_info FREQ_MAX			F!   
+     1.4600000e02      PriborPassport_info LEVEL_MAX			F!   
+   "   *ids6600*  " PriborPassport_info NamePribor	LOAD_TO_BUFER   
+   "   COMPORT  " PriborPassport_info interface	LOAD_TO_BUFER   
+   "     " PriborPassport_info Nameinterface	LOAD_TO_BUFER   
+   "   \\.\COM21  " PriborPassport_info interface_data1	LOAD_TO_BUFER   
+     115200      PriborPassport_info interface_data2		!   
+ ...file-save. 
+DEPTH =33716080  filechooserbutton_pribor_open   gtk_file_chooser_get_filename = 51243584 DEPTH =33716080 
+DEPTH  include =33716080 flag=-1 
+1 INCLUDE FILE: C:\progs\SPForth\emctest\prib\default\pribor.prib
+Load Pribor...
+.....Load Pribor
+33716080 5760044 0 DEPTH OBJ =33716080 flag=-1 
+filechooserbutton_pribor_open=C:\progs\SPForth\emctest\prib\default\pribor.prib 33716080 
+filechooserbutton_haracter_pribor_open=C:\progs\SPForth\emctest\prib\default\haracter.spf1 
+LOAD_TO_BUFER 8 : *pribor*
+LOAD_TO_BUFER 50 : C:\progs\SPForth\emctest\interface\TCPIP.interface
+LOAD_TO_BUFER 11 : socket_port
+LOAD_TO_BUFER 12 : 10.10.10.112
+DEPTH=33716080 
+ PriborPassportSeeOne: 32 Refresh_param_prib_list Название прибора -> 3 
+ I: 1  
+ PriborPassportSeeOne: 42 Refresh_param_prib_list Минимальая частота, Гц -> 2 
+ I: 2  
+ PriborPassportSeeOne: 45 Refresh_param_prib_list максимальная частота, Гц-> 2 
+ I: 3  
+ PriborPassportSeeOne: 52 Refresh_param_prib_list Максимальный уровень, дБмВт -> 2 
+ I: 4  
+ PriborPassportSeeOne: 65 Refresh_param_prib_list Название интерфейса (COMPORT, ETHERNET,GPIB-NI)-> 5 
+ I: 5  
+ PriborPassportSeeOne: 27 Refresh_param_prib_list данные 1 (адрес)-> 3 
+ I: 6  
+ PriborPassportSeeOne: 42 Refresh_param_prib_list данные 2 (порт,скорость)-> 1 
+ I: 7  
+ PriborPassportSeeOne: 0 2 end _pribor_open DEPTH=33716080 
+DEPTH =33716080  filechooserbutton_pribor_open   gtk_file_chooser_get_filename = 51553584 DEPTH =33716080 
+DEPTH  include =33716080 flag=-1 
+1 INCLUDE FILE: C:\progs\SPForth\emctest\prib\JDS6600\jds6600.prib
+Load jds6600...
+jds6600 isn't unique ()
+.....Load jds6600
+33716080 5761064 0 DEPTH OBJ =33716080 flag=-1 
+filechooserbutton_pribor_open=C:\progs\SPForth\emctest\prib\JDS6600\jds6600.prib 33716080 
+filechooserbutton_haracter_pribor_open=C:\progs\SPForth\emctest\prib\JDS6600\\haracter.spf1 
+LOAD_TO_BUFER 9 : *ids6600*
+LOAD_TO_BUFER 7 : COMPORT
+LOAD_TO_BUFER 0 : 
+LOAD_TO_BUFER 9 : \\.\COM21
+DEPTH=33716080 
+ PriborPassportSeeOne: 32 Refresh_param_prib_list Название прибора -> 3 
+ I: 1  
+ PriborPassportSeeOne: 42 Refresh_param_prib_list Минимальая частота, Гц -> 2 
+ I: 2  
+ PriborPassportSeeOne: 45 Refresh_param_prib_list максимальная частота, Гц-> 2 
+ I: 3  
+ PriborPassportSeeOne: 52 Refresh_param_prib_list Максимальный уровень, дБмВт -> 2 
+ I: 4  
+ PriborPassportSeeOne: 65 Refresh_param_prib_list Название интерфейса (COMPORT, ETHERNET,GPIB-NI)-> 5 
+ I: 5  
+ PriborPassportSeeOne: 27 Refresh_param_prib_list данные 1 (адрес)-> 3 
+ I: 6  
+ PriborPassportSeeOne: 42 Refresh_param_prib_list данные 2 (порт,скорость)-> 1 
+ I: 7  
+ PriborPassportSeeOne: 0 2 end _pribor_open DEPTH=33716080 

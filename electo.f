@@ -15,11 +15,12 @@ STARTLOG
   
   
 : LOAD_TO_BUFER { s-adr adr \ u   -- }
-s-adr STR@  TYPE CR
+s-adr STR@  ." LOAD_TO_BUFER "  DUP . ." : " TYPE CR
 s-adr STR@  DUP 255 > IF DROP 255 THEN -> u
 adr  1+ u CMOVE 
 s-adr STRFREE
 u adr  C!
+
 ;
 
 \ работа с приборами (временно, не придумал куда девать)

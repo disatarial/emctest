@@ -7,6 +7,7 @@
 \  VOCABULARY com_port
 \ ALSO com_port  DEFINITIONS
 REQUIRE  HYPE ~day\hype3\hype3.f
+
 CLASS com_port
 32 CELLS CONSTANT num_bufer_port
 CELL PROPERTY idport

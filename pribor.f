@@ -11,6 +11,15 @@ STARTLOG
  REQUIRE AddNode ~ac\STR_LIST.F            \ список
  REQUIRE  STR@ ~ac\str5.f                    \ работа с динамическими строками
  
+  
+: LOAD_TO_BUFER { s-adr adr \ u   -- }
+s-adr STR@  ." LOAD_TO_BUFER "  DUP . ." : " TYPE CR
+s-adr STR@  DUP 255 > IF DROP 255 THEN -> u
+adr  1+ u CMOVE 
+s-adr STRFREE
+u adr  C!
+
+;
 
 VARIABLE num_data \ номер последних/текущих данных в списке  gtk_tree... только для передачи внутри граф. интерфейса
 VARIABLE LoadPribor \ загруженый прибор
@@ -71,8 +80,8 @@ VARIABLE  buttonSavePribor
 
 VARIABLE  filefilter_prib
 VARIABLE  filechooserbutton_pribor 
-VARIABLE  filechooserbuttoninterface
-VARIABLE  filefilter_interface
+\ VARIABLE  filechooserbuttoninterface
+\ VARIABLE  filefilter_interface
 
  
 \ диалог ввода цифр и файлов в методы  
@@ -89,7 +98,7 @@ VARIABLE  entry_proverka
   
   
 \ различные итераторвы
- 0 , HERE  64 ALLOT  VALUE iter_store_interface
+\ 0 , HERE  64 ALLOT  VALUE iter_store_interface
  0 , HERE  64 ALLOT  VALUE iter_store_pribor
 \ 0 , HERE  64 ALLOT  VALUE iter_n
 \ 0 , HERE  64 ALLOT  VALUE iter_k
@@ -236,12 +245,12 @@ column path tree_view 	window @   ;  3 CELLS  CALLBACK:  treeview_param_prib_cli
    DUP 0 = IF DROP S"   " DROP DUP 0 SWAP 1 + C! THEN  ASCIIZ>  STR>S  -> s   \ " sava.txt"  
 
  \ DEPTH . 
-     filechooserbuttoninterface  @ 1 gtk_file_chooser_get_filename    DUP  ."  filechooserbuttoninterface= " . CR
-   DUP 0 = IF DROP S"   " DROP DUP 0 SWAP 1 + C! THEN ASCIIZ> STR>S  -> int   \  interface  
+\     filechooserbuttoninterface  @ 1 gtk_file_chooser_get_filename    DUP  ."  filechooserbuttoninterface= " . CR
+\   DUP 0 = IF DROP S"   " DROP DUP 0 SWAP 1 + C! THEN ASCIIZ> STR>S  -> int   \  interface  
    
 \ DEPTH . 
-s STR@ ?STR_FILE int STR@ ?STR_FILE
-  AND 
+s STR@ ?STR_FILE  \ int STR@ ?STR_FILE
+  \ AND 
   IF  \ оба файла в наличии
 	s STR@ 12 - STR>S -> s2  \ удалили название файла
 	s STRFREE
@@ -262,7 +271,7 @@ s STR@ ?STR_FILE int STR@ ?STR_FILE
  ELSE
  ." ...file not save. " CR
  THEN
- int STRFREE
+ \ int STRFREE
  s STRFREE
 \  DEPTH .
 1000 PAUSE
@@ -342,21 +351,22 @@ dialog   @
  :NONAME 	dialog @  1 gtk_widget_hide DROP  
  0 ;  1 CELLS  CALLBACK: button_error_click
  
-  :NONAME   { \ s   }
- ."  filechooserbuttoninterface_open  " 
+ 
+\  :NONAME   { \ s   }
+\ ."  filechooserbuttoninterface_open  " 
 \ грузим имя настроек
-   filechooserbuttoninterface  @ 1 gtk_file_chooser_get_filename    DUP  ."  filechooserbuttoninterface_open = " . CR
+\   filechooserbuttoninterface  @ 1 gtk_file_chooser_get_filename    DUP  ."  filechooserbuttoninterface_open = " . CR
 \ DEPTH .
-  DUP  IF \  DEPTH .
+\  DUP  IF \  DEPTH .
 \ грузим файл прибора настройки
-	ASCIIZ> STR>S   -> s   DEPTH . 
-	s STR@  INCLUDE-PROBE   DEPTH . 
-." filechooserbuttoninterface_open2=" s STR@ TYPE  DEPTH . CR
-		IF     " Error: load pribor-file problem  " STYPE CR \  error_metod_file :ERROR    
-		ELSE  
-		s SaveInterface 
-		"" -> s
-		THEN
+\	ASCIIZ> STR>S   -> s   DEPTH . 
+\	s STR@  INCLUDE-PROBE   DEPTH . 
+\ ." filechooserbuttoninterface_open2=" s STR@ TYPE  DEPTH . CR
+\		IF     " Error: load pribor-file problem  " STYPE CR \  error_metod_file :ERROR    
+\		ELSE  
+\		s SaveInterface 
+\		"" -> s
+\		THEN
 \ грузим настройки
 \	s STR@ 12 - STR>S -> s2 
 \    " \haracter.spf"  s2  	  S+
@@ -364,16 +374,16 @@ dialog   @
 \  s2 STR@ INCLUDE-PROBE 	 
 \		IF     " Error: load haracter-pribor problem  "  \  error_metod_file :ERROR     
 	\	THEN
-	 s STRFREE
+\	 s STRFREE
  \ s2 STRFREE
-  THEN \ IF EXIT THEN
-  ." DEPTH=" DEPTH .   CR 
+\  THEN \ IF EXIT THEN
+\  ." DEPTH=" DEPTH .   CR 
   
 
-  Refresh_param_prib_list
+\  Refresh_param_prib_list
 \ DROP
  
-  window @  ;  1 CELLS  CALLBACK: filechooserbuttoninterface_open  
+\  window @  ;  1 CELLS  CALLBACK: filechooserbuttoninterface_open  
  
  :NONAME  
  ." button_proverka_click "  CR
@@ -418,12 +428,12 @@ dialog   @
     
 
   \ указатель для загрузки , устанавливаем фильтр для интерфейсов
- " filechooserbuttoninterface" >R  R@ STR@  DROP builder_pribor   @  2 gtk_builder_get_object filechooserbuttoninterface !    R> STRFREE \ 2DROP
- " filefilter_interface" >R  R@ STR@  DROP builder_pribor   @  2 gtk_builder_get_object filefilter_interface !    R> STRFREE \ 2DROP
-  filefilter_interface @ filechooserbuttoninterface @ 2 gtk_file_chooser_add_filter DROP
- " ./interface/" >R  R@ STR@  DROP filechooserbuttoninterface  @ 2 gtk_file_chooser_set_current_folder   R> STRFREE  ." filefilter_interface =" . CR 
+\ " filechooserbuttoninterface" >R  R@ STR@  DROP builder_pribor   @  2 gtk_builder_get_object filechooserbuttoninterface !    R> STRFREE \ 2DROP
+\ " filefilter_interface" >R  R@ STR@  DROP builder_pribor   @  2 gtk_builder_get_object filefilter_interface !    R> STRFREE \ 2DROP
+\  filefilter_interface @ filechooserbuttoninterface @ 2 gtk_file_chooser_add_filter DROP
+\ " ./interface/" >R  R@ STR@  DROP filechooserbuttoninterface  @ 2 gtk_file_chooser_set_current_folder   R> STRFREE  ." filefilter_interface =" . CR 
 
-  " file-set"    >R 0 0 0  ['] filechooserbuttoninterface_open  R@ STR@ DROP filechooserbuttoninterface @ 6 g_signal_connect_data   R> STRFREE  DROP \ 2DROP 2DROP 2DROP
+ \ " file-set"    >R 0 0 0  ['] filechooserbuttoninterface_open  R@ STR@ DROP filechooserbuttoninterface @ 6 g_signal_connect_data   R> STRFREE  DROP \ 2DROP 2DROP 2DROP
 
 
 
