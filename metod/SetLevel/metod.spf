@@ -753,7 +753,8 @@ CALLBACK: button_load_data_metod_click
 		work-info  ERROR_PROG @ 0=  \ проверяем на ошибки формы 
 		IF	
 			['] WorkCicle  TASK work-info work_thread !
-			work-info work_thread @ START 
+			0 work-info work_thread @ START 
+			 work-info tid-thead !
 		THEN
 	THEN
 	Refresh_list 
@@ -780,21 +781,22 @@ CALLBACK: but_start_click
 		CLEAR_ERROR_BUFER
 	THEN
 	
-	work-info -upravl_thead- @    work_Execute  \  2DUP . . 
-	=  \ работает?
+	work-info -upravl_thead- @    work_Execute = \  2DUP . .   \ работает?
+	work-info -upravl_thead- @    work_Pause  = \  2DUP . .    | пауза
+	OR 
 	IF 
 		0 button_start @ 2 gtk_widget_set_sensitive DROP
-		-1 button_stop @ 2 gtk_widget_set_sensitive DROP
-		-1 button_pause @ 2 gtk_widget_set_sensitive DROP
+		1 button_stop @ 2 gtk_widget_set_sensitive DROP
+		1 button_pause @ 2 gtk_widget_set_sensitive DROP
 		\ work-info tid-thead   @ SUSPEND  work_Pause   work-info -upravl_thead- !
-	ELSE \ в паузе
+	ELSE \ в стопе  
 \		work_Execute  work-info -upravl_thead- !   work-info tid-thead  @ RESUME  
 		\ -upravl_thead- work_Pause = IF -work_thead-   RESUME  work_Execute  TO -upravl_thead-   ELSE  -work_thead-  SUSPEND  work_Pause  TO -upravl_thead- THEN 
-		-1 button_start @ 2 gtk_widget_set_sensitive DROP
+		1 button_start @ 2 gtk_widget_set_sensitive DROP
 		0 button_stop @ 2 gtk_widget_set_sensitive DROP
 		0 button_pause @ 2 gtk_widget_set_sensitive DROP
 	THEN	
-	
+		
 	textview_result_bufer @  1 gtk_text_buffer_get_insert -> s
 	0 0 0 0 s textview_result @ 6 gtk_text_view_scroll_to_mark DROP
 	

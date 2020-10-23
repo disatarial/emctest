@@ -144,7 +144,10 @@ CONSTANT sysup-metod-info
 	DUP 50 < 
 	IF  PAUSE  
 	ELSE 50 / 
-		0 DO work-info -upravl_thead- @  work_Execute = 
+		0 DO 
+			work-info -upravl_thead- @  work_Execute = 
+			work-info -upravl_thead- @  work_Pause = 
+			OR
 			IF  50 PAUSE THEN    
 		LOOP 
 	THEN 
@@ -297,11 +300,9 @@ CONSTANT sysup-metod-info
 : WORK:     || F: gen F: kal  D: n_step   ||
 	  ."  work... "
 \	 metod-info FREQ  F@   F.
-	 \ учтанавливаем частоту
-	 metod-info FREQ  F@    metod-info generator	@ ^ SetFreq  
-	\ metod-info FREQ  F@   metod-info kalibr_izm	@ ^ SetFreq 
-
-	metod-info FREQ  F@ 2 metod-info kalibrovka @ ^ TakeData  gen F!  \ начальные данные генератора
+	 \ уcтанавливаем частоту
+	metod-info FREQ  F@    metod-info generator	@ ^ SetFreq  
+        metod-info FREQ  F@ 2 metod-info kalibrovka @ ^ TakeData  gen F!  \ начальные данные генератора
 
 \ частота
 	 metod-info FREQ  F@   metod-info result @ FtoFile  
@@ -363,7 +364,7 @@ CONSTANT sysup-metod-info
  ;
 
 \ один шаг по частоте
-: WorkStep
+: WorkSteps
 	work_Execute work-info -upravl_thead- !
 	 \  work-info FREQ_BEGIN  F@ work-info  FREQ F!
 	\ WORK_BEGIN:
@@ -371,6 +372,8 @@ CONSTANT sysup-metod-info
 		\ ."  -1- "
 		\ завершение работы, штатное/принудительное
 		work-info  -upravl_thead- @ work_Execute = 
+	\	work-info  -upravl_thead- @ work_Pause = 
+	\	OR
 		IF 
 			IF_END:    \
 		ELSE  0 
@@ -398,7 +401,7 @@ CONSTANT sysup-metod-info
 		" word BEGIN problem  " error_end_problem  :ERROR  DROP
 	ELSE \ если инициализация прошла 
 		CR ." word BEGIN  - ok  " CR
-		['] WorkStep CATCH  
+		['] WorkSteps CATCH  
 		IF   
 			" word WorkCicle problem "  error_cicle_problem  :ERROR  DROP
 			\	  error_cicle_problem work-info  ERROR_PROG ! 
@@ -718,7 +721,9 @@ CALLBACK: button_load_data_metod_click
 		work-info  ERROR_PROG @ 0=  \ проверяем на ошибки формы 
 		IF	
 			['] WorkCicle  TASK work-info work_thread !
-			work-info work_thread @ START 
+			0 work-info work_thread @ START  
+			 					
+			   work-info tid-thead !
 		THEN
 	THEN
 	Refresh_list
@@ -745,17 +750,18 @@ CALLBACK: but_start_click
 		CLEAR_ERROR_BUFER
 	THEN
 	
-	work-info -upravl_thead- @    work_Execute  \  2DUP . . 
-	=  \ работает?
+	work-info -upravl_thead- @    work_Execute = \  2DUP . .   \ работает?
+	work-info -upravl_thead- @    work_Pause  = \  2DUP . .    | пауза
+	OR 
 	IF 
 		0 button_start @ 2 gtk_widget_set_sensitive DROP
-		-1 button_stop @ 2 gtk_widget_set_sensitive DROP
-		-1 button_pause @ 2 gtk_widget_set_sensitive DROP
+		1 button_stop @ 2 gtk_widget_set_sensitive DROP
+		1 button_pause @ 2 gtk_widget_set_sensitive DROP
 		\ work-info tid-thead   @ SUSPEND  work_Pause   work-info -upravl_thead- !
-	ELSE \ в паузе
+	ELSE \ в стопе  
 \		work_Execute  work-info -upravl_thead- !   work-info tid-thead  @ RESUME  
 		\ -upravl_thead- work_Pause = IF -work_thead-   RESUME  work_Execute  TO -upravl_thead-   ELSE  -work_thead-  SUSPEND  work_Pause  TO -upravl_thead- THEN 
-		-1 button_start @ 2 gtk_widget_set_sensitive DROP
+		1 button_start @ 2 gtk_widget_set_sensitive DROP
 		0 button_stop @ 2 gtk_widget_set_sensitive DROP
 		0 button_pause @ 2 gtk_widget_set_sensitive DROP
 	THEN	
@@ -787,9 +793,12 @@ CALLBACK:  timer_ticket
 :NONAME  ." but_pause_click"	
 	 work-info -upravl_thead- @  work_Execute =  \ работает?
 	IF 
-		work-info tid-thead   @ SUSPEND  work_Pause   work-info -upravl_thead- !
+		work-info tid-thead   @  SUSPEND  
+		work_Pause   work-info -upravl_thead- !
+
 	ELSE \ в паузе
-		work_Execute  work-info -upravl_thead- !   work-info tid-thead  @ RESUME  
+		work_Execute  work-info -upravl_thead- !   
+		work-info tid-thead  @   RESUME  
 		\ -upravl_thead- work_Pause = IF -work_thead-   RESUME  work_Execute  TO -upravl_thead-   ELSE  -work_thead-  SUSPEND  work_Pause  TO -upravl_thead- THEN 
 	THEN	
 	0 ;  1 CELLS  
