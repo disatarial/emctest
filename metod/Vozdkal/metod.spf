@@ -143,6 +143,7 @@ CONSTANT sysup-metod-info
 : :ERROR  { s-adr-err n-err  }  s-adr-err  TO_ERROR_PROG_BUFER  n-err work-info  ERROR_PROG ! TYPE_ERROR_PROG_BUFER   -1 ;
 
 : PAUSE-PROG 
+ABS
 	DUP 50 < 
 	IF  PAUSE  
 	ELSE 50 / 
@@ -260,6 +261,10 @@ CONSTANT sysup-metod-info
 	 ENDCASE
 	metod-info FREQ  F!  
 \ ."  v4 " DEPTH . FDEPTH . ."  " 
+\ metod-info STEP_TIME @ 0 <
+\	IF
+\		work_Pause  work-info -upravl_thead- !  
+\	THEN
 ; 
 
 
@@ -425,19 +430,25 @@ work_Execute work-info -upravl_thead- @ =
 
 \ записали данные генератора 
 	gen F@  metod-info generator @ ^ SetLevel  \  выставляем данные генератора
-	metod-info STEP_TIME @ PAUSE-PROG
+	500 1000 Beep
+\	metod-info STEP_TIME @ PAUSE-PROG
+
 	 gen  F@   metod-info result @ FtoFile  
 	"          "  metod-info result @  StoFile
 \ записали полученную калибровку
 	metod-info   kalwork @    
 	IF  \ только в режиме калибровки
 		\ калибровочные данные
+		metod-info STEP_TIME @ PAUSE-PROG
 		 metod-info kalibr_izm	@ ^ GetLevel  DUP 0 >   IF   0 DO   metod-info result @ FtoFile  LOOP ELSE DROP    THEN
 		 "    "  metod-info result @  StoFile  
 	ELSE
 		metod-info FREQ  F@ 3 metod-info kalibrovka @ ^ TakeData  	 \ данные калибровки
 		 metod-info result @ FtoFile 
+\		 metod-info kalibr_izm	@ ^ GetLevel  DUP 0 >   IF   0 DO   metod-info result @ FtoFile  LOOP ELSE DROP    THEN
+
 		  "    "  metod-info result @  StoFile  
+		metod-info STEP_TIME @ PAUSE-PROG
 	THEN
 
 \ записали номер шага
@@ -636,7 +647,12 @@ VARIABLE  checkbutton_kal \ режим калибровки
 :NONAME 
 	." but_stop_click"	
  \	0 work-info  ERROR_PROG  !	\ сбраcываем ошибки
+\	 metod-info STEP_TIME @ 0 <
+\	IF
+\		 work-info tid-thead  @ RESUME  
+\	THEN
 	work_Stop work-info -upravl_thead- ! 	
+\
 	0 ;  1 CELLS  
 CALLBACK: but_stop_click 
 
@@ -867,19 +883,31 @@ CALLBACK: but_start_click
 	THEN
 	
 	work-info -upravl_thead- @    work_Execute = \  2DUP . .   \ работает?
-	work-info -upravl_thead- @    work_Pause  = \  2DUP . .    | пауза
-	OR 
 	IF 
 		0 button_start @ 2 gtk_widget_set_sensitive DROP
 		1 button_stop @ 2 gtk_widget_set_sensitive DROP
 		1 button_pause @ 2 gtk_widget_set_sensitive DROP
-		\ work-info tid-thead   @ SUSPEND  work_Pause   work-info -upravl_thead- !
-	ELSE \ в стопе  
+	THEN
+	
+	work-info -upravl_thead- @    work_Stop  = \  2DUP . .    | пауза 
+	IF \ в стопе  
 \		work_Execute  work-info -upravl_thead- !   work-info tid-thead  @ RESUME  
-		\ -upravl_thead- work_Pause = IF -work_thead-   RESUME  work_Execute  TO -upravl_thead-   ELSE  -work_thead-  SUSPEND  work_Pause  TO -upravl_thead- THEN 
 		1 button_start @ 2 gtk_widget_set_sensitive DROP
 		0 button_stop @ 2 gtk_widget_set_sensitive DROP
 		0 button_pause @ 2 gtk_widget_set_sensitive DROP
+	THEN	
+	work-info -upravl_thead- @    work_Pause  = \  2DUP . .    | пауза 
+	IF \ в паузе
+\		work_Execute  work-info -upravl_thead- !   work-info tid-thead  @ RESUME  
+		0 button_start @ 2 gtk_widget_set_sensitive DROP
+\		 metod-info STEP_TIME @ 0 <
+\		 IF \ 
+\		       work-info tid-thead  @ SUSPEND  
+\			1 button_stop @ 2 gtk_widget_set_sensitive DROP
+\		 ELSE
+			0 button_stop @ 2 gtk_widget_set_sensitive DROP				
+\		 THEN
+		1 button_pause @ 2 gtk_widget_set_sensitive DROP
 	THEN	
 	
 	textview_result_bufer @  1 gtk_text_buffer_get_insert -> s
