@@ -79,7 +79,8 @@ CVAPI: gtk_file_chooser_set_current_folder	libgtk-3-0.dll
 CVAPI: gtk_image_set_from_file			libgtk-3-0.dll 
 
 CVAPI: gtk_toggle_button_get_active		libgtk-3-0.dll 
-    
+
+WINAPI: Beep Kernel32.dll    
 0
 CELL -- domain
 CELL -- code \ 

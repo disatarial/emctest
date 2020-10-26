@@ -91,7 +91,7 @@ HERE DUP >R DCB DUP ALLOT ERASE VALUE MyDCB
 : open {  str  --  handle -1 }  \ for example string "com1" or "com2"
 \ -> str 
  0 0 OPEN_EXISTING 0 0 GENERIC_READ GENERIC_WRITE OR str STR@ DROP  CreateFileA
- DUP -1 = IF DROP -1 ELSE 0 THEN THROW  idport !
+ DUP -1 = IF DROP -1 ELSE 0 THEN  SWAP idport !
  str STRFREE
 ;
 

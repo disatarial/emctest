@@ -346,7 +346,13 @@ ABS
 	\	metod-info result @	CRtoFile 
 	\	" x= [{CRLF}" metod-info result @ StoFile
 	\ metod-info generator @ ^ On
-	metod-info   FREQ_BEGIN F@ metod-info   FREQ  F!  
+	metod-info FREQ_STEP F@ 0e F>
+	IF \ едем вверх
+	   metod-info   FREQ_BEGIN F@ metod-info   FREQ  F!  
+	ELSE \ едем вниз
+	  metod-info   FREQ_END F@ metod-info   FREQ  F!  
+	THEN
+
 	-1e10 metod-info  prev_gen F!  \ забиваем  предыдущее значение   большой отрицательной  (мелкой) величиной
 
 	." begin-ok"

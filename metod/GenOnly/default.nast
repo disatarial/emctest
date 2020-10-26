@@ -3,7 +3,7 @@ COMMENT( Простой проход по частоте с использова
  "  1000 " S>FLOAT DROP F>D DROP  metod-info STEP_PAUSE          ! 
  "  1.0000000e03 " S>FLOAT DROP           metod-info FREQ_BEGIN          F! 
  "  5.0000000e03 " S>FLOAT DROP           metod-info FREQ_END            F! 
- "  -1.0000000e00 " S>FLOAT DROP           metod-info FREQ_STEP           F! 
+ "  1.0000000e00 " S>FLOAT DROP           metod-info FREQ_STEP           F! 
  "  3 " S>FLOAT DROP F>D DROP  metod-info FREQ_DEGREE	   ! 
  "  0 " S>FLOAT DROP F>D DROP  metod-info work_step           ! 
  " C:\progs\SPForth\emctest\prib\JDS6600\jds6600.prib" metod-info file_generator_buf	LOAD_TO_BUFER 

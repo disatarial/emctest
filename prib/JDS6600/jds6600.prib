@@ -40,11 +40,13 @@ STR>S >R
  ." adres: "    PriborPassport_info interface_data1   DUP 1 + SWAP C@	DUP . TYPE CR
   
  PriborPassport_info Nameinterface 1+ DUP SWAP C@    EVALUATE   NewObj pribor  !
- PriborPassport_info interface_data1  1+ DUP SWAP C@ STR>S pribor  @ ^ open
-
-\ PriborPassport_info interface_data2	\ pribor   @ StartInterface 
- 115200 8 0 0   pribor   @ ^ set_comm ( BaudRate ByteSize StopBits Parity -- ior ) 
- 
+ PriborPassport_info interface_data1  1+ DUP SWAP C@ STR>S pribor  @ ^ open 
+ IF \ ошибка
+	-1 flag !
+ ELSE
+	\ PriborPassport_info interface_data2	\ pribor   @ StartInterface 
+	 115200 8 0 0   pribor   @ ^ set_comm ( BaudRate ByteSize StopBits Parity -- ior ) 
+  THEN 
  etalon @  STRFREE    
 ." testing no execute" CR
   CR

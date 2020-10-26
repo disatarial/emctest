@@ -239,11 +239,11 @@ STARTLOG
  
 \ : T S" .\metod\*.*" ['] addListMetod FIND-FILES ; T
 
- 
+ start
 \ EOF
   FALSE TO ?GUI
   \   ' CECONSOLE MAINX !
 	 ' start MAINX !
          S" emctest.exe"  SAVE
 \	BYE
- start
+\ start
