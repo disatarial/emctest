@@ -1,11 +1,11 @@
 COMMENT( испытания по ГОСТ РВ 6601 с одним  проходом по частоте и настройкой поля по датчику.)
  "  1000 " S>FLOAT DROP F>D DROP  metod-info STEP_TIME           !  
  "  1000 " S>FLOAT DROP F>D DROP  metod-info STEP_PAUSE          ! 
- "  1.0000000e07 " S>FLOAT DROP           metod-info FREQ_BEGIN          F! 
- "  2.0000000e07 " S>FLOAT DROP           metod-info FREQ_END            F! 
+ "  1.0000000e06 " S>FLOAT DROP           metod-info FREQ_BEGIN          F! 
+ "  4.0000000e06 " S>FLOAT DROP           metod-info FREQ_END            F! 
  "  1.0000000e00 " S>FLOAT DROP           metod-info FREQ_STEP           F! 
  "  6 " S>FLOAT DROP F>D DROP  metod-info FREQ_DEGREE	   ! 
- "  0 " S>FLOAT DROP F>D DROP  metod-info work_step           ! 
+ "  1 " S>FLOAT DROP F>D DROP  metod-info work_step           ! 
  " C:\progs\SPForth\emctest\prib\default\pribor.prib" metod-info file_generator_buf	LOAD_TO_BUFER 
  " C:\progs\SPForth\emctest\prib\default\pribor.prib" metod-info file_izm_buf	 	LOAD_TO_BUFER 
  " C:\progs\SPForth\emctest\metod\Vozdkal\test-k.kal" metod-info file_kalibrov_buf		LOAD_TO_BUFER 

@@ -1,7 +1,7 @@
  1.0000000e00  PriborPassport_info FREQ_MIN			F! 
  6.0000000e07  PriborPassport_info FREQ_MAX			F! 
  1.4600000e02  PriborPassport_info LEVEL_MAX			F! 
- " *ids6600*" PriborPassport_info NamePribor	LOAD_TO_BUFER 
+ " *SMY*" PriborPassport_info NamePribor	LOAD_TO_BUFER 
  " COMPORT" PriborPassport_info interface	LOAD_TO_BUFER 
  " " PriborPassport_info Nameinterface	LOAD_TO_BUFER 
  " \\.\COM17" PriborPassport_info interface_data1	LOAD_TO_BUFER 
