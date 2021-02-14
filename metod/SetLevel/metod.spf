@@ -53,6 +53,8 @@ CONSTANT sysup-work-info
 	  1 FLOATS  -- GenMaxStep 	\ ограничение на шаг генераторе
 	  1 FLOATS  -- Tochnost	   \ точность выхода на значение
 	  1 FLOATS  -- GenMax	  \  максимальное значение генератора	
+	CELL PulseMode	\ включение импульсной модуляции
+
 	\ внутренние переменные
 	  256 -- file_nastr_buf		\ имя файла настроек
 	  CELL -- Len_Coment_buffer \ размер данных в буфере для коментария настроек
@@ -175,6 +177,7 @@ CONSTANT sysup-metod-info
 	n 10 = IF DROP   metod-info Tochnost	2	S" Точность установки"   THEN
 	n 11 = IF DROP   metod-info GenMax	2	S" Наибольшее значение генератора, дБ"  THEN
 	n 12 = IF DROP   metod-info GenMaxStep	2	S" Наибольший шаг перестройки мощности"  THEN
+	n 13 = IF DROP   metod-info PulseMode	2	S" Включение импульсной модуляции  <> 0 "  THEN
 	\ 0
 	\ ENDCASE
 	 \ какой-то глюк кейса 
@@ -231,6 +234,8 @@ CONSTANT sysup-metod-info
 \ ограничение на генераторе
 	"  {''} " save_file StoFile metod-info	GenMax		F@ save_file FtoFile  "  {''} S>FLOAT DROP	    metod-info GenMax              F! "  save_file StoFile  save_file CRtoFile
 	"  {''} " save_file StoFile metod-info	GenMaxStep	F@ save_file FtoFile  "  {''} S>FLOAT DROP	    metod-info GenMaxStep	   F! "  save_file StoFile  save_file CRtoFile
+\ модуляция
+	"  {''} " save_file StoFile  metod-info	PulseMode	@  save_file DtoFile  " {''} S>FLOAT DROP F>D DROP  metod-info PulseMode           !  "   save_file StoFile  save_file CRtoFile
  
 ;
 	\
@@ -352,7 +357,13 @@ work_Execute work-info -upravl_thead- @ =
 	"                "  metod-info result @  StoFile
 	
 	gen F@  metod-info generator @ ^ SetLevel  \  выставляем данные генератора
+
+metod-info PulseMode @  IF  1 metod-info generator @ ^ PULSE  THEN
+
 	metod-info STEP_TIME @ PAUSE-PROG
+metod-info PulseMode @  IF  0 metod-info generator @ ^ PULSE  THEN
+
+
 	 gen  F@   metod-info result @ FtoFile  
 	"               "  metod-info result @  StoFile
 \  калибровочные данные
