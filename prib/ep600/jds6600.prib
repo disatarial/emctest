@@ -1,0 +1,96 @@
+\ настройки прибора
+REQUIRE  HYPE ~disa\~day\hype3\hype3.f
+REQUIRE PriborPassport priborpassport.f
+REQUIRE com_port ~disa/COMM.F
+
+ 
+
+S" Load Pribor..." TYPE CR
+
+
+ CLASS 1_Prib 
+1 FLOATS  DEFS data 
+PriborPassport DEFS  Passport
+ CELL DEFS generator
+
+: Start
+|| D:  str_prib   D: etalon  D: flag  D: pribpath  ||
+\ pribpath ! \ путь к  файлу прибора, прилетает для команды старт
+ \ " test pribor 1 data " str_prib !
+  
+  S" ./prib\JDS6600/haracter.spf"  
+ INCLUDE-PROBE IF ."   ERROR haracteristic pribor not found  " CR -1 flag ! THEN \ считываем характеристики прибора 
+  PriborPassport_info Passport PriborPassport CMOVE \ копируем свежесчитанные данные по прибору 
+  Passport NamePribor 1 +  Passport NamePribor C@  \ название
+  STR>S
+\  " *pribor*"  
+  etalon !
+\ меняю формат строки в переменной 
+\  STR>S  pribpath !
+\ " \haracter.spf" pribpath @ S+
+\ pribpath @ STR@  2DUP TYPE CR
+\ INCLUDE-PROBE IF  	 ."   ERROR haracteristic pribor 1: not found  " CR -1 flag ! THEN
+\ pribpath @ STRFREE
+ 
+\  PriborPassport_info  Passport  PriborPassport CMOVE
+\ str_prib @ STR@ etalon @ STR@ WildCMP-U
+\ IF
+\	 ."   ERROR pribor 1 not found  " CR -1 flag ! 
+\ ELSE  
+\	str_prib @ STR@ TYPE CR 0 flag ! 
+\	." pribor -ok: "
+	\ PriborPassportSee
+
+\ THEN
+." name: "    PriborPassport_info Nameinterface  1+ DUP SWAP C@   TYPE CR
+ ." adres: "    PriborPassport_info interface_data1   1+ DUP SWAP C@   TYPE CR
+\ com_port NewObj pribor !
+\ " COM3"  pribor @ ^  open
+ 
+PriborPassport_info Nameinterface 1+ DUP SWAP C@    EVALUATE   NewObj generator !
+PriborPassport_info interface_data1  1+ DUP SWAP C@ STR>S generator @ ^ open
+
+115200 8 0 0 generator  @ ^ set_comm ( BaudRate ByteSize StopBits Parity -- ior ) 
+ 
+ 
+\ etalon @  STRFREE  str_prib @ STRFREE 
+." testing no execute" CR
+  CR
+  flag @ DUP . CR
+;
+ 
+ 
+: SetFreq    FDUP ." SetFreq=" F.
+  F>D  DROP  100 M* \ на стеке двойное число!
+\   >NUM 
+  (D.) " :w23=" DUP >R STR+  
+  S" ." R@ STR+
+R>  S+CRLF    
+DUP STR@ TYPE
+  generator   @ ^   write  
+ ; 
+ 
+: SetLevel    
+  dBm->V  1e3 F* 
+   ." SetLevel =" FDUP  F.   
+   F>D DROP  DUP .  >NUM        \ число требуется в миливольтах 
+  " :w25=" DUP >R STR+  
+  S" ." R@ STR+
+  R>  S+CRLF    
+  DUP STR@ TYPE
+  generator   @ ^   write  
+ ;
+  
+: GetLevel  ." GetLevel=" data F@ FDUP F. 1 ; 
+: Off ." off" ;
+
+: Stop
+ 100 PAUSE
+ generator @ ^    close \ закрыли после использования
+ generator @ FreeObj
+ ;
+
+ 
+;CLASS 1_Prib
+S" .....Load Pribor" TYPE CR
+

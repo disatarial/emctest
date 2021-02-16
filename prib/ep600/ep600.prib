@@ -1,0 +1,101 @@
+\ настройки измерителя
+
+REQUIRE  HYPE ~disa\~day\hype3\hype3.f
+REQUIRE  com_port ~disa/COMM.f
+REQUIRE PriborPassport priborpassport.f
+
+ CLASS EP600 
+ CELL DEFS pribor
+PriborPassport DEFS  Passport
+
+: Start || D:  str_prib   D: etalon  D: flag  ||
+\	" *EP600*"  etalon !
+	CR ." EP600 start..." CR
+\ gpib_port NewObj pribor !
+\ 12 0 pribor @ ^  open
+\ com_port NewObj pribor !
+\ " COM8"  pribor @ ^  open
+
+  S" ./prib\ep600/haracter.spf"  
+ INCLUDE-PROBE IF ."   ERROR haracteristic pribor not found  " CR -1 flag ! THEN \ считываем характеристики прибора 
+  PriborPassport_info Passport PriborPassport CMOVE \ копируем свежесчитанные данные по прибору 
+  Passport NamePribor 1 +  Passport NamePribor C@  \ название
+  STR>S
+\  " *pribor*"  
+  etalon !
+
+PriborPassport_info Nameinterface 1+ DUP SWAP C@    EVALUATE   NewObj pribor !
+PriborPassport_info interface_data1  1+ DUP SWAP C@ STR>S pribor @ ^ open
+
+\ 115200 8 0 0 generator  @ ^ set_comm ( BaudRate ByteSize StopBits Parity -- ior ) 
+ 
+ 
+
+  " #00?v*"  S+CRLF  pribor @ ^  write  300 PAUSE
+  " #00?v*"  S+CRLF  pribor @ ^  write  300 PAUSE
+  
+      pribor @ ^ read  str_prib !     
+    
+  CR     str_prib @  STR@ TYPE   CR
+
+ str_prib @ STR@ etalon @ STR@ WildCMP-U 
+ IF
+ 	 ."   ERROR: ep600 not found. FIND:  "  str_prib @  STR@ TYPE    -1 flag ! 
+ ELSE  
+	str_prib @ STR@ TYPE 0 flag ! 
+ THEN
+
+CR ." ... ep600. TT." CR
+\ CR 
+ str_prib @ STRFREE 
+ etalon @ STRFREE 
+
+ flag @ \ DUP . CR
+;
+
+
+: Stop 
+ pribor @ ^    close \ закрыли после использования
+ pribor  @ FreeObj  
+;
+
+: SetFreq    
+  >FNUM    " #00?k " DUP >R  STR+ R>  \ " #00?k freq"
+ " *"  SWAP DUP >R  S+ R> S+CRLF \ " #00?k freq*CRLF"  
+STYPE
+\  pribor @ ^  write 
+  300 PAUSE
+; 
+
+: SetLevel  FDROP  ; 
+
+: GetLevel  || D:  str_prib D: fsize ||
+
+  " #00?T*"    S+CRLF  pribor @ ^  write  
+  300 PAUSE
+    pribor @ ^ read  str_prib ! 
+
+CR     str_prib @  STR@ 
+\ TYPE  
+\ DUP 0 > IF 0 DO DUP  I + C@ . LOOP  ELSE DROP THEN DROP
+ DROP 
+1 + @  
+DATA>FLOAT32     FSQRT FDUP F. V->dBuV 
+
+\ F. 
+\ F-SIZE @  .
+\ F-SIZE @  fsize ! \ запомним размерность флоатов
+
+\ 4 F-SIZE ! 
+\  F-SIZE @  .
+\  FSQRT F.
+\ fsize @ F-SIZE ! \ запомним размерность флоатов
+\ CR
+\     F-SIZE @  DUP .
+\ 1.e
+ 1 
+; 
+
+: Off ;
+ 
+;CLASS EP600

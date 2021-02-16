@@ -1,0 +1,103 @@
+\ настройки измерителя
+
+REQUIRE  HYPE ~disa\~day\hype3\hype3.f
+REQUIRE  com_port ~disa/COMM.f
+.( NBM 550 include: )
+ CLASS NBM550 
+ CELL DEFS pribor
+
+: Start || D:  str_prib   D: etalon  D: flag  ||
+	" *NBM550*"  etalon !
+	CR ." NBM550 start..." CR
+ com_port NewObj pribor !
+ " \\.\COM12"  pribor @ ^  open
+115200 8 0 0   pribor @ ^  set_comm  0 = IF -1 flag ! THEN
+ CR ." ... NBM550. TT." CR
+ etalon @ STRFREE 
+ flag @ \ DUP . CR
+;
+
+
+: Stop 
+ pribor @ ^    close \ закрыли после использования
+ pribor  @ FreeObj  
+;
+
+: SetFreq    
+FDROP
+\  >FNUM    " #00?k " DUP >R  STR+ R>  \ " #00?k freq"
+\ " *"  SWAP DUP >R  S+ R> S+CRLF \ " #00?k freq*CRLF"  
+\ STYPE CR
+\  pribor @ ^  write 
+\  300 PAUSE
+; 
+
+: SetLevel  FDROP  ; 
+
+: dot? || D: str ||
+SWAP str !
+0 SWAP
+0 DO
+	str @ I + C@ 46 =   OR
+LOOP
+;
+
+: GetLevel  || D:  str_prib D: stmp  D: i D: n D: char  F: f1 F: f2 F: f3  D: flag ||
+\ ." FDEPTH . " FDEPTH .  CR
+10 n !
+   " REMOTE ON;"  pribor @ ^   write DROP
+ 	" MEAS_START_CIB;"  pribor @ ^   write DROP
+	500 PAUSE
+	pribor @ ^ read  str_prib ! 
+   " REMOTE OFF;"  pribor @ ^   write DROP
+ 300 PAUSE
+ \ CR     str_prib @  STR@   \ DUP . 100 PAUSE
+ \ TYPE    CR
+0 i !
+\ ." FDEPTH 1. " FDEPTH .  CR
+
+	BEGIN   CR
+		0 flag ! 
+\		str_prib @  STR@ STR>S   i @ 0 + N_S_PickUpWord DUP STR@ 2 >  >R 1 + C@ 46 =  R> AND IF DUP STR@ TYPE  S>FLOAT  IF   f1 F!              -1 flag ! THEN ELSE STRFREE  THEN 
+\		str_prib @  STR@ STR>S   i @ 1 + N_S_PickUpWord DUP STR@ 2 >  >R 1 + C@ 46 =  R> AND IF DUP STR@ TYPE  S>FLOAT  IF   f2 F!    flag @ -1 AND flag ! THEN ELSE STRFREE THEN 
+\		str_prib @  STR@ STR>S   i @ 2 + N_S_PickUpWord DUP STR@ 2 >  >R 1 + C@ 46 =  R> AND IF DUP STR@ TYPE  S>FLOAT  IF   f3 F!    flag @ -1 AND flag ! THEN ELSE STRFREE THEN 
+		str_prib @  STR@ STR>S   i @ 0 + N_S_PickUpWord DUP STR@ TYPE DUP STR@ dot?  IF S>FLOAT  IF   f1 F!              -1 flag ! THEN ELSE STRFREE  THEN  ."  "
+		str_prib @  STR@ STR>S   i @ 1 + N_S_PickUpWord DUP STR@ TYPE DUP STR@ dot?  IF S>FLOAT  IF   f2 F!    flag @ -1 AND flag ! ELSE 0 flag ! THEN ELSE STRFREE 0 flag ! THEN   ."  "
+		str_prib @  STR@ STR>S   i @ 2 + N_S_PickUpWord DUP STR@ TYPE DUP STR@ dot?  IF S>FLOAT  IF   f3 F!    flag @ -1 AND flag ! ELSE 0 flag ! THEN ELSE STRFREE 0 flag ! THEN  ."  " 
+		i @ 1+ i !
+		flag @   
+	\	." FDEPTH 2. "FDEPTH .   .S
+		CR
+	UNTIL
+ 
+ (
+ str_prib @ STR@ DROP i @ +    33   TYPE CR 
+\ STR>S 2 N_S_PickUpWord  STYPE CR \ S>FLOAT DROP F. \ FDUP F*
+ str_prib @ STR@ DROP i @ +    33  STR>S 0 N_S_PickUpWord   S>FLOAT DROP      FDUP FSQRT F. \ FDUP F*  
+ str_prib @ STR@ DROP i @ +    33  STR>S 1 N_S_PickUpWord    S>FLOAT DROP    FDUP FSQRT F. \ FDUP F*
+  F+
+ str_prib @ STR@ DROP i @ +    33  STR>S 2 N_S_PickUpWord    S>FLOAT DROP    FDUP FSQRT  F. \ FDUP F* 
+ F+ FSQRT
+  )
+  f1 F@  \ FSQRT   F.
+  f2 F@ \ FSQRT   F. 
+  F+
+  f2 F@ \ FSQRT   F.
+  F+ FSQRT
+\ str_prib @  STR@  STR>S 4 N_S_PickUpWord  STYPE CR  \ S>FLOAT DROP F. \ FDUP F* F+ FSQRT
+\ DATA>FLOAT32     FSQRT FDUP F. V->dBuV 
+\ 1.e 
+ str_prib @   STRFREE
+\ 1e
+\ CR 
+\ 1e
+ CR ." GetLevel  = " FDUP F.  FDEPTH .  CR \ FDEPTH .  .S   f1 F@ F. f2 F@ F.  f3 F@ F.  CR 
+\ FDUP 1e-9 F<  IF FDROP 1e-9 THEN
+\   V->dBuV
+1
+; 
+
+: Off ;
+ 
+;CLASS NBM550 
+.( NBM 550 .. OK )
