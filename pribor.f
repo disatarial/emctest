@@ -140,7 +140,7 @@ DROP
 	0 ;  1 CELLS  CALLBACK: buttonClosePribor_click 
  
 
-:NONAME  { \ s s2  flag file }
+:NONAME  { \ s s2  s3 flag file  str len  num }
 
 -1 -> flag
 "" -> s "" -> s2
@@ -160,13 +160,33 @@ DROP
 \ грузим файл прибора 
 	s STRFREE
 	file ASCIIZ> STR>S   -> s  DEPTH . 
-	s STR@   ." INCLUDE FILE: " 2DUP TYPE CR
-	INCLUDE-PROBE   .S  -> file
+	s STR@   ." INCLUDE FILE: "   TYPE CR
+s STR@  -> len -> str
+len -> num 
+   0 > IF
+CR len . CR
+		len  0  DO
+\ I . str I + C@ . CR
+
+			str I + C@ 47 =
+			str I + C@ 92 = 
+			OR
+			IF I -> num THEN
+		LOOP
+	ELSE 0 -> flag  THEN
+	
+ CR num CR str num TYPE CR
+"" -> s3
+ str num  s3 STR+ 
+S" haracter.spf" s3 STR+ 
+	s3 STR@   INCLUDE-PROBE   .S  
+	 -> file
 	file  
 	IF	
 		" error ineterface generator " TO_ERROR_PROG_BUFER   
 		0 -> flag 
 	ELSE -> file
+	-1 -> flag
 	THEN
  THEN
  
@@ -188,6 +208,8 @@ DROP
  THEN
  s STRFREE
  s2 STRFREE
+ s3 STRFREE
+
 \  THEN \ IF EXIT THEN
   ." DEPTH="  .S   CR 
   Refresh_param_prib_list
